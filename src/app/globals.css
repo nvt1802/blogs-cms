@@ -25,3 +25,11 @@ body {
     text-wrap: balance;
   }
 }
+
+.cms-main {
+  height: calc(100vh - 60px);
+}
+
+.cms-sibar > div {
+  @apply rounded-none;
+}
