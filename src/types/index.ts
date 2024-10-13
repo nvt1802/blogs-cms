@@ -1,9 +1,21 @@
-export interface IUser {
-  id: string;
+export interface IResponsePaginationBase {
+  page: number;
+  limit: number;
+  totalPages: number;
+  totalItem: number;
+}
+
+export interface ICategoriesShort {
+  name: string;
+  slug: string;
+}
+
+export interface IUsersShort {
   username: string;
-  email: string;
   profile_picture: string;
-  role: "user" | "author" | "admin";
-  created_at: string;
-  updated_at: string;
+}
+
+export interface ITagsShort {
+  name: string;
+  slug: string;
 }

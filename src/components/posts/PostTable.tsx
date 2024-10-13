@@ -1,32 +1,29 @@
 "use client";
 
+import { IPost, IPostResponse } from "@/types/posts";
 import axiosInstance from "@/utils/axiosInstance";
-import { Pagination, Table, Avatar, Badge } from "flowbite-react";
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
 import { HttpStatusCode } from "axios";
+import dayjs from "dayjs";
+import { Avatar, Pagination, Table } from "flowbite-react";
 import { useRouter } from "next/navigation";
-import { UserRole } from "@/utils/enum";
-import { IUsersResponse, IUser } from "@/types/users";
+import { useEffect, useState } from "react";
 
-const UserTable = () => {
-  const [users, setUsers] = useState<IUser[]>([]);
+const PostsTable = () => {
+  const [users, setUsers] = useState<IPost[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
 
   const onPageChange = async (page: number) => {
-    const { data } = await axiosInstance.get<IUsersResponse>(
-      `/api/users?page=${page}`
-    );
-    setUsers(data?.data.items);
+    const { data } = await axiosInstance.get(`/api/posts?page=${page}`);
+    setUsers(data?.data.items || []);
     setTotalPages(data?.data?.totalPages);
     setCurrentPage(page);
   };
 
   const onGetUserInfo = async () => {
     try {
-      const { data } = await axiosInstance.get(`/api/users`);
+      const { data } = await axiosInstance.get<IPostResponse>(`/api/posts`);
       setUsers(data?.data.items || []);
       setTotalPages(data?.data?.totalPages);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
@@ -49,11 +46,10 @@ const UserTable = () => {
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>STT</Table.HeadCell>
-            <Table.HeadCell>Avatar</Table.HeadCell>
-            <Table.HeadCell>Username</Table.HeadCell>
-            <Table.HeadCell>Email</Table.HeadCell>
-            <Table.HeadCell>Role</Table.HeadCell>
-            <Table.HeadCell>Created At</Table.HeadCell>
+            <Table.HeadCell>Thumnail</Table.HeadCell>
+            <Table.HeadCell>Title</Table.HeadCell>
+            <Table.HeadCell>Category</Table.HeadCell>
+            <Table.HeadCell>Create By</Table.HeadCell>
             <Table.HeadCell>Updated At</Table.HeadCell>
             <Table.HeadCell>
               <span className="sr-only">Edit</span>
@@ -69,29 +65,15 @@ const UserTable = () => {
                   {(currentPage - 1) * 10 + index + 1}
                 </Table.Cell>
                 <Table.Cell>
-                  <Avatar img={item.profile_picture} alt="avatar" />
+                  <Avatar img={item.featured_image} alt="avatar" />
                 </Table.Cell>
-                <Table.Cell>{item.username}</Table.Cell>
-                <Table.Cell>{item.email}</Table.Cell>
+                <Table.Cell>{item.title}</Table.Cell>
+                <Table.Cell>{item.categories?.name}</Table.Cell>
                 <Table.Cell className="capitalize">
-                  <Badge
-                    color={
-                      UserRole.ADMIN === item.role
-                        ? "success"
-                        : UserRole.AUTHOR === item.role
-                        ? "warning"
-                        : "blue"
-                    }
-                    className="w-fit"
-                  >
-                    {item.role}
-                  </Badge>
+                  {item.users?.username}
                 </Table.Cell>
                 <Table.Cell>
                   {dayjs(item.created_at).format("DD/MM/YYYY mm:ss")}
-                </Table.Cell>
-                <Table.Cell>
-                  {dayjs(item.updated_at).format("DD/MM/YYYY mm:ss")}
                 </Table.Cell>
                 <Table.Cell>
                   <a
@@ -117,4 +99,4 @@ const UserTable = () => {
   );
 };
 
-export default UserTable;
+export default PostsTable;

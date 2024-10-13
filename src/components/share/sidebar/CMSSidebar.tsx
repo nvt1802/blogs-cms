@@ -1,6 +1,6 @@
 "use client";
 
-import Menu from "@/components/sidebar/Menu";
+import Menu from "@/components/share/sidebar/Menu";
 import { useAppContext } from "@/context/AppContext";
 import { ScreenBreakpoints } from "@/utils/enum";
 import { Drawer } from "flowbite-react";

@@ -5,3 +5,9 @@ export enum ScreenBreakpoints {
   XL = 1280,
   "2XL" = 1536,
 }
+
+export enum UserRole {
+  ADMIN = "admin",
+  AUTHOR = "author",
+  USER = "user",
+}

@@ -1,4 +1,4 @@
-import UserTable from "@/components/users/UserTable";
+import CategoriesTable from "@/components/categories/CategoriesTable";
 import MainLayout from "@/layouts/MainLayout";
 import { Metadata } from "next";
 
@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <MainLayout>
       <div className="p-4">
-        <UserTable />
+        <CategoriesTable />
       </div>
     </MainLayout>
   );

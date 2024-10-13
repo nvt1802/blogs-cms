@@ -1,5 +1,5 @@
 import CMSHeader from "@/components/CMSHeader";
-import CMSSidebar from "@/components/sidebar/CMSSidebar";
+import CMSSidebar from "@/components/share/sidebar/CMSSidebar";
 import React from "react";
 
 const MainLayout: React.FC<

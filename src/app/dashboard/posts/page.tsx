@@ -1,4 +1,4 @@
-import UserTable from "@/components/users/UserTable";
+import PostTable from "@/components/posts/PostTable";
 import MainLayout from "@/layouts/MainLayout";
 import { Metadata } from "next";
 
@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <MainLayout>
       <div className="p-4">
-        <UserTable />
+        <PostTable />
       </div>
     </MainLayout>
   );

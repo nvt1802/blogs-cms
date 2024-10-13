@@ -22,7 +22,6 @@ const FormLogin = () => {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (formData) => {
-    console.log(process.env.CMS_API_URL);    
     const { data, status } = await axiosInstance.post("/api/login", formData);
     if (status === HttpStatusCode.Ok) {
       setCookie("token", data?.data?.token);
