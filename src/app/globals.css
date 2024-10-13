@@ -66,3 +66,15 @@ input {
     -moz-appearance: textfield;
   }
 }
+
+.custom-tab > div[role="tablist"] {
+  @apply hidden;
+}
+
+.ce-block__content {
+  max-width: 800px !important;
+}
+
+.ce-toolbar__content {
+  max-width: 800px !important;
+}

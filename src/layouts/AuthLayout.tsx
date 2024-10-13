@@ -6,7 +6,7 @@ const AuthLayout: React.FC<
   }>
 > = ({ children }) => {
   return (
-    <div className="h-screen w-screen flex">
+    <div className="h-screen w-screen flex bg-gray-50 dark:bg-gray-700">
       <div className="w-full h-full flex">{children}</div>
     </div>
   );

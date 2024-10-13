@@ -1,4 +1,9 @@
-import { ICategoriesShort, IResponsePaginationBase, ITagsShort, IUsersShort } from ".";
+import {
+  ICategoriesShort,
+  IResponsePaginationBase,
+  ITagsShort,
+  IUsersShort,
+} from ".";
 
 export interface IPost {
   id: string;
@@ -19,6 +24,9 @@ export interface IPost {
   categories: ICategoriesShort;
   users: IUsersShort;
   tags: ITagsShort[];
+  seo_title?: string;
+  is_index?: boolean;
+  is_follow?: boolean;
 }
 
 export interface IPostPaginationResponse extends IResponsePaginationBase {
@@ -28,4 +36,19 @@ export interface IPostPaginationResponse extends IResponsePaginationBase {
 export interface IPostResponse {
   statusCode: number;
   data: IPostPaginationResponse;
+}
+
+export interface IPostFormInput {
+  overview: {
+    title: string;
+    slug: string;
+    featuredImage?: string;
+  };
+  content: string;
+  seo: {
+    isIndex: boolean;
+    isFollow: boolean;
+    seoTitle: string;
+    excerpt: string;
+  }
 }
