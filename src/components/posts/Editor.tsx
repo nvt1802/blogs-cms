@@ -31,9 +31,14 @@ const CMSEditor: React.FC<IProps> = ({ isShowEditor = false, register }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShowEditor]);
 
+  useEffect(() => {}, [editor]);
+
   return (
     <>
-      <div id="editorjs" className="h-[60vh] w-full max-w-5xl overflow-y-auto relative" />
+      <div
+        id="editorjs"
+        className="h-[60vh] w-full max-w-5xl overflow-y-auto relative"
+      />
       <TextInput
         id="small"
         type="text"
