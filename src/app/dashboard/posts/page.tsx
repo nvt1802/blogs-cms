@@ -1,17 +1,15 @@
-import PostTable from "@/components/posts/PostTable";
+import PostContainer from "@/components/posts/PostContainer";
 import MainLayout from "@/layouts/MainLayout";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard - CMS",
+  title: "Posts - Dashboard CMS",
 };
 
 export default function Home() {
   return (
     <MainLayout>
-      <div className="p-4">
-        <PostTable />
-      </div>
+      <PostContainer />
     </MainLayout>
   );
 }

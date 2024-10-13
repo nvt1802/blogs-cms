@@ -32,7 +32,7 @@ const CMSHeader = () => {
         <HiMenu className="h-6 w-6" />
       </button>
 
-      <Navbar.Brand href="/">
+      <Navbar.Brand href="/dashboard">
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
           CMS
         </span>

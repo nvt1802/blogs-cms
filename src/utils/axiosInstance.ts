@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { getCookie } from "./cookieUtils";
 
 const axiosInstance = axios.create({
@@ -27,6 +27,9 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.response && error.response.status === HttpStatusCode.Forbidden) {
+      location.href = "/login";
+    }
     return Promise.reject(error);
   }
 );

@@ -2,7 +2,13 @@
 
 import { DarkThemeToggle, Sidebar } from "flowbite-react";
 import { usePathname } from "next/navigation";
-import { HiChartPie, HiDocument, HiUser } from "react-icons/hi";
+import {
+  HiChartPie,
+  HiDocument,
+  HiUser,
+  HiTag,
+  HiOutlineBookmark,
+} from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
 
 interface IProps {
@@ -14,8 +20,12 @@ const Menu: React.FC<IProps> = ({ className }) => {
     { name: "Dashboard", href: "/dashboard", icon: HiChartPie },
     { name: "Users", href: "/dashboard/users", icon: HiUser },
     { name: "Posts", href: "/dashboard/posts", icon: HiDocument },
-    { name: "Categories", href: "/dashboard/categories", icon: HiDocument },
-    { name: "Tags", href: "/dashboard/tags", icon: HiDocument },
+    {
+      name: "Categories",
+      href: "/dashboard/categories",
+      icon: HiOutlineBookmark,
+    },
+    { name: "Tags", href: "/dashboard/tags", icon: HiTag },
   ];
   const pathname = usePathname();
 
@@ -38,20 +48,6 @@ const Menu: React.FC<IProps> = ({ className }) => {
           ))}
         </Sidebar.ItemGroup>
       </Sidebar.Items>
-
-      {/* <Sidebar.Items className="h-[calc(100%-40px)]">
-        <Sidebar.ItemGroup>
-          <Sidebar.Item active href="/dashboard" icon={HiChartPie}>
-            Dashboard
-          </Sidebar.Item>
-          <Sidebar.Item href="/dashboard/users" icon={HiUser}>
-            Users
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiDocument}>
-            Posts
-          </Sidebar.Item>
-        </Sidebar.ItemGroup>
-      </Sidebar.Items> */}
       <Sidebar.Items>
         <DarkThemeToggle />
       </Sidebar.Items>

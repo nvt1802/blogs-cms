@@ -9,9 +9,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <MainLayout>
-      <div className="p-4">
-        <CategoriesTable />
-      </div>
+      <CategoriesTable />
     </MainLayout>
   );
 }
