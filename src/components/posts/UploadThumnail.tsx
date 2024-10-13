@@ -54,7 +54,7 @@ const UploadThumnail: React.FC<IProps> = ({ register }) => {
             <FileInput
               id="dropzone-file"
               className="hidden"
-              {...register("featuredImage", {
+              {...register("overview.featuredImage", {
                 required: "This is required.",
               })}
               onChange={onChangeImage}
