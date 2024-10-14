@@ -5,10 +5,14 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import CMSTabs, { ITabItem } from "../share/tabs/CMSTabs";
 import TabItem from "../share/tabs/TabItem";
-import Editor from "./Editor";
 import PostForm from "./OverviewForm";
 import { Button } from "flowbite-react";
 import SeoForm from "./SeoForm";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import('./Editor'), {
+  ssr: false,
+})
 
 const PostTabs = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
