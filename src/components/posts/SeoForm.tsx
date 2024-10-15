@@ -4,7 +4,9 @@ import { IPostFormInput } from "@/types/posts";
 import { Label, TextInput } from "flowbite-react";
 import React from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import Toggle from "../share/Toggle";
+import Toggle from "@/components/share/Toggle";
+import ErrorText from "@/components/share/ErrorText";
+import { ErrorMessage } from "@/utils/errorMessage";
 
 interface IProps {
   register: UseFormRegister<IPostFormInput>;
@@ -22,14 +24,12 @@ const SeoForm: React.FC<IProps> = ({ register, errors }) => {
           id="small"
           type="text"
           sizing="md"
-          readOnly
-          {...register("seo.seoTitle")}
+          {...register("seo.seoTitle", { required: "This is required." })}
         />
-        {errors?.overview?.slug && (
-          <p role="alert" className="text-red-600">
-            {errors?.overview?.slug?.message}
-          </p>
-        )}
+        <ErrorText
+          isError={!!errors?.seo?.seoTitle}
+          message={errors?.seo?.seoTitle?.message}
+        />
       </div>
       <div>
         <div className="mb-2 block">
@@ -39,14 +39,12 @@ const SeoForm: React.FC<IProps> = ({ register, errors }) => {
           id="small"
           type="text"
           sizing="md"
-          readOnly
-          {...register("seo.excerpt")}
+          {...register("seo.excerpt", { required: ErrorMessage.REQUIRED })}
         />
-        {errors?.overview?.slug && (
-          <p role="alert" className="text-red-600">
-            {errors?.overview?.slug?.message}
-          </p>
-        )}
+        <ErrorText
+          isError={!!errors?.seo?.excerpt}
+          message={errors?.seo?.excerpt?.message}
+        />
       </div>
       <div className="flex flex-row gap-4">
         <Toggle label="Is Index" {...register("seo.isIndex")} />

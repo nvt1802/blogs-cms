@@ -3,6 +3,7 @@
 import { IPost } from "@/types/posts";
 import dayjs from "dayjs";
 import { Avatar, Table } from "flowbite-react";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   currentPage: number;
@@ -10,6 +11,12 @@ interface IProps {
 }
 
 const PostsTable: React.FC<IProps> = ({ currentPage = 1, posts }) => {
+  const router = useRouter();
+
+  const onEditPost = (slug: string) => {
+    router.push(`/dashboard/posts/${slug}`);
+  };
+
   return (
     <div className="overflow-x-auto">
       <Table hoverable>
@@ -44,13 +51,11 @@ const PostsTable: React.FC<IProps> = ({ currentPage = 1, posts }) => {
               <Table.Cell>
                 {dayjs(item.created_at).format("DD/MM/YYYY mm:ss")}
               </Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                >
-                  Edit
-                </a>
+              <Table.Cell
+                onClick={() => onEditPost(item?.slug)}
+                className="cursor-pointer hover:underline"
+              >
+                Edit
               </Table.Cell>
             </Table.Row>
           ))}

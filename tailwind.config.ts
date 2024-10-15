@@ -10,6 +10,23 @@ const config: Config = {
     flowbite.content(),
   ],
   theme: {
+    screens: {
+      xxs: "320px",
+      xsm: "360px",
+      xs: "480px",
+      sm: "640px",
+      md: "768px",
+      xmd: "880px",
+      lg: "1024px",
+      xlg: "1151px",
+      main: "1170px", // 1170px is area main size
+      sxl: "1200px",
+      xl: "1280px",
+      mxl: "1400px",
+      "2xl": "1536px", // can i change to 1440px follow design system?
+      "3xl": "1600px",
+      "hover-hover": { raw: "(hover: hover)" },
+    },
     extend: {
       colors: {
         primary: {

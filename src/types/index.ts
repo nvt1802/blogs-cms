@@ -6,16 +6,24 @@ export interface IResponsePaginationBase {
 }
 
 export interface ICategoriesShort {
+  id: string;
   name: string;
   slug: string;
 }
 
 export interface IUsersShort {
+  id: string;
   username: string;
   profile_picture: string;
 }
 
 export interface ITagsShort {
+  id: string;
   name: string;
   slug: string;
+}
+
+export interface IOption {
+  label?: string;
+  value?: string | number;
 }

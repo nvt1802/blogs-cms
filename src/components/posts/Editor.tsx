@@ -2,42 +2,53 @@
 
 import { IPostFormInput } from "@/types/posts";
 import { editorTools } from "@/utils/tools";
-import EditorJS from "@editorjs/editorjs";
+import EditorJS, { OutputData } from "@editorjs/editorjs";
 import { TextInput } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { UseFormRegister } from "react-hook-form";
-
 interface IProps {
   isShowEditor?: boolean;
+  data?: OutputData;
   register: UseFormRegister<IPostFormInput>;
+  onChange: (data: OutputData) => void;
 }
 
-const CMSEditor: React.FC<IProps> = ({ isShowEditor = false, register }) => {
-  let isAddEditor: boolean = false;
-  const [editor, setEditor] = useState<EditorJS>();
+const CMSEditor: React.FC<IProps> = ({
+  isShowEditor = false,
+  data,
+  register,
+  onChange,
+}) => {
+  const editorRef = useRef<EditorJS | null>(null);
+
   useEffect(() => {
-    if (!isAddEditor && isShowEditor) {
-      setEditor(
-        new EditorJS({
-          holder: "editorjs",
-          tools: editorTools,
-          autofocus: true,
-          placeholder: "",
-        })
-      );
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      isAddEditor = true;
+    if (isShowEditor && !editorRef.current) {
+      editorRef.current = new EditorJS({
+        holder: "editorjs",
+        tools: editorTools,
+        autofocus: false,
+        placeholder: "Enter content for the article",
+        data: data,
+        onChange: async () => {
+          try {
+            const savedData = await editorRef.current?.save();
+            if (savedData && Array.isArray(savedData.blocks)) {
+              onChange(savedData);
+            }
+          } catch (error) {
+            console.error("Error saving editor data:", error);
+          }
+        },
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isShowEditor]);
-
-  useEffect(() => {}, [editor]);
+  }, [isShowEditor, onChange]);
 
   return (
     <>
       <div
         id="editorjs"
-        className="h-[60vh] w-full max-w-5xl overflow-y-auto relative"
+        className="h-[60vh] w-full overflow-y-auto relative bg-white dark:bg-gray-700 rounded-lg dark:text-white"
       />
       <TextInput
         id="small"

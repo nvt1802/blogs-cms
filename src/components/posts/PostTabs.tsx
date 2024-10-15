@@ -1,43 +1,58 @@
 "use client";
 
-import { IPostFormInput } from "@/types/posts";
-import { useState } from "react";
+import { IPost, IPostFormInput } from "@/types/posts";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import CMSTabs, { ITabItem } from "../share/tabs/CMSTabs";
-import TabItem from "../share/tabs/TabItem";
-import PostForm from "./OverviewForm";
+import CMSTabs, { ITabItem } from "@/components/share/tabs/CMSTabs";
+import TabItem from "@/components/share/tabs/TabItem";
+import OverviewForm from "@/components/posts/OverviewForm";
 import { Button } from "flowbite-react";
-import SeoForm from "./SeoForm";
+import SeoForm from "@/components/posts/SeoForm";
 import dynamic from "next/dynamic";
+import { OutputData } from "@editorjs/editorjs";
+import { postTabs } from "@/utils/contants";
 
-const Editor = dynamic(() => import('./Editor'), {
+const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
-})
+});
 
-const PostTabs = () => {
+interface IProps {
+  post?: IPost;
+}
+
+const PostTabs: React.FC<IProps> = ({ post }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [tabs, setTabs] = useState<ITabItem[]>([
-    {
-      name: "Overview",
-      status: "unknown",
-    },
-    {
-      name: "Content",
-      status: "unknown",
-    },
-    {
-      name: "Seo",
-      status: "unknown",
-    },
-  ]);
+  const [tabs, setTabs] = useState<ITabItem[]>(postTabs);
+  const [defaultValue, setDefaultValue] = useState<IPostFormInput>();
 
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isDirty },
     trigger,
-  } = useForm<IPostFormInput>();
+  } = useForm<IPostFormInput>({
+    values: defaultValue,
+  });
+
+  useEffect(() => {
+    setDefaultValue({
+      content: post?.content ?? "",
+      overview: {
+        slug: post?.slug ?? "",
+        category_id: post?.category_id,
+        featuredImage: post?.featured_image,
+        tag_id: post?.tags?.map((item) => item.id),
+        title: post?.title ?? "",
+      },
+      seo: {
+        excerpt: post?.excerpt ?? "",
+        isFollow: post?.is_follow || false,
+        isIndex: post?.is_index || false,
+        seoTitle: post?.seo_title ?? "",
+      },
+    });
+  }, [post]);
 
   const onSubmit: SubmitHandler<IPostFormInput> = async (
     formData: IPostFormInput
@@ -53,7 +68,10 @@ const PostTabs = () => {
           "overview.title",
           "overview.slug",
           "overview.featuredImage",
+          "overview.category_id",
+          "overview.tag_id",
         ]);
+        console.log(result);
         break;
       case 1:
         result = await trigger(["content"]);
@@ -74,33 +92,61 @@ const PostTabs = () => {
     setActiveTab(activeTab < 2 ? activeTab + 1 : activeTab);
   };
 
+  const handleEditorChange = (data: OutputData) => {
+    setValue("content", JSON.stringify(data));
+  };
+
+  useEffect(() => {
+    if (isDirty) {
+      window.addEventListener("beforeunload", (event) => {
+        event.preventDefault();
+      });
+    }
+  }, [isDirty]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <CMSTabs
-        activeTab={activeTab}
-        onClickTab={(tab) => setActiveTab(tab)}
-        tabs={tabs}
+    <CMSTabs
+      activeTab={activeTab}
+      onClickTab={(tab) => setActiveTab(tab)}
+      tabs={tabs}
+    >
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="max-h-[calc(100vh-270px)]"
       >
         <TabItem active={activeTab === 0}>
-          <PostForm register={register} setValue={setValue} errors={errors} />
+          <OverviewForm
+            register={register}
+            setValue={setValue}
+            errors={errors}
+          />
         </TabItem>
-        <TabItem active={activeTab === 1}>
-          <Editor register={register} isShowEditor={activeTab === 1} />
+        <TabItem active={activeTab === 1} className="bg-gray-200">
+          <Editor
+            register={register}
+            isShowEditor={activeTab === 1}
+            data={post?.content ? JSON?.parse(post?.content) : null}
+            onChange={handleEditorChange}
+          />
         </TabItem>
         <TabItem active={activeTab === 2}>
           <SeoForm register={register} errors={errors} />
         </TabItem>
-      </CMSTabs>
-
-      <div className="px-4 pb-2 w-full flex justify-end gap-4 absolute bottom-0">
-        <Button color="cyan" type="button" onClick={onNextTabs}>
-          Next
-        </Button>
-        <Button color="cyan" type="submit">
-          Submit
-        </Button>
-      </div>
-    </form>
+        <div className="px-4 pt-1 w-full flex justify-between gap-4 absolute bottom-0 border-t">
+          <Button color="purple" type="button">
+            Publish
+          </Button>
+          <div className="flex gap-4">
+            <Button color="info" type="button" onClick={onNextTabs}>
+              Next
+            </Button>
+            <Button color="success" type="submit">
+              Submit
+            </Button>
+          </div>
+        </div>
+      </form>
+    </CMSTabs>
   );
 };
 

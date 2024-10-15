@@ -43,6 +43,8 @@ export interface IPostFormInput {
     title: string;
     slug: string;
     featuredImage?: string;
+    category_id?: string;
+    tag_id?: string[];
   };
   content: string;
   seo: {
@@ -50,5 +52,10 @@ export interface IPostFormInput {
     isFollow: boolean;
     seoTitle: string;
     excerpt: string;
-  }
+  };
+}
+
+export interface IPostDetailResponse {
+  statusCode: number;
+  data: IPost;
 }

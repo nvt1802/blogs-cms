@@ -19,7 +19,7 @@ const MainLayout: React.FC<
         <div className="w-full cms-main p-4 flex flex-col gap-4">
           <CMSBreadcrumb />
           <QueryClientWrapper>
-            <div className="overflow-y-auto h-full relative">{children}</div>
+            <div className="h-full relative">{children}</div>
           </QueryClientWrapper>
         </div>
       </div>

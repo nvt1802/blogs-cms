@@ -27,8 +27,8 @@ body {
 }
 
 .cms-main {
-  height: calc(100vh - 92px);
-  max-height: calc(100vh - 92px);
+  height: calc(100vh - 62px);
+  max-height: calc(100vh - 62px);
 }
 
 .cms-sibar > div {
@@ -71,10 +71,14 @@ input {
   @apply hidden;
 }
 
+.codex-editor {
+  @apply md:ml-16 md:mr-4 mx-2 h-full my-2;
+}
+
 .ce-block__content {
-  max-width: 800px !important;
+  max-width: unset !important;
 }
 
 .ce-toolbar__content {
-  max-width: 800px !important;
+  max-width: unset !important;
 }

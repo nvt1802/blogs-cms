@@ -14,6 +14,7 @@ import CheckList from "@editorjs/checklist";
 import Delimiter from "@editorjs/delimiter";
 import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
+import TextColor from "editorjs-text-color-plugin";
 
 export const editorTools = {
   embed: Embed,
@@ -31,4 +32,5 @@ export const editorTools = {
   delimiter: Delimiter,
   inlineCode: InlineCode,
   simpleImage: SimpleImage,
+  textColor: TextColor
 };
