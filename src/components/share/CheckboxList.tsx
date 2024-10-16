@@ -9,12 +9,15 @@ interface IProps {
   selected?: string[];
   options: IOption[];
   onChange?: (options: string[]) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  register?: any;
 }
 
 const TagsCheckbox: React.FC<IProps> = ({
   name,
   options,
   selected,
+  register,
   onChange,
 }) => {
   const [optionSeleted, setOptionSeleted] = useState<string[]>([]);
@@ -49,6 +52,7 @@ const TagsCheckbox: React.FC<IProps> = ({
               item?.value ? optionSeleted?.includes(String(item?.value)) : false
             }
             onClick={() => handleSelectedItem(String(item?.value))}
+            {...register}
           />
           <Label htmlFor={name}>{item?.label}</Label>
         </div>

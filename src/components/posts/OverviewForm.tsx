@@ -118,14 +118,17 @@ const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
               onChange={onChangeTitle}
             />
           </div>
-          <ErrorText
-            isError={!!errors?.overview?.category_id}
-            message={errors?.overview?.category_id?.message}
-          />
+
           <Accordion className="border-gray-300" collapseAll>
             <Accordion.Panel>
               <Accordion.Title className="p-2.5 text-sm">
-                Category
+                <div className="flex flex-row gap-4">
+                  <p>Category</p>
+                  <ErrorText
+                    isError={!!errors?.overview?.category_id}
+                    message={errors?.overview?.category_id?.message}
+                  />
+                </div>
               </Accordion.Title>
               <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
                 <RadioList
@@ -142,58 +145,30 @@ const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
               </Accordion.Content>
             </Accordion.Panel>
             <Accordion.Panel>
-              <Accordion.Title className="p-2.5 text-sm">Tags</Accordion.Title>
+              <Accordion.Title className="p-2.5 text-sm">
+                <div className="flex flex-row gap-4">
+                  <p>Tags</p>
+                  <ErrorText
+                    isError={!!errors?.overview?.tag_id}
+                    message={errors?.overview?.tag_id?.message}
+                  />
+                </div>
+              </Accordion.Title>
               <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
                 <CheckboxList
-                  name="tags"
+                  name="overview.tag_id"
                   options={tags}
                   selected={post?.tags?.map((tag) => tag?.id)}
                   onChange={handleChangeTags}
+                  register={{
+                    ...register("overview.tag_id", {
+                      required: ErrorMessage.REQUIRED,
+                    }),
+                  }}
                 />
               </Accordion.Content>
             </Accordion.Panel>
           </Accordion>
-
-          {/* <div className="space-y-2">
-            <div className="inline-flex gap-3">
-              <p className="my-auto dark:text-white">Category</p>
-              <SelectDropdown
-                options={categories}
-                placeholder="Select a category"
-                onSelect={handleSelect}
-              />
-              <input
-                type="text"
-                className="hidden"
-                {...register("overview.category_id", {
-                  required: "This is required.",
-                })}
-              />
-            </div>
-            <ErrorText
-              isError={!!errors?.overview?.category_id}
-              message={errors?.overview?.category_id?.message}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <TagsSelect
-              label="Tags"
-              options={tags}
-              onChange={handleChangeTags}
-            />
-            <input
-              type="text"
-              className="hidden"
-              {...register("overview.tag_id", {
-                required: "This is required.",
-              })}
-            />
-            <ErrorText
-              isError={!!errors?.overview?.tag_id}
-              message={errors?.overview?.tag_id?.message}
-            />
-          </div> */}
         </div>
         <div>
           <UploadThumnail register={register} errors={errors} />

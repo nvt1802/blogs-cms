@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
+import ErrorText from "../share/ErrorText";
 
 interface IProps {
   register: UseFormRegister<IPostFormInput>;
@@ -21,13 +22,21 @@ const UploadThumnail: React.FC<IProps> = ({ register, errors }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm dark:text-white">Featured Image</p>
+      <div className="flex flex-row gap-4">
+        <p className="text-sm dark:text-white">Featured Image</p>
+        <ErrorText
+          isError={!!errors?.overview?.featuredImage}
+          message={errors?.overview?.featuredImage?.message}
+        />
+      </div>
+
       <div className="flex w-full items-center justify-center">
         {!fileList ? (
           <Label
             htmlFor="dropzone-file"
             className={twMerge(
-              "flex h-96 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600", errors?.overview?.featuredImage ? "ring-2 ring-red-600" :""
+              "flex h-96 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600",
+              errors?.overview?.featuredImage ? "ring-2 ring-red-600" : ""
             )}
           >
             <div className="flex flex-col items-center justify-center pb-6 pt-5">
