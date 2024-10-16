@@ -3,6 +3,7 @@ import { Dropdown } from "flowbite-react";
 import { IOption } from "@/types";
 
 interface SelectDropdownProps {
+  defaultOption?: IOption;
   options: IOption[];
   onSelect?: (selectedOption: IOption) => void;
   placeholder?: string;

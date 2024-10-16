@@ -118,6 +118,7 @@ const PostTabs: React.FC<IProps> = ({ post }) => {
           <OverviewForm
             register={register}
             setValue={setValue}
+            post={post}
             errors={errors}
           />
         </TabItem>
@@ -130,7 +131,12 @@ const PostTabs: React.FC<IProps> = ({ post }) => {
           />
         </TabItem>
         <TabItem active={activeTab === 2}>
-          <SeoForm register={register} errors={errors} />
+          <SeoForm
+            register={register}
+            errors={errors}
+            post={post}
+            setValue={setValue}
+          />
         </TabItem>
         <div className="px-4 pt-1 w-full flex justify-between gap-4 absolute bottom-0 border-t">
           <Button color="purple" type="button">

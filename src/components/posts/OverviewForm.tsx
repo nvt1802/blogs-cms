@@ -1,29 +1,28 @@
 "use client";
 
 import UploadThumnail from "@/components/posts/UploadThumnail";
+import CheckboxList from "@/components/share/CheckboxList";
 import ErrorText from "@/components/share/ErrorText";
-import SelectDropdown from "@/components/share/SelectDropdown";
-import TagsSelect from "@/components/share/TagsSelect";
+import RadioList from "@/components/share/RadioList";
 import { IOption } from "@/types";
-import { IPostFormInput } from "@/types/posts";
+import { IPost, IPostFormInput } from "@/types/posts";
 import { fetchCategories } from "@/utils/api/categories";
 import { fetchTags } from "@/utils/api/tags";
 import { generateSlug } from "@/utils/string-helper";
 import { useQuery } from "@tanstack/react-query";
-import { Label, TextInput } from "flowbite-react";
+import { Accordion, Label, TextInput } from "flowbite-react";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 interface IProps {
+  post?: IPost;
   register: UseFormRegister<IPostFormInput>;
   setValue: UseFormSetValue<IPostFormInput>;
   errors: FieldErrors<IPostFormInput>;
 }
 
-const PostForm: React.FC<IProps> = ({ register, setValue, errors }) => {
+const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
   const [categories, setCategories] = useState<IOption[]>([]);
-
-  const [tagsDefault, setTagsDefault] = useState<IOption[]>([]);
   const [tags, setTags] = useState<IOption[]>([]);
 
   const { data: categoriesData } = useQuery({
@@ -52,27 +51,18 @@ const PostForm: React.FC<IProps> = ({ register, setValue, errors }) => {
         value: item?.id,
       })) ?? [];
     setTags(options);
-    setTagsDefault(options);
   }, [tagsData]);
 
   const onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setValue("overview.slug", generateSlug(event.target.value));
   };
 
-  const handleChangeTags = (selectedCategories: IOption[]) => {
-    setValue(
-      "overview.tag_id",
-      selectedCategories?.map((item) =>
-        item?.value ? String(item?.value) : ""
-      ) ?? []
-    );
-    setTags(tagsDefault?.filter((item) => !selectedCategories?.includes(item)));
+  const handleChangeTags = (options: string[]) => {
+    setValue("overview.tag_id", options);
   };
 
-  const handleSelect = (selectedOption: IOption) => {
-    if (selectedOption?.value) {
-      setValue("overview.category_id", `${selectedOption?.value}`);
-    }
+  const handleSelect = (options: string) => {
+    setValue("overview.category_id", options);
   };
 
   return (
@@ -119,7 +109,34 @@ const PostForm: React.FC<IProps> = ({ register, setValue, errors }) => {
             />
           </div>
 
-          <div className="space-y-2">
+          <Accordion className="border-gray-300" collapseAll>
+            <Accordion.Panel>
+              <Accordion.Title className="p-2.5 text-sm">
+                Category
+              </Accordion.Title>
+              <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
+                <RadioList
+                  name="categories"
+                  options={categories}
+                  selected={post?.category_id}
+                  onChange={handleSelect}
+                />
+              </Accordion.Content>
+            </Accordion.Panel>
+            <Accordion.Panel>
+              <Accordion.Title className="p-2.5 text-sm">Tags</Accordion.Title>
+              <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
+                <CheckboxList
+                  name="tags"
+                  options={tags}
+                  selected={post?.tags?.map((tag) => tag?.id)}
+                  onChange={handleChangeTags}
+                />
+              </Accordion.Content>
+            </Accordion.Panel>
+          </Accordion>
+
+          {/* <div className="space-y-2">
             <div className="inline-flex gap-3">
               <p className="my-auto dark:text-white">Category</p>
               <SelectDropdown
@@ -158,7 +175,7 @@ const PostForm: React.FC<IProps> = ({ register, setValue, errors }) => {
               isError={!!errors?.overview?.tag_id}
               message={errors?.overview?.tag_id?.message}
             />
-          </div>
+          </div> */}
         </div>
         <div>
           <UploadThumnail register={register} errors={errors} />

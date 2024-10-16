@@ -3,8 +3,8 @@
 import axiosInstance from "@/utils/axiosInstance";
 import { setCookie } from "@/utils/cookieUtils";
 import { HttpStatusCode } from "axios";
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import { useRouter } from 'next/navigation'
+import { Button, Label, TextInput } from "flowbite-react";
+import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 interface IFormInput {
@@ -71,10 +71,6 @@ const FormLogin = () => {
             {errors?.password?.message}
           </p>
         )}
-      </div>
-      <div className="flex items-center gap-2">
-        <Checkbox id="remember" />
-        <Label htmlFor="remember">Remember me</Label>
       </div>
       <Button type="submit">Submit</Button>
     </form>
