@@ -8,12 +8,15 @@ interface IProps {
   selected?: string;
   options: IOption[];
   onChange?: (options: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  register?: any;
 }
 
 const CategoriesRadio: React.FC<IProps> = ({
   name,
   options,
   selected,
+  register,
   onChange,
 }) => {
   return (
@@ -28,6 +31,7 @@ const CategoriesRadio: React.FC<IProps> = ({
             onClick={() =>
               onChange ? onChange(String(item?.value)) : undefined
             }
+            {...register}
           />
           <Label htmlFor={name}>{item?.label}</Label>
         </div>

@@ -8,6 +8,7 @@ import { IOption } from "@/types";
 import { IPost, IPostFormInput } from "@/types/posts";
 import { fetchCategories } from "@/utils/api/categories";
 import { fetchTags } from "@/utils/api/tags";
+import { ErrorMessage } from "@/utils/errorMessage";
 import { generateSlug } from "@/utils/string-helper";
 import { useQuery } from "@tanstack/react-query";
 import { Accordion, Label, TextInput } from "flowbite-react";
@@ -78,11 +79,16 @@ const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
               type="text"
               sizing="md"
               readOnly
-              {...register("overview.slug", { required: "This is required." })}
-            />
-            <ErrorText
-              isError={!!errors?.overview?.slug}
-              message={errors?.overview?.slug?.message}
+              {...register("overview.slug", {
+                required: ErrorMessage.REQUIRED,
+              })}
+              color={!!errors?.overview?.slug ? "failure" : ""}
+              helperText={
+                <ErrorText
+                  isError={!!errors?.overview?.slug}
+                  message={errors?.overview?.slug?.message}
+                />
+              }
             />
           </div>
 
@@ -94,21 +100,28 @@ const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
               id="small"
               type="text"
               sizing="md"
+              required
               {...register("overview.title", {
-                required: "This is required.",
+                required: ErrorMessage.REQUIRED,
                 maxLength: {
                   value: 100,
                   message: "maxlength 100",
                 },
               })}
+              color={!!errors?.overview?.title ? "failure" : ""}
+              helperText={
+                <ErrorText
+                  isError={!!errors?.overview?.title}
+                  message={errors?.overview?.title?.message}
+                />
+              }
               onChange={onChangeTitle}
             />
-            <ErrorText
-              isError={!!errors?.overview?.title}
-              message={errors?.overview?.title?.message}
-            />
           </div>
-
+          <ErrorText
+            isError={!!errors?.overview?.category_id}
+            message={errors?.overview?.category_id?.message}
+          />
           <Accordion className="border-gray-300" collapseAll>
             <Accordion.Panel>
               <Accordion.Title className="p-2.5 text-sm">
@@ -116,10 +129,15 @@ const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
               </Accordion.Title>
               <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
                 <RadioList
-                  name="categories"
+                  name="overview.category_id"
                   options={categories}
                   selected={post?.category_id}
                   onChange={handleSelect}
+                  register={{
+                    ...register("overview.category_id", {
+                      required: ErrorMessage.REQUIRED,
+                    }),
+                  }}
                 />
               </Accordion.Content>
             </Accordion.Panel>

@@ -43,12 +43,16 @@ const SeoForm: React.FC<IProps> = ({ register, errors, post, setValue }) => {
           id="small"
           type="text"
           sizing="md"
-          {...register("seo.seoTitle", { required: "This is required." })}
+          {...register("seo.seoTitle", { required: ErrorMessage.REQUIRED })}
+          color={!!errors?.seo?.seoTitle ? "failure" : ""}
+              helperText={
+                <ErrorText
+                isError={!!errors?.seo?.seoTitle}
+                message={errors?.seo?.seoTitle?.message}
+              />
+              }
         />
-        <ErrorText
-          isError={!!errors?.seo?.seoTitle}
-          message={errors?.seo?.seoTitle?.message}
-        />
+        
       </div>
       <div>
         <div className="mb-2 block">
@@ -59,10 +63,13 @@ const SeoForm: React.FC<IProps> = ({ register, errors, post, setValue }) => {
           type="text"
           sizing="md"
           {...register("seo.excerpt", { required: ErrorMessage.REQUIRED })}
-        />
-        <ErrorText
-          isError={!!errors?.seo?.excerpt}
-          message={errors?.seo?.excerpt?.message}
+          color={!!errors?.seo?.excerpt ? "failure" : ""}
+              helperText={
+                <ErrorText
+                isError={!!errors?.seo?.excerpt}
+                message={errors?.seo?.excerpt?.message}
+              />
+              }
         />
       </div>
       <div className="flex flex-row gap-4">
