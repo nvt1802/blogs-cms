@@ -1,43 +1,34 @@
 "use client";
 
 import { IOption } from "@/types";
-import { Label, Radio } from "flowbite-react";
+import { Radio, Label } from "flowbite-react";
 
 interface IProps {
   name: string;
-  selected?: string;
   options: IOption[];
-  onChange?: (options: string) => void;
+  value?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  register?: any;
+  onChange: (...event: any[]) => void;
 }
 
-const CategoriesRadio: React.FC<IProps> = ({
-  name,
-  options,
-  selected,
-  register,
-  onChange,
-}) => {
+const TagsCheckbox: React.FC<IProps> = ({ name, options, value, onChange }) => {
   return (
     <fieldset className="flex max-w-md flex-col gap-4">
       {options?.map((item, index) => (
         <div key={index} className="flex items-center gap-2">
           <Radio
-            id={name}
+            id={String(item.value)}
+            key={item.value}
+            value={item.value}
             name={name}
-            value="USA"
-            checked={item.value === selected}
-            onClick={() =>
-              onChange ? onChange(String(item?.value)) : undefined
-            }
-            {...register}
+            checked={value === item.value}
+            onChange={() => onChange(item.value)}
           />
-          <Label htmlFor={name}>{item?.label}</Label>
+          <Label htmlFor={String(item.value)}>{item?.label}</Label>
         </div>
       ))}
     </fieldset>
   );
 };
 
-export default CategoriesRadio;
+export default TagsCheckbox;

@@ -43,11 +43,13 @@ const PostContainer = () => {
         <>
           <PostsTable currentPage={currentPage} posts={data?.items || []} />
           <div className="flex overflow-x-auto sm:justify-center">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={data?.totalPages || 0}
-              onPageChange={onPageChange}
-            />
+            {data?.totalPages && data?.totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={data?.totalPages || 0}
+                onPageChange={onPageChange}
+              />
+            )}
           </div>
         </>
       )}

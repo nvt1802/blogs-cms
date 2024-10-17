@@ -13,16 +13,28 @@ import { generateSlug } from "@/utils/string-helper";
 import { useQuery } from "@tanstack/react-query";
 import { Accordion, Label, TextInput } from "flowbite-react";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
+import {
+  Control,
+  FieldErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  Controller,
+} from "react-hook-form";
 
 interface IProps {
   post?: IPost;
   register: UseFormRegister<IPostFormInput>;
   setValue: UseFormSetValue<IPostFormInput>;
   errors: FieldErrors<IPostFormInput>;
+  control: Control<IPostFormInput>;
 }
 
-const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
+const PostForm: React.FC<IProps> = ({
+  register,
+  setValue,
+  errors,
+  control,
+}) => {
   const [categories, setCategories] = useState<IOption[]>([]);
   const [tags, setTags] = useState<IOption[]>([]);
 
@@ -58,64 +70,55 @@ const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
     setValue("overview.slug", generateSlug(event.target.value));
   };
 
-  const handleChangeTags = (options: string[]) => {
-    setValue("overview.tag_id", options);
-  };
-
-  const handleSelect = (options: string) => {
-    setValue("overview.category_id", options);
-  };
-
   return (
     <div className="p-4">
       <div className="flex flex-col xmd:flex-row xmd:grid xmd:grid-cols-2 gap-5">
         <div className="flex flex-col gap-6">
-          <div className="space-y-2">
+        <div className="space-y-2">
             <div className="mb-2 block">
-              <Label htmlFor="small" value="Slug" />
+              <Label htmlFor="overview.title" value="Title" />
             </div>
-            <TextInput
-              id="small"
-              type="text"
-              sizing="md"
-              readOnly
-              {...register("overview.slug", {
+            <Controller
+              name="overview.title"
+              control={control}
+              rules={{
                 required: ErrorMessage.REQUIRED,
-              })}
-              color={!!errors?.overview?.slug ? "failure" : ""}
-              helperText={
-                <ErrorText
-                  isError={!!errors?.overview?.slug}
-                  message={errors?.overview?.slug?.message}
+              }}
+              render={({ field }) => (
+                <TextInput
+                  id="overview.title"
+                  type="text"
+                  sizing="md"
+                  color={!!errors?.overview?.title ? "failure" : ""}
+                  helperText={
+                    <ErrorText
+                      isError={!!errors?.overview?.title}
+                      message={errors?.overview?.title?.message}
+                    />
+                  }
+                  {...field}
+                  onInput={onChangeTitle}
                 />
-              }
+              )}
             />
           </div>
 
           <div className="space-y-2">
             <div className="mb-2 block">
-              <Label htmlFor="small" value="Title" />
+              <Label htmlFor="overview.slug" value="Slug" />
             </div>
-            <TextInput
-              id="small"
-              type="text"
-              sizing="md"
-              required
-              {...register("overview.title", {
-                required: ErrorMessage.REQUIRED,
-                maxLength: {
-                  value: 100,
-                  message: "maxlength 100",
-                },
-              })}
-              color={!!errors?.overview?.title ? "failure" : ""}
-              helperText={
-                <ErrorText
-                  isError={!!errors?.overview?.title}
-                  message={errors?.overview?.title?.message}
+            <Controller
+              name="overview.slug"
+              control={control}
+              render={({ field }) => (
+                <TextInput
+                  id="overview.slug"
+                  type="text"
+                  sizing="md"
+                  readOnly
+                  {...field}
                 />
-              }
-              onChange={onChangeTitle}
+              )}
             />
           </div>
 
@@ -131,16 +134,20 @@ const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
                 </div>
               </Accordion.Title>
               <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
-                <RadioList
+                <Controller
                   name="overview.category_id"
-                  options={categories}
-                  selected={post?.category_id}
-                  onChange={handleSelect}
-                  register={{
-                    ...register("overview.category_id", {
-                      required: ErrorMessage.REQUIRED,
-                    }),
+                  control={control}
+                  rules={{
+                    required: ErrorMessage.REQUIRED,
                   }}
+                  render={({ field: { value, onChange, ...restField } }) => (
+                    <RadioList
+                      options={categories}
+                      value={value}
+                      onChange={onChange}
+                      {...restField}
+                    />
+                  )}
                 />
               </Accordion.Content>
             </Accordion.Panel>
@@ -155,16 +162,20 @@ const PostForm: React.FC<IProps> = ({ post, register, setValue, errors }) => {
                 </div>
               </Accordion.Title>
               <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
-                <CheckboxList
+                <Controller
                   name="overview.tag_id"
-                  options={tags}
-                  selected={post?.tags?.map((tag) => tag?.id)}
-                  onChange={handleChangeTags}
-                  register={{
-                    ...register("overview.tag_id", {
-                      required: ErrorMessage.REQUIRED,
-                    }),
+                  control={control}
+                  rules={{
+                    required: ErrorMessage.REQUIRED,
                   }}
+                  render={({ field: { value, onChange, ...restField } }) => (
+                    <CheckboxList
+                      options={tags}
+                      value={value}
+                      onChange={onChange}
+                      {...restField}
+                    />
+                  )}
                 />
               </Accordion.Content>
             </Accordion.Panel>

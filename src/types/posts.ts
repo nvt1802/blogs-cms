@@ -59,3 +59,17 @@ export interface IPostDetailResponse {
   statusCode: number;
   data: IPost;
 }
+
+export interface IPostForm {
+  title: string
+  slug: string
+  content: string
+  excerpt: string
+  author_id: string
+  category_id: string
+  status: string
+  featured_image: string
+  is_index: boolean
+  is_follow: boolean
+  seo_title: string
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { IPost, IPostFormInput } from "@/types/posts";
+import { IPost, IPostForm, IPostFormInput } from "@/types/posts";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import CMSTabs, { ITabItem } from "@/components/share/tabs/CMSTabs";
@@ -11,6 +11,7 @@ import SeoForm from "@/components/posts/SeoForm";
 import dynamic from "next/dynamic";
 import { OutputData } from "@editorjs/editorjs";
 import { postTabs } from "@/utils/contants";
+import { getCookie } from "@/utils/cookieUtils";
 
 const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
@@ -18,9 +19,10 @@ const Editor = dynamic(() => import("./Editor"), {
 
 interface IProps {
   post?: IPost;
+  onSubmit?: (post: IPostForm) => void;
 }
 
-const PostTabs: React.FC<IProps> = ({ post }) => {
+const PostTabs: React.FC<IProps> = ({ post, onSubmit }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [tabs, setTabs] = useState<ITabItem[]>(postTabs);
   const [defaultValue, setDefaultValue] = useState<IPostFormInput>();
@@ -29,6 +31,7 @@ const PostTabs: React.FC<IProps> = ({ post }) => {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors, isDirty },
     trigger,
   } = useForm<IPostFormInput>({
@@ -54,10 +57,24 @@ const PostTabs: React.FC<IProps> = ({ post }) => {
     });
   }, [post]);
 
-  const onSubmit: SubmitHandler<IPostFormInput> = async (
+  const onSubmitForm: SubmitHandler<IPostFormInput> = async (
     formData: IPostFormInput
   ) => {
-    console.log(formData, errors);
+    if (onSubmit) {
+      onSubmit({
+        author_id: post?.author_id ?? getCookie("userId") ?? "",
+        category_id: formData.overview.category_id ?? "",
+        content: formData.content ?? "",
+        excerpt: formData.seo.excerpt,
+        featured_image: formData.overview.featuredImage ?? "",
+        is_follow: formData.seo.isFollow,
+        is_index: formData.seo.isIndex,
+        seo_title: formData.seo.seoTitle,
+        slug: formData.overview.slug,
+        status: "draft",
+        title: formData.overview.title,
+      });
+    }
   };
 
   const onNextTabs = async () => {
@@ -71,7 +88,6 @@ const PostTabs: React.FC<IProps> = ({ post }) => {
           "overview.category_id",
           "overview.tag_id",
         ]);
-        console.log(result);
         break;
       case 1:
         result = await trigger(["content"]);
@@ -111,7 +127,7 @@ const PostTabs: React.FC<IProps> = ({ post }) => {
       tabs={tabs}
     >
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmitForm)}
         className="max-h-[calc(100vh-270px)]"
       >
         <TabItem active={activeTab === 0}>
@@ -120,6 +136,7 @@ const PostTabs: React.FC<IProps> = ({ post }) => {
             setValue={setValue}
             post={post}
             errors={errors}
+            control={control}
           />
         </TabItem>
         <TabItem active={activeTab === 1} className="bg-gray-200">
@@ -131,12 +148,7 @@ const PostTabs: React.FC<IProps> = ({ post }) => {
           />
         </TabItem>
         <TabItem active={activeTab === 2}>
-          <SeoForm
-            register={register}
-            errors={errors}
-            post={post}
-            setValue={setValue}
-          />
+          <SeoForm control={control} errors={errors} setValue={setValue} />
         </TabItem>
         <div className="px-4 pt-1 w-full flex justify-between gap-4 absolute bottom-0 border-t">
           <Button color="purple" type="button">

@@ -1,8 +1,9 @@
 "use client";
 
-import { fetchPostsBySlug } from "@/utils/api/posts";
+import { fetchPostsBySlug, updatePost } from "@/utils/api/posts";
 import { useQuery } from "@tanstack/react-query";
 import PostTabs from "./PostTabs";
+import { IPostForm } from "@/types/posts";
 
 interface IProps {
   slug: string;
@@ -13,9 +14,13 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
     queryFn: async () => fetchPostsBySlug(slug),
   });
 
+  const onUpdatePost = (post: IPostForm) => {
+    updatePost(slug, post);
+  };
+
   return (
     <>
-      <PostTabs post={data} />
+      <PostTabs post={data} onSubmit={onUpdatePost} />
     </>
   );
 };

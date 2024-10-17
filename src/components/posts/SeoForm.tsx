@@ -1,91 +1,111 @@
 "use client";
 
-import { IPost, IPostFormInput } from "@/types/posts";
-import { Label, TextInput, ToggleSwitch } from "flowbite-react";
-import React, { useEffect, useState } from "react";
-import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import ErrorText from "@/components/share/ErrorText";
+import { IPostFormInput } from "@/types/posts";
 import { ErrorMessage } from "@/utils/errorMessage";
+import { Label, TextInput, ToggleSwitch } from "flowbite-react";
+import React from "react";
+import {
+  Control,
+  Controller,
+  FieldErrors,
+  UseFormSetValue
+} from "react-hook-form";
 
 interface IProps {
-  post?: IPost;
-  register: UseFormRegister<IPostFormInput>;
   errors: FieldErrors<IPostFormInput>;
   setValue: UseFormSetValue<IPostFormInput>;
+  control: Control<IPostFormInput>;
 }
 
-const SeoForm: React.FC<IProps> = ({ register, errors, post, setValue }) => {
-  const [isIndex, setIsIndex] = useState(false);
-  const [isFollow, setIsFollow] = useState(false);
-
-  useEffect(() => {
-    setIsIndex(post?.is_index || false);
-    setIsFollow(post?.is_follow || false);
-  }, [post]);
-
-  const onChangeIsIndex = () => {
-    setIsIndex(!isIndex);
-    setValue("seo.isIndex", !isIndex);
-  };
-
-  const onChangeIsFollow = () => {
-    setIsFollow(!isFollow);
-    setValue("seo.isFollow", !isFollow);
-  };
-
+const SeoForm: React.FC<IProps> = ({ errors, control }) => {
   return (
     <div className="p-4 flex flex-col gap-5">
       <div>
         <div className="mb-2 block">
           <Label htmlFor="small" value="Title" />
         </div>
-        <TextInput
-          id="small"
-          type="text"
-          sizing="md"
-          {...register("seo.seoTitle", { required: ErrorMessage.REQUIRED })}
-          color={!!errors?.seo?.seoTitle ? "failure" : ""}
+        <Controller
+          name="seo.seoTitle"
+          control={control}
+          rules={{
+            required: ErrorMessage.REQUIRED,
+          }}
+          render={({ field }) => (
+            <TextInput
+              id="small"
+              type="text"
+              sizing="md"
+              color={!!errors?.seo?.seoTitle ? "failure" : ""}
               helperText={
                 <ErrorText
-                isError={!!errors?.seo?.seoTitle}
-                message={errors?.seo?.seoTitle?.message}
-              />
+                  isError={!!errors?.seo?.seoTitle}
+                  message={errors?.seo?.seoTitle?.message}
+                />
               }
+              {...field}
+            />
+          )}
         />
-        
       </div>
       <div>
         <div className="mb-2 block">
           <Label htmlFor="small" value="Description" />
         </div>
-        <TextInput
-          id="small"
-          type="text"
-          sizing="md"
-          {...register("seo.excerpt", { required: ErrorMessage.REQUIRED })}
-          color={!!errors?.seo?.excerpt ? "failure" : ""}
+        <Controller
+          name="seo.excerpt"
+          control={control}
+          rules={{
+            required: ErrorMessage.REQUIRED,
+          }}
+          render={({ field }) => (
+            <TextInput
+              id="small"
+              type="text"
+              sizing="md"
+              color={!!errors?.seo?.excerpt ? "failure" : ""}
               helperText={
                 <ErrorText
-                isError={!!errors?.seo?.excerpt}
-                message={errors?.seo?.excerpt?.message}
-              />
+                  isError={!!errors?.seo?.excerpt}
+                  message={errors?.seo?.excerpt?.message}
+                />
               }
+              {...field}
+            />
+          )}
         />
       </div>
-      <div className="flex flex-row gap-4">
-        <ToggleSwitch
-          label="Is Index"
-          {...register("seo.isIndex")}
+      <div className="flex flex-row gap-8">
+        <Controller
           name="seo.isIndex"
-          checked={isIndex}
-          onChange={onChangeIsIndex}
+          control={control}
+          rules={{
+            required: ErrorMessage.REQUIRED,
+          }}
+          render={({ field: { onChange, value, ...restField } }) => (
+            <ToggleSwitch
+              label="Is isIndex"
+              checked={value}
+              onChange={(e) => onChange(e)}
+              {...restField}
+            />
+          )}
         />
-        <ToggleSwitch
-          label="Is Follow"
-          {...register("seo.isFollow")}
+
+        <Controller
           name="seo.isFollow"
-          checked={isFollow}
-          onChange={onChangeIsFollow}
+          control={control}
+          rules={{
+            required: ErrorMessage.REQUIRED,
+          }}
+          render={({ field: { onChange, value, ...restField } }) => (
+            <ToggleSwitch
+              label="Is Follow"
+              checked={value}
+              onChange={(e) => onChange(e)}
+              {...restField}
+            />
+          )}
         />
       </div>
     </div>
