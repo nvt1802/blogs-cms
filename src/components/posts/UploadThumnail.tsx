@@ -7,6 +7,7 @@ import { ChangeEvent, useState } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import ErrorText from "../share/ErrorText";
+import { ErrorMessage } from "@/utils/errorMessage";
 
 interface IProps {
   post?: IPost;
@@ -105,7 +106,7 @@ const UploadThumnail: React.FC<IProps> = ({
             id="dropzone-file"
             className="hidden"
             {...register("overview.featuredImage", {
-              // required: "This is required.",
+              required: ErrorMessage.REQUIRED,
             })}
             onChange={onChangeImage}
           />

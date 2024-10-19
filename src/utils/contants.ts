@@ -1,6 +1,6 @@
 import { ITabItem } from "@/components/share/tabs/CMSTabs";
 
-export const pageLimit = 8;
+export const pageLimit = 6;
 export const postTabs: ITabItem[] = [
   {
     name: "Overview",

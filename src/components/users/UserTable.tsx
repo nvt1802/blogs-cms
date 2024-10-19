@@ -22,9 +22,11 @@ const UserTable = () => {
   return (
     <>
       {isLoading ? (
-        <div className="text-center">
-          <Spinner aria-label="Center-aligned spinner example" />
-        </div>
+        <div className="flex flex-col text-center h-full">
+          <div className="my-auto">
+            <Spinner aria-label="spinner" />
+          </div>
+      </div>
       ) : (
         <>
           <div className="overflow-y-auto">

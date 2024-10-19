@@ -7,35 +7,44 @@ import RadioList from "@/components/share/RadioList";
 import { IOption } from "@/types";
 import { IPost, IPostFormInput } from "@/types/posts";
 import { fetchCategories } from "@/utils/api/categories";
+import { checkSlugIsUsed } from "@/utils/api/posts";
 import { fetchTags } from "@/utils/api/tags";
 import { ErrorMessage } from "@/utils/errorMessage";
 import { generateSlug } from "@/utils/string-helper";
 import { useQuery } from "@tanstack/react-query";
 import { Accordion, Label, TextInput } from "flowbite-react";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FocusEvent, useEffect, useState } from "react";
 import {
   Control,
-  FieldErrors,
-  UseFormRegister,
-  UseFormSetValue,
   Controller,
+  FieldErrors,
+  UseFormClearErrors,
+  UseFormRegister,
+  UseFormSetError,
+  UseFormSetValue,
 } from "react-hook-form";
 
 interface IProps {
   post?: IPost;
+  isCreateForm?: boolean;
   register: UseFormRegister<IPostFormInput>;
   setValue: UseFormSetValue<IPostFormInput>;
+  setError?: UseFormSetError<IPostFormInput>;
+  clearErrors?: UseFormClearErrors<IPostFormInput>;
   errors: FieldErrors<IPostFormInput>;
   control: Control<IPostFormInput>;
   onChaneFileList?: (fileList: FileList | null) => void;
 }
 
 const PostForm: React.FC<IProps> = ({
-  register,
-  setValue,
   post,
   errors,
   control,
+  isCreateForm,
+  register,
+  setValue,
+  setError,
+  clearErrors,
   onChaneFileList,
 }) => {
   const [categories, setCategories] = useState<IOption[]>([]);
@@ -69,10 +78,45 @@ const PostForm: React.FC<IProps> = ({
     setTags(options);
   }, [tagsData]);
 
+  const onCheckSlug = async (slug: string) => {
+    try {
+      const { isUsed } = await checkSlugIsUsed(slug);
+      if (!setError || !clearErrors) return;
+      const hasSlugConflict = isCreateForm
+        ? isUsed
+        : isUsed && slug !== post?.slug;
+
+      if (hasSlugConflict) {
+        setError("overview.slug", { message: "Slug is used" });
+      } else {
+        clearErrors("overview.slug");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    const slug = generateSlug(event.target.value);
     setValue("overview.slug", generateSlug(event.target.value), {
       shouldDirty: true,
     });
+    onCheckSlug(slug);
+  };
+
+  const onChangeSlug = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+    setValue("overview.slug", event.target.value, {
+      shouldDirty: true,
+    });
+  };
+
+  const onBlurSlug = async (event: FocusEvent<HTMLInputElement>) => {
+    const slug = generateSlug(event.target.value);
+    setValue("overview.slug", generateSlug(slug), {
+      shouldDirty: true,
+    });
+    onCheckSlug(slug);
   };
 
   return (
@@ -116,13 +160,24 @@ const PostForm: React.FC<IProps> = ({
             <Controller
               name="overview.slug"
               control={control}
+              rules={{
+                required: ErrorMessage.REQUIRED,
+              }}
               render={({ field }) => (
                 <TextInput
                   id="overview.slug"
                   type="text"
                   sizing="md"
-                  readOnly
+                  color={!!errors?.overview?.slug ? "failure" : ""}
+                  helperText={
+                    <ErrorText
+                      isError={!!errors?.overview?.slug}
+                      message={errors?.overview?.slug?.message}
+                    />
+                  }
                   {...field}
+                  onChange={onChangeSlug}
+                  onBlur={onBlurSlug}
                 />
               )}
             />

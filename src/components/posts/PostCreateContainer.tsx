@@ -1,24 +1,14 @@
 "use client";
 
 import { useAppContext } from "@/context/AppContext";
-import { IPost, IPostForm } from "@/types/posts";
-import {
-  updatePost,
-  updateTagsOfPost
-} from "@/utils/api/posts";
+import { IPostForm } from "@/types/posts";
+import { addNewPost, addTagsForPost } from "@/utils/api/posts";
 import { uploadSingeFile } from "@/utils/api/upload";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import PostTabs from "./PostTabs";
 
-interface IProps {
-  slug: string;
-}
-const PostCreateContainer: React.FC<IProps> = ({ slug }) => {
-  const router = useRouter();
+const PostCreateContainer: React.FC = () => {
   const [isUpdateProcessing, setIsUpdateProcessing] = useState<boolean>(false);
-
-  const [post, setPost] = useState<IPost>();
   const { state, updateState } = useAppContext();
 
   const addToast = (
@@ -42,14 +32,11 @@ const PostCreateContainer: React.FC<IProps> = ({ slug }) => {
       }
       delete post?.tags_id;
       delete post?.featured_image_blob;
-      const response = await updatePost(slug, post);
-      await updateTagsOfPost(slug, tagsId);
-      if (response.slug !== slug) {
-        router.push(`/dashboard/posts/${response.slug}`);
-      } else {
-        setPost(response);
-        addToast("Update Post success", "success");
-      }
+      const { slug } = await addNewPost(post);
+      console.log(slug);      
+      const { message } = await addTagsForPost(slug, tagsId);
+      addToast(message, "success");
+      addToast("Update Post success", "success");
     } catch (error) {
       console.error(error);
       addToast("Update Post error", "error");
@@ -62,7 +49,6 @@ const PostCreateContainer: React.FC<IProps> = ({ slug }) => {
     <>
       <PostTabs
         isCreateForm
-        post={post}
         isUpdateProcessing={isUpdateProcessing}
         onSubmit={onUpdatePost}
       />

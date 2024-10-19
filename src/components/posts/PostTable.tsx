@@ -3,7 +3,8 @@
 import { IPost } from "@/types/posts";
 import { PostStatus } from "@/utils/contants";
 import dayjs from "dayjs";
-import { Avatar, Badge, Table } from "flowbite-react";
+import { Badge, Table } from "flowbite-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 interface IProps {
@@ -43,15 +44,24 @@ const PostsTable: React.FC<IProps> = ({ currentPage = 1, posts }) => {
                 {(currentPage - 1) * 10 + index + 1}
               </Table.Cell>
               <Table.Cell>
-                <Avatar img={item.featured_image} alt="avatar" />
+                <Image
+                  src={item.featured_image}
+                  alt="thumnail"
+                  width={60}
+                  height={30}
+                />
               </Table.Cell>
               <Table.Cell>{item.title}</Table.Cell>
               <Table.Cell>{item.categories?.name}</Table.Cell>
               <Table.Cell className="capitalize">
                 {item.status === "published" ? (
-                  <Badge color="success" className="w-fit py-1.5">{PostStatus.PUBLISHED}</Badge>
+                  <Badge color="success" className="w-fit py-1.5">
+                    {PostStatus.PUBLISHED}
+                  </Badge>
                 ) : (
-                  <Badge color="info" className="w-fit py-1.5">{PostStatus.DRAFT}</Badge>
+                  <Badge color="info" className="w-fit py-1.5">
+                    {PostStatus.DRAFT}
+                  </Badge>
                 )}
               </Table.Cell>
               <Table.Cell className="capitalize">

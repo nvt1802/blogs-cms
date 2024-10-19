@@ -6,16 +6,10 @@ export const metadata: Metadata = {
   title: "Create New Post - Dashboard CMS",
 };
 
-interface PostPageProps {
-  params: {
-    slug: string;
-  };
-}
-
-const CreatePost = ({ params }: PostPageProps) => {
+const CreatePost = () => {
   return (
     <MainLayout>
-      <PostCreateContainer slug={params.slug} />
+      <PostCreateContainer />
     </MainLayout>
   );
 };

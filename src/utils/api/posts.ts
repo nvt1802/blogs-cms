@@ -16,6 +16,14 @@ export const fetchPostsBySlug = async (slug: string) => {
   return data.data;
 };
 
+export const addNewPost = async (post: IPostForm) => {
+  const { data } = await axiosInstance.post<IPostDetailResponse>(
+    `/api/posts`,
+    post
+  );
+  return data.data;
+};
+
 export const updatePost = async (slug: string, post: IPostForm) => {
   const { data } = await axiosInstance.put<IPostDetailResponse>(
     `/api/posts/${slug}`,
@@ -40,5 +48,25 @@ export const updateStatusOfPost = async (id: string, status: PostStatus) => {
       status,
     }
   );
+  return data.data;
+};
+
+export const checkSlugIsUsed = async (slug: string) => {
+  const { data } = await axiosInstance.get<{
+    statusCode: number;
+    data: {
+      isUsed: boolean;
+    };
+  }>(`/api/posts/check-slug/${slug}`);
+  return data.data;
+};
+
+export const addTagsForPost = async (slug: string, tags_id: string[]) => {
+  const { data } = await axiosInstance.post<{
+    statusCode: number;
+    data: {
+      message: string;
+    };
+  }>(`/api/posts/tags`, { slug, tags_id });
   return data.data;
 };

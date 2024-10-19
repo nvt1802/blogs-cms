@@ -4,6 +4,8 @@ import { Breadcrumb } from "flowbite-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HiHome } from "react-icons/hi";
+import { HiOutlineChevronRight } from "react-icons/hi";
+import Link from "next/link";
 
 interface IBreakcrumb {
   href: string;
@@ -22,7 +24,7 @@ const CMSBreadcrumb = () => {
       data.push({
         href: fullPath?.join("/"),
         name: path,
-      });      
+      });
     });
     setBreakcrumbData(data);
   }, [pathname]);
@@ -33,14 +35,28 @@ const CMSBreadcrumb = () => {
       className="bg-white px-5 py-3 dark:bg-gray-700 hidden sm:block"
     >
       {breakcrumbData.map((item, index: number) => (
-        <Breadcrumb.Item
-          href={item?.href || "/"}
-          key={index}
-          icon={item?.href ? undefined : HiHome}
-          className="capitalize"
-        >
-          {item?.name || "Home"}
-        </Breadcrumb.Item>
+        <li key={index} className="group flex items-center capitalize">
+          {index === 0 ? (
+            <Link href={item.href} className="inline-flex">
+              <HiHome className="mr-2 h-4 w-4 my-auto" />
+              <p className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Home</p>
+            </Link>
+          ) : (
+            <HiOutlineChevronRight className="mx-1 h-4 w-4 text-gray-400 group-first:hidden md:mx-2" />
+          )}
+          {index !== 0 && index < breakcrumbData.length - 1 ? (
+            <Link
+              href={item.href}
+              className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            >
+              {item?.name}
+            </Link>
+          ) : (
+            <p className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+              {item?.name}
+            </p>
+          )}
+        </li>
       ))}
     </Breadcrumb>
   );

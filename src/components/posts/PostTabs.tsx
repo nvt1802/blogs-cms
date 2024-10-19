@@ -46,6 +46,8 @@ const PostTabs: React.FC<IProps> = ({
     control,
     formState: { errors, dirtyFields },
     trigger,
+    setError,
+    clearErrors,
   } = useForm<IPostFormInput>({
     values: defaultValue,
   });
@@ -162,9 +164,12 @@ const PostTabs: React.FC<IProps> = ({
           <OverviewForm
             register={register}
             setValue={setValue}
+            setError={setError}
+            clearErrors={clearErrors}
             post={post}
             errors={errors}
             control={control}
+            isCreateForm={isCreateForm}
             onChaneFileList={onChangeThumnailBlob}
           />
         </TabItem>

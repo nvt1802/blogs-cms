@@ -27,20 +27,22 @@ const PostContainer = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-end p-2">
-        <Button color="cyan" onClick={onCreateNewPost}>
-          <div className="flex flex-row gap-2">
-            <HiDocumentAdd size={20} />
-            <p>Create New Post</p>
-          </div>
-        </Button>
-      </div>
       {isLoading ? (
-        <div className="text-center">
-          <Spinner aria-label="Center-aligned spinner example" />
+        <div className="flex flex-col text-center h-full">
+          <div className="my-auto">
+            <Spinner aria-label="spinner" />
+          </div>
         </div>
       ) : (
         <>
+          <div className="flex flex-row justify-end p-2">
+            <Button color="cyan" onClick={onCreateNewPost}>
+              <div className="flex flex-row gap-2">
+                <HiDocumentAdd size={20} />
+                <p>Create New Post</p>
+              </div>
+            </Button>
+          </div>
           <PostsTable currentPage={currentPage} posts={data?.items || []} />
           <div className="flex overflow-x-auto sm:justify-center">
             {data?.totalPages && data?.totalPages > 1 && (

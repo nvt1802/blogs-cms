@@ -21,8 +21,10 @@ const CategoriesTable = () => {
   return (
     <>
       {isLoading ? (
-        <div className="text-center">
-          <Spinner aria-label="Center-aligned spinner example" />
+        <div className="flex flex-col text-center h-full">
+          <div className="my-auto">
+            <Spinner aria-label="spinner" />
+          </div>
         </div>
       ) : (
         <>
