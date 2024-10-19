@@ -1,17 +1,17 @@
 "use client";
 
-import { IPost, IPostForm, IPostFormInput } from "@/types/posts";
-import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import OverviewForm from "@/components/posts/OverviewForm";
+import SeoForm from "@/components/posts/SeoForm";
 import CMSTabs, { ITabItem } from "@/components/share/tabs/CMSTabs";
 import TabItem from "@/components/share/tabs/TabItem";
-import OverviewForm from "@/components/posts/OverviewForm";
-import { Button } from "flowbite-react";
-import SeoForm from "@/components/posts/SeoForm";
-import dynamic from "next/dynamic";
-import { OutputData } from "@editorjs/editorjs";
-import { postTabs } from "@/utils/contants";
+import { IPost, IPostForm, IPostFormInput } from "@/types/posts";
+import { PostStatus, postTabs } from "@/utils/contants";
 import { getCookie } from "@/utils/cookieUtils";
+import { OutputData } from "@editorjs/editorjs";
+import { Button } from "flowbite-react";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
@@ -19,20 +19,32 @@ const Editor = dynamic(() => import("./Editor"), {
 
 interface IProps {
   post?: IPost;
+  isUpdateProcessing?: boolean;
+  isPublishProcessing?: boolean;
+  isCreateForm?: boolean;
   onSubmit?: (post: IPostForm) => void;
+  onPublish?: (id: string, status: PostStatus) => void;
 }
 
-const PostTabs: React.FC<IProps> = ({ post, onSubmit }) => {
+const PostTabs: React.FC<IProps> = ({
+  post,
+  isUpdateProcessing,
+  isPublishProcessing,
+  isCreateForm,
+  onSubmit,
+  onPublish,
+}) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [tabs, setTabs] = useState<ITabItem[]>(postTabs);
   const [defaultValue, setDefaultValue] = useState<IPostFormInput>();
+  const [fileList, setFileList] = useState<FileList | null>();
 
   const {
     register,
     handleSubmit,
     setValue,
     control,
-    formState: { errors, isDirty },
+    formState: { errors, dirtyFields },
     trigger,
   } = useForm<IPostFormInput>({
     values: defaultValue,
@@ -67,12 +79,14 @@ const PostTabs: React.FC<IProps> = ({ post, onSubmit }) => {
         content: formData.content ?? "",
         excerpt: formData.seo.excerpt,
         featured_image: formData.overview.featuredImage ?? "",
-        is_follow: formData.seo.isFollow,
-        is_index: formData.seo.isIndex,
+        is_follow: formData.seo?.isFollow,
+        is_index: formData.seo?.isIndex,
         seo_title: formData.seo.seoTitle,
         slug: formData.overview.slug,
         status: "draft",
         title: formData.overview.title,
+        tags_id: formData.overview.tag_id ?? [],
+        featured_image_blob: fileList,
       });
     }
   };
@@ -108,17 +122,31 @@ const PostTabs: React.FC<IProps> = ({ post, onSubmit }) => {
     setActiveTab(activeTab < 2 ? activeTab + 1 : activeTab);
   };
 
-  const handleEditorChange = (data: OutputData) => {
-    setValue("content", JSON.stringify(data));
+  const onEditorChange = (data: OutputData) => {
+    setValue("content", JSON.stringify(data), { shouldDirty: true });
+  };
+
+  const onChangeThumnailBlob = (fileList: FileList | null) => {
+    setFileList(fileList);
+  };
+
+  const onChangeStatus = () => {
+    if (onPublish) {
+      onPublish(
+        post?.id ?? "",
+        post?.status === "draft" ? PostStatus.PUBLISHED : PostStatus.DRAFT
+      );
+    }
   };
 
   useEffect(() => {
-    if (isDirty) {
-      window.addEventListener("beforeunload", (event) => {
+    window.addEventListener("beforeunload", (event) => {
+      if (!!Object.keys(dirtyFields).length) {
         event.preventDefault();
-      });
-    }
-  }, [isDirty]);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dirtyFields]);
 
   return (
     <CMSTabs
@@ -130,37 +158,53 @@ const PostTabs: React.FC<IProps> = ({ post, onSubmit }) => {
         onSubmit={handleSubmit(onSubmitForm)}
         className="max-h-[calc(100vh-270px)]"
       >
-        <TabItem active={activeTab === 0}>
+        <TabItem active={activeTab === 0} className="bg-white">
           <OverviewForm
             register={register}
             setValue={setValue}
             post={post}
             errors={errors}
             control={control}
+            onChaneFileList={onChangeThumnailBlob}
           />
         </TabItem>
-        <TabItem active={activeTab === 1} className="bg-gray-200">
+        <TabItem active={activeTab === 1} className="bg-gray-200 p-1">
           <Editor
             register={register}
             isShowEditor={activeTab === 1}
             data={post?.content ? JSON?.parse(post?.content) : null}
-            onChange={handleEditorChange}
+            onChange={onEditorChange}
           />
         </TabItem>
-        <TabItem active={activeTab === 2}>
+        <TabItem active={activeTab === 2} className="bg-white">
           <SeoForm control={control} errors={errors} setValue={setValue} />
         </TabItem>
-        <div className="px-4 pt-1 w-full flex justify-between gap-4 absolute bottom-0 border-t">
-          <Button color="purple" type="button">
-            Publish
-          </Button>
-          <div className="flex gap-4">
-            <Button color="info" type="button" onClick={onNextTabs}>
-              Next
-            </Button>
-            <Button color="success" type="submit">
-              Submit
-            </Button>
+        <div className="px-2 py-4 w-full absolute -bottom-4 border-t bg-gray-50 dark:bg-gray-700 z-30">
+          <div className="flex gap-4 justify-between max-w-md">
+            <div className="flex gap-4">
+              <Button color="info" type="button" onClick={onNextTabs}>
+                Next
+              </Button>
+              <Button
+                color="success"
+                type="submit"
+                isProcessing={isUpdateProcessing}
+                disabled={!Object.keys(dirtyFields).length}
+              >
+                Save
+              </Button>
+            </div>
+            {!isCreateForm && (
+              <Button
+                color="purple"
+                type="button"
+                className="capitalize"
+                isProcessing={isPublishProcessing}
+                onClick={onChangeStatus}
+              >
+                {post?.status === "published" ? "Draft" : "Publish"}
+              </Button>
+            )}
           </div>
         </div>
       </form>

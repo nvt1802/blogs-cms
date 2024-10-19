@@ -45,7 +45,7 @@ const CMSTabs: React.FC<IProps> = ({
                   if (typeof onClickTab !== "undefined") onClickTab(index);
                 }}
               >
-                <p>{item?.name}</p>
+                <p className="font-semibold">{item?.name}</p>
                 {item.status === "error" && (
                   <HiXCircle className="my-auto" color="red" size={18} />
                 )}

@@ -9,7 +9,7 @@ import {
   Control,
   Controller,
   FieldErrors,
-  UseFormSetValue
+  UseFormSetValue,
 } from "react-hook-form";
 
 interface IProps {
@@ -36,6 +36,7 @@ const SeoForm: React.FC<IProps> = ({ errors, control }) => {
               id="small"
               type="text"
               sizing="md"
+              className="custom-input"
               color={!!errors?.seo?.seoTitle ? "failure" : ""}
               helperText={
                 <ErrorText
@@ -63,6 +64,7 @@ const SeoForm: React.FC<IProps> = ({ errors, control }) => {
               id="small"
               type="text"
               sizing="md"
+              className="custom-input"
               color={!!errors?.seo?.excerpt ? "failure" : ""}
               helperText={
                 <ErrorText
@@ -79,9 +81,6 @@ const SeoForm: React.FC<IProps> = ({ errors, control }) => {
         <Controller
           name="seo.isIndex"
           control={control}
-          rules={{
-            required: ErrorMessage.REQUIRED,
-          }}
           render={({ field: { onChange, value, ...restField } }) => (
             <ToggleSwitch
               label="Is isIndex"
@@ -95,9 +94,6 @@ const SeoForm: React.FC<IProps> = ({ errors, control }) => {
         <Controller
           name="seo.isFollow"
           control={control}
-          rules={{
-            required: ErrorMessage.REQUIRED,
-          }}
           render={({ field: { onChange, value, ...restField } }) => (
             <ToggleSwitch
               label="Is Follow"

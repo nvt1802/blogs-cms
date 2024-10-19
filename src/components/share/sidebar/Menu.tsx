@@ -31,7 +31,7 @@ const Menu: React.FC<IProps> = ({ className }) => {
 
   return (
     <Sidebar
-      aria-label="Default sidebar example"
+      aria-label="sidebar"
       className={twMerge("cms-sibar", className)}
     >
       <Sidebar.Items className="h-[calc(100%-40px)]">

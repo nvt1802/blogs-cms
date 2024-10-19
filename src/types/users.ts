@@ -34,3 +34,17 @@ export interface IUsersResponse {
   statusCode: number;
   data: IUsersPaginationResponse;
 }
+
+export interface IUserInfo {
+  email: string;
+  profile_picture: string;
+  role: "user" | "author" | "admin";
+  username: string;
+  first_name: string;
+  last_name: string;
+}
+
+export interface IUsersInfoResponse {
+  statusCode: number;
+  data: IUserInfo;
+}

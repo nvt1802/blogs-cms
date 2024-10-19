@@ -48,7 +48,7 @@ const CMSEditor: React.FC<IProps> = ({
     <>
       <div
         id="editorjs"
-        className="h-[60vh] w-full overflow-y-auto relative bg-white dark:bg-gray-700 rounded-lg dark:text-white"
+        className="h-[calc(100vh-420px)] w-full overflow-y-auto relative bg-white dark:bg-gray-700 rounded-lg dark:text-white"
       />
       <TextInput
         id="small"

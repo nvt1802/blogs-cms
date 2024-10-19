@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppContext } from "@/context/AppContext";
-import axiosInstance from "@/utils/axiosInstance";
+import { fetchUsersInfoById } from "@/utils/api/users";
 import { getCookie } from "@/utils/cookieUtils";
 import { Avatar, Navbar } from "flowbite-react";
 import { useEffect } from "react";
@@ -13,8 +13,10 @@ const CMSHeader = () => {
   const onGetUserInfo = async () => {
     try {
       const userId = getCookie("userId");
-      const { data } = await axiosInstance.get(`/api/userinfo/${userId}`);
-      updateState({ user: data?.data });
+      if (userId) {
+        const data = await fetchUsersInfoById(userId);
+        updateState({ user: data });
+      }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {}
   };
@@ -27,7 +29,7 @@ const CMSHeader = () => {
   const onClick = () => updateState({ isOpenMenuDrawer: true });
 
   return (
-    <Navbar fluid rounded className="w-full rounded-none">
+    <Navbar fluid rounded className="w-full rounded-none bg-gray-200">
       <button onClick={() => onClick()} className="m-2 sm:hidden">
         <HiMenu className="h-6 w-6" />
       </button>

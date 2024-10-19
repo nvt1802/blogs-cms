@@ -15,3 +15,7 @@ export const postTabs: ITabItem[] = [
     status: "unknown",
   },
 ];
+export enum PostStatus {
+  PUBLISHED = "published",
+  DRAFT = "draft",
+}

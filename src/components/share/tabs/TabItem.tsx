@@ -12,7 +12,7 @@ const TabItem: React.FC<IProps> = ({ children, active, className }) => {
   return (
     <div
       className={twMerge(
-        "hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800",
+        "hidden rounded-lg bg-gray-50 dark:bg-gray-800",
         active ? "block" : "",
         className
       )}

@@ -3,7 +3,7 @@ import MainLayout from "@/layouts/MainLayout";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Posts - Dashboard CMS",
+  title: "Update Post - Dashboard CMS",
 };
 
 interface PostPageProps {
@@ -12,10 +12,12 @@ interface PostPageProps {
   };
 }
 
-export default function Home({ params }: PostPageProps) {
+const DetailPost = ({ params }: PostPageProps) => {
   return (
     <MainLayout>
       <PostDetailContainer slug={params.slug} />
     </MainLayout>
   );
-}
+};
+
+export default DetailPost;

@@ -1,26 +1,165 @@
 "use client";
 
-import { fetchPostsBySlug, updatePost } from "@/utils/api/posts";
+import { IPost, IPostForm } from "@/types/posts";
+import {
+  fetchPostsBySlug,
+  updatePost,
+  updateStatusOfPost,
+  updateTagsOfPost,
+} from "@/utils/api/posts";
 import { useQuery } from "@tanstack/react-query";
+import { Avatar, Badge, Spinner } from "flowbite-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import PostTabs from "./PostTabs";
-import { IPostForm } from "@/types/posts";
+import { useAppContext } from "@/context/AppContext";
+import { uploadSingeFile } from "@/utils/api/upload";
+import { fetchUsersInfoById } from "@/utils/api/users";
+import { IUserInfo } from "@/types/users";
+import { PostStatus } from "@/utils/contants";
+import dayjs from "dayjs";
 
 interface IProps {
   slug: string;
 }
 const PostContainer: React.FC<IProps> = ({ slug }) => {
-  const { data } = useQuery({
+  const router = useRouter();
+  const [isUpdateProcessing, setIsUpdateProcessing] = useState<boolean>(false);
+  const [isPublishProcessing, setIsPublishProcessing] =
+    useState<boolean>(false);
+
+  const [post, setPost] = useState<IPost>();
+  const [userInfo, setUserInfo] = useState<IUserInfo>();
+  const { state, updateState } = useAppContext();
+
+  const { data, error, isLoading } = useQuery({
     queryKey: ["posts", slug],
+    retryOnMount: false,
     queryFn: async () => fetchPostsBySlug(slug),
   });
 
-  const onUpdatePost = (post: IPostForm) => {
-    updatePost(slug, post);
+  const onGetUserInfo = async (userId: string) => {
+    try {
+      if (userId) {
+        const data = await fetchUsersInfoById(userId);
+        setUserInfo(data);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {}
   };
+
+  const addToast = (
+    message: string,
+    type: "success" | "error" | "info",
+    position?: "top-left" | "top-right" | "bottom-left" | "bottom-right",
+    duration: number = 5000
+  ) => {
+    const id = new Date().toISOString();
+    const newToast = { id, message, type, position, duration };
+    updateState({ toasts: [...state.toasts, newToast] });
+  };
+
+  const onUpdatePost = async (post: IPostForm) => {
+    try {
+      setIsUpdateProcessing(true);
+      const tagsId = post?.tags_id ?? [];
+      if (post.featured_image_blob) {
+        const { url } = await uploadSingeFile(post.featured_image_blob);
+        post.featured_image = url;
+      }
+      delete post?.tags_id;
+      delete post?.featured_image_blob;
+      const response = await updatePost(slug, post);
+      await updateTagsOfPost(slug, tagsId);
+      if (response.slug !== slug) {
+        router.push(`/dashboard/posts/${response.slug}`);
+      } else {
+        setPost(response);
+        addToast("Update Post success", "success");
+      }
+    } catch (error) {
+      console.error(error);
+      addToast("Update Post error", "error");
+    } finally {
+      setIsUpdateProcessing(false);
+    }
+  };
+
+  const onPublish = async (id: string, status: PostStatus) => {
+    try {
+      setIsPublishProcessing(true);
+      const response = await updateStatusOfPost(id, status);
+      setPost(response);
+      addToast("Update Post success", "success");
+    } catch (error) {
+      console.error(error);
+      addToast("Update Post error", "error");
+    } finally {
+      setIsPublishProcessing(false);
+    }
+  };
+
+  useEffect(() => {
+    setPost(data);
+    onGetUserInfo(data?.author_id ?? "");
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      router.push(`/404`);
+    }
+  }, [router, error]);
 
   return (
     <>
-      <PostTabs post={data} onSubmit={onUpdatePost} />
+      {isLoading ? (
+        <div className="text-center">
+          <Spinner aria-label="spinner" />
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-row gap-5">
+            <Avatar
+              img={userInfo?.profile_picture}
+              alt="avatar"
+              placeholderInitials={`${
+                userInfo?.first_name?.charAt(0).toUpperCase() ?? ""
+              }${userInfo?.last_name?.charAt(0).toUpperCase() ?? ""}`}
+              size="lg"
+              rounded
+            />
+            <div className="grid grid-cols-3 gap-5 text-sm leading-7 dark:text-white">
+              <div className="col-span-1 flex flex-col gap-1 justify-between font-semibold ">
+                <div>Author</div>
+                <div>Update At</div>
+                <div>Status</div>
+              </div>
+              <div className="col-span-2 flex flex-col gap-1 justify-between ">
+                <div className="capitalize">{`${userInfo?.first_name} ${userInfo?.last_name}`}</div>
+                <div>{dayjs(post?.updated_at).format("DD/MM/YYYY hh:mm")}</div>
+                <div className="capitalize">
+                  {post?.status === "published" ? (
+                    <Badge color="success" className="w-fit py-1.5">
+                      {PostStatus.PUBLISHED}
+                    </Badge>
+                  ) : (
+                    <Badge color="info" className="w-fit py-1.5">
+                      {PostStatus.DRAFT}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <PostTabs
+            post={post}
+            isUpdateProcessing={isUpdateProcessing}
+            isPublishProcessing={isPublishProcessing}
+            onSubmit={onUpdatePost}
+            onPublish={onPublish}
+          />
+        </>
+      )}
     </>
   );
 };

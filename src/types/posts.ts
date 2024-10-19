@@ -15,7 +15,7 @@ export interface IPost {
   category_id: string;
   published_at: string;
   updated_at: string;
-  status: string;
+  status: "published" | "draft";
   featured_image: string;
   view_count: number;
   likes_count: number;
@@ -61,15 +61,17 @@ export interface IPostDetailResponse {
 }
 
 export interface IPostForm {
-  title: string
-  slug: string
-  content: string
-  excerpt: string
-  author_id: string
-  category_id: string
-  status: string
-  featured_image: string
-  is_index: boolean
-  is_follow: boolean
-  seo_title: string
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  author_id: string;
+  category_id: string;
+  status: string;
+  featured_image: string;
+  is_index: boolean;
+  is_follow: boolean;
+  seo_title: string;
+  tags_id?: string[];
+  featured_image_blob?: FileList | null
 }

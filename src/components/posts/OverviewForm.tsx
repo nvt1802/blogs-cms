@@ -27,13 +27,16 @@ interface IProps {
   setValue: UseFormSetValue<IPostFormInput>;
   errors: FieldErrors<IPostFormInput>;
   control: Control<IPostFormInput>;
+  onChaneFileList?: (fileList: FileList | null) => void;
 }
 
 const PostForm: React.FC<IProps> = ({
   register,
   setValue,
+  post,
   errors,
   control,
+  onChaneFileList,
 }) => {
   const [categories, setCategories] = useState<IOption[]>([]);
   const [tags, setTags] = useState<IOption[]>([]);
@@ -67,14 +70,16 @@ const PostForm: React.FC<IProps> = ({
   }, [tagsData]);
 
   const onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
-    setValue("overview.slug", generateSlug(event.target.value));
+    setValue("overview.slug", generateSlug(event.target.value), {
+      shouldDirty: true,
+    });
   };
 
   return (
     <div className="p-4">
-      <div className="flex flex-col xmd:flex-row xmd:grid xmd:grid-cols-2 gap-5">
+      <div className="flex flex-col xmd:flex-row xmd:grid xmd:grid-cols-2 gap-5 mb-12 lg:mb-0">
         <div className="flex flex-col gap-6">
-        <div className="space-y-2">
+          <div className="space-y-2">
             <div className="mb-2 block">
               <Label htmlFor="overview.title" value="Title" />
             </div>
@@ -89,6 +94,7 @@ const PostForm: React.FC<IProps> = ({
                   id="overview.title"
                   type="text"
                   sizing="md"
+                  className="custom-input"
                   color={!!errors?.overview?.title ? "failure" : ""}
                   helperText={
                     <ErrorText
@@ -122,67 +128,75 @@ const PostForm: React.FC<IProps> = ({
             />
           </div>
 
-          <Accordion className="border-gray-300" collapseAll>
-            <Accordion.Panel>
-              <Accordion.Title className="p-2.5 text-sm">
-                <div className="flex flex-row gap-4">
-                  <p>Category</p>
-                  <ErrorText
-                    isError={!!errors?.overview?.category_id}
-                    message={errors?.overview?.category_id?.message}
-                  />
-                </div>
-              </Accordion.Title>
-              <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
-                <Controller
-                  name="overview.category_id"
-                  control={control}
-                  rules={{
-                    required: ErrorMessage.REQUIRED,
-                  }}
-                  render={({ field: { value, onChange, ...restField } }) => (
-                    <RadioList
-                      options={categories}
-                      value={value}
-                      onChange={onChange}
-                      {...restField}
+          <div className="flex flex-col gap-2">
+            <p className="text-sm">Categories & Tags</p>
+            <Accordion className="border-gray-300" collapseAll>
+              <Accordion.Panel>
+                <Accordion.Title className="p-2.5 text-sm">
+                  <div className="flex flex-row gap-4">
+                    <p>Category</p>
+                    <ErrorText
+                      isError={!!errors?.overview?.category_id}
+                      message={errors?.overview?.category_id?.message}
                     />
-                  )}
-                />
-              </Accordion.Content>
-            </Accordion.Panel>
-            <Accordion.Panel>
-              <Accordion.Title className="p-2.5 text-sm">
-                <div className="flex flex-row gap-4">
-                  <p>Tags</p>
-                  <ErrorText
-                    isError={!!errors?.overview?.tag_id}
-                    message={errors?.overview?.tag_id?.message}
+                  </div>
+                </Accordion.Title>
+                <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
+                  <Controller
+                    name="overview.category_id"
+                    control={control}
+                    rules={{
+                      required: ErrorMessage.REQUIRED,
+                    }}
+                    render={({ field: { value, onChange, ...restField } }) => (
+                      <RadioList
+                        options={categories}
+                        value={value}
+                        onChange={onChange}
+                        {...restField}
+                      />
+                    )}
                   />
-                </div>
-              </Accordion.Title>
-              <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
-                <Controller
-                  name="overview.tag_id"
-                  control={control}
-                  rules={{
-                    required: ErrorMessage.REQUIRED,
-                  }}
-                  render={({ field: { value, onChange, ...restField } }) => (
-                    <CheckboxList
-                      options={tags}
-                      value={value}
-                      onChange={onChange}
-                      {...restField}
+                </Accordion.Content>
+              </Accordion.Panel>
+              <Accordion.Panel>
+                <Accordion.Title className="p-2.5 text-sm">
+                  <div className="flex flex-row gap-4">
+                    <p>Tags</p>
+                    <ErrorText
+                      isError={!!errors?.overview?.tag_id}
+                      message={errors?.overview?.tag_id?.message}
                     />
-                  )}
-                />
-              </Accordion.Content>
-            </Accordion.Panel>
-          </Accordion>
+                  </div>
+                </Accordion.Title>
+                <Accordion.Content className="p-2.5 max-h-96 overflow-y-auto">
+                  <Controller
+                    name="overview.tag_id"
+                    control={control}
+                    rules={{
+                      required: ErrorMessage.REQUIRED,
+                    }}
+                    render={({ field: { value, onChange, ...restField } }) => (
+                      <CheckboxList
+                        options={tags}
+                        value={value}
+                        onChange={onChange}
+                        {...restField}
+                      />
+                    )}
+                  />
+                </Accordion.Content>
+              </Accordion.Panel>
+            </Accordion>
+          </div>
         </div>
         <div>
-          <UploadThumnail register={register} errors={errors} />
+          <UploadThumnail
+            post={post}
+            register={register}
+            errors={errors}
+            onChaneFileList={onChaneFileList}
+          />
         </div>
       </div>
     </div>

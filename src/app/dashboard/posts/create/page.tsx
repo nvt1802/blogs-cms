@@ -1,15 +1,23 @@
-import PostTabs from "@/components/posts/PostTabs";
+import PostCreateContainer from "@/components/posts/PostCreateContainer";
 import MainLayout from "@/layouts/MainLayout";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Posts - Dashboard CMS",
+  title: "Create New Post - Dashboard CMS",
 };
 
-export default function Home() {
+interface PostPageProps {
+  params: {
+    slug: string;
+  };
+}
+
+const CreatePost = ({ params }: PostPageProps) => {
   return (
     <MainLayout>
-      <PostTabs />
+      <PostCreateContainer slug={params.slug} />
     </MainLayout>
   );
-}
+};
+
+export default CreatePost;

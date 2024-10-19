@@ -27,3 +27,11 @@ export interface IOption {
   label?: string;
   value?: string | number;
 }
+
+export interface IToast {
+  id: string;
+  message: string;
+  type: 'success' | 'error' | 'info';
+  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+  duration?: number;
+}

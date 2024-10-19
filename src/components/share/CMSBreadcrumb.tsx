@@ -29,8 +29,8 @@ const CMSBreadcrumb = () => {
 
   return (
     <Breadcrumb
-      aria-label="Default breadcrumb example"
-      className="bg-gray-50 px-5 py-3 dark:bg-gray-700"
+      aria-label="breadcrumb"
+      className="bg-white px-5 py-3 dark:bg-gray-700 hidden sm:block"
     >
       {breakcrumbData.map((item, index: number) => (
         <Breadcrumb.Item

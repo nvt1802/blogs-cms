@@ -29,10 +29,11 @@ body {
 .cms-main {
   height: calc(100vh - 62px);
   max-height: calc(100vh - 62px);
+  @apply bg-white dark:bg-gray-700;
 }
 
 .cms-sibar > div {
-  @apply rounded-none;
+  @apply rounded-none bg-gray-200;
 }
 
 ::-webkit-scrollbar {
@@ -81,4 +82,8 @@ input {
 
 .ce-toolbar__content {
   max-width: unset !important;
+}
+
+.custom-input input {
+  @apply dark:bg-slate-700 dark:text-white;
 }

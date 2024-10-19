@@ -1,5 +1,6 @@
 "use client";
 
+import { IToast } from "@/types";
 import { ScreenBreakpoints } from "@/utils/enum";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
@@ -15,6 +16,7 @@ interface IAppState {
   isSticky: boolean;
   isOpenMenuDrawer: boolean;
   user?: IUserInfo;
+  toasts: IToast[];
 }
 
 interface AppContextType {
@@ -31,6 +33,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
     innerWidth: ScreenBreakpoints.LG,
     isSticky: true,
     isOpenMenuDrawer: false,
+    toasts: [],
   });
 
   const updateState = (newState: Partial<IAppState>) => {

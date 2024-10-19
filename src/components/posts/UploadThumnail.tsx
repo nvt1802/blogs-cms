@@ -1,23 +1,37 @@
 "use client";
 
-import { IPostFormInput } from "@/types/posts";
+import { IPost, IPostFormInput } from "@/types/posts";
 import { FileInput, Label } from "flowbite-react";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
-import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import ErrorText from "../share/ErrorText";
 
 interface IProps {
+  post?: IPost;
   register: UseFormRegister<IPostFormInput>;
-  setValue?: UseFormSetValue<IPostFormInput>;
   errors?: FieldErrors<IPostFormInput>;
+  onChaneFileList?: (fileList: FileList | null) => void;
 }
 
-const UploadThumnail: React.FC<IProps> = ({ register, errors }) => {
+const UploadThumnail: React.FC<IProps> = ({
+  post,
+  register,
+  errors,
+  onChaneFileList,
+}) => {
   const [fileList, setFileList] = useState<FileList | null>();
+  const [isShowBlob, setIsShowBlob] = useState<boolean>(false);
+
   const onChangeImage = (event: ChangeEvent<HTMLInputElement>) => {
     setFileList(event?.target.files);
+    if (onChaneFileList) onChaneFileList(event?.target.files);
+    if (!!event?.target.files?.length) {
+      setIsShowBlob(true);
+    } else {
+      setIsShowBlob(false);
+    }
   };
 
   return (
@@ -31,14 +45,37 @@ const UploadThumnail: React.FC<IProps> = ({ register, errors }) => {
       </div>
 
       <div className="flex w-full items-center justify-center">
-        {!fileList ? (
-          <Label
-            htmlFor="dropzone-file"
-            className={twMerge(
-              "flex h-96 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600",
-              errors?.overview?.featuredImage ? "ring-2 ring-red-600" : ""
-            )}
-          >
+        <Label
+          htmlFor="dropzone-file"
+          className={twMerge(
+            "flex h-96 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600",
+            errors?.overview?.featuredImage ? "ring-2 ring-red-600" : ""
+          )}
+        >
+          {isShowBlob && fileList ? (
+            <div className="w-full bg-gray-100 dark:bg-gray-800 flex p-1 max-h-[380px]">
+              <Image
+                src={URL.createObjectURL(fileList[0])}
+                alt="Featured Image"
+                width={460}
+                height={380}
+                className="max-w-[500px] max-h-96 object-contain mx-auto"
+              />
+            </div>
+          ) : (
+            post?.featured_image && (
+              <div className="w-full bg-gray-100 dark:bg-gray-800 flex p-1 max-h-[380px]">
+                <Image
+                  src={post?.featured_image ?? ""}
+                  alt="Featured Image"
+                  width={460}
+                  height={380}
+                  className="max-w-[500px] max-h-96 object-contain mx-auto"
+                />
+              </div>
+            )
+          )}
+          {!post?.featured_image && !fileList && (
             <div className="flex flex-col items-center justify-center pb-6 pt-5">
               <svg
                 className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
@@ -63,26 +100,16 @@ const UploadThumnail: React.FC<IProps> = ({ register, errors }) => {
                 SVG, PNG, JPG or GIF (MAX. 800x400px)
               </p>
             </div>
-            <FileInput
-              id="dropzone-file"
-              className="hidden"
-              {...register("overview.featuredImage", {
-                // required: "This is required.",
-              })}
-              onChange={onChangeImage}
-            />
-          </Label>
-        ) : (
-          <div className="w-full bg-gray-100 flex">
-            <Image
-              src={URL.createObjectURL(fileList[0])}
-              alt="Featured Image"
-              width={460}
-              height={384}
-              className="max-w-[500px] max-h-96 object-contain mx-auto"
-            />
-          </div>
-        )}
+          )}
+          <FileInput
+            id="dropzone-file"
+            className="hidden"
+            {...register("overview.featuredImage", {
+              // required: "This is required.",
+            })}
+            onChange={onChangeImage}
+          />
+        </Label>
       </div>
     </div>
   );

@@ -1,8 +1,9 @@
 "use client";
 
 import { IPost } from "@/types/posts";
+import { PostStatus } from "@/utils/contants";
 import dayjs from "dayjs";
-import { Avatar, Table } from "flowbite-react";
+import { Avatar, Badge, Table } from "flowbite-react";
 import { useRouter } from "next/navigation";
 
 interface IProps {
@@ -25,6 +26,7 @@ const PostsTable: React.FC<IProps> = ({ currentPage = 1, posts }) => {
           <Table.HeadCell>Thumnail</Table.HeadCell>
           <Table.HeadCell>Title</Table.HeadCell>
           <Table.HeadCell>Category</Table.HeadCell>
+          <Table.HeadCell>Status</Table.HeadCell>
           <Table.HeadCell>Create By</Table.HeadCell>
           <Table.HeadCell>Updated At</Table.HeadCell>
           <Table.HeadCell>
@@ -46,10 +48,17 @@ const PostsTable: React.FC<IProps> = ({ currentPage = 1, posts }) => {
               <Table.Cell>{item.title}</Table.Cell>
               <Table.Cell>{item.categories?.name}</Table.Cell>
               <Table.Cell className="capitalize">
+                {item.status === "published" ? (
+                  <Badge color="success" className="w-fit py-1.5">{PostStatus.PUBLISHED}</Badge>
+                ) : (
+                  <Badge color="info" className="w-fit py-1.5">{PostStatus.DRAFT}</Badge>
+                )}
+              </Table.Cell>
+              <Table.Cell className="capitalize">
                 {item.users?.username}
               </Table.Cell>
               <Table.Cell>
-                {dayjs(item.created_at).format("DD/MM/YYYY mm:ss")}
+                {dayjs(item.created_at).format("DD/MM/YYYY hh:mm")}
               </Table.Cell>
               <Table.Cell
                 onClick={() => onEditPost(item?.slug)}
