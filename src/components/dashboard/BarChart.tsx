@@ -35,7 +35,7 @@ const BarChart = () => {
   return (
     <div>
       <h2>Bar Chart</h2>
-      <Bar data={data} options={options} />
+      <Bar data={data} options={options} className="max-h-80"/>
     </div>
   );
 };

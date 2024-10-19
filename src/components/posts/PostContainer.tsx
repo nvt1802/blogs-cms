@@ -36,7 +36,7 @@ const PostContainer = () => {
       ) : (
         <>
           <div className="flex flex-row justify-end p-2">
-            <Button color="cyan" onClick={onCreateNewPost}>
+            <Button color="success" onClick={onCreateNewPost}>
               <div className="flex flex-row gap-2">
                 <HiDocumentAdd size={20} />
                 <p>Create New Post</p>

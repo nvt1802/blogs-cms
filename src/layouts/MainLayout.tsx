@@ -16,7 +16,7 @@ const MainLayout: React.FC<
         <div className="min-w-[256px]">
           <CMSSidebar />
         </div>
-        <div className="w-full bg-gray-50 dark:bg-gray-700">
+        <div className="w-full bg-gray-50 dark:bg-gray-700 overflow-y-hidden">
           <CMSHeader />
           <div className="w-full cms-main p-4 flex flex-col gap-4">
             <CMSBreadcrumb />

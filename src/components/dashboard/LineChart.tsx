@@ -55,9 +55,9 @@ const options = {
 
 const LineChart: React.FC = () => {
   return (
-    <div className="w-full max-h-96">
+    <div className="w-full">
       <h2>Line Chart</h2>
-      <Line data={data} options={options} />
+      <Line data={data} options={options} className="max-h-80" />
     </div>
   );
 };
