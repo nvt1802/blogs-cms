@@ -1,3 +1,4 @@
+import DashboardContainer from "@/components/dashboard/DashboardContainer";
 import MainLayout from "@/layouts/MainLayout";
 import { Metadata } from "next";
 
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <MainLayout>
-      <div></div>
+      <div className="overflow-hidden">
+        <DashboardContainer />
+      </div>
     </MainLayout>
   );
 }
