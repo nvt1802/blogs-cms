@@ -15,6 +15,7 @@ interface IAppState {
   innerWidth: number;
   isSticky: boolean;
   isOpenMenuDrawer: boolean;
+  isCollapse?: boolean;
   user?: IUserInfo;
   toasts: IToast[];
 }
@@ -33,6 +34,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
     innerWidth: ScreenBreakpoints.LG,
     isSticky: true,
     isOpenMenuDrawer: false,
+    isCollapse: false,
     toasts: [],
   });
 

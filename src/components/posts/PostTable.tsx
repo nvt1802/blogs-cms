@@ -1,86 +1,107 @@
 "use client";
 
-import { IPost } from "@/types/posts";
+import { IPost, IPostPaginationResponse } from "@/types/posts";
 import { PostStatus } from "@/utils/contants";
 import dayjs from "dayjs";
-import { Badge, Table } from "flowbite-react";
+import { Badge, Pagination, Table } from "flowbite-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 interface IProps {
   currentPage: number;
-  posts: IPost[];
+  posts?: IPostPaginationResponse;
+  onChange?: (page: number) => void;
+  onClickItem?: (post: IPost) => void;
 }
 
-const PostsTable: React.FC<IProps> = ({ currentPage = 1, posts }) => {
-  const router = useRouter();
+const PostsTable: React.FC<IProps> = ({
+  currentPage = 1,
+  posts,
+  onChange,
+  onClickItem,
+}) => {
+  const onClickPostItem = (post: IPost) => {
+    if (onClickItem) onClickItem(post);
+  };
 
-  const onEditPost = (slug: string) => {
-    router.push(`/dashboard/posts/${slug}`);
+  const onPageChange = (page: number) => {
+    if (onChange) {
+      onChange(page);
+    }
   };
 
   return (
-    <div className="overflow-x-auto">
-      <Table hoverable>
-        <Table.Head>
-          <Table.HeadCell>STT</Table.HeadCell>
-          <Table.HeadCell>Thumnail</Table.HeadCell>
-          <Table.HeadCell>Title</Table.HeadCell>
-          <Table.HeadCell>Category</Table.HeadCell>
-          <Table.HeadCell>Status</Table.HeadCell>
-          <Table.HeadCell>Create By</Table.HeadCell>
-          <Table.HeadCell>Updated At</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Edit</span>
-          </Table.HeadCell>
-        </Table.Head>
-        <Table.Body className="divide-y">
-          {posts?.map((item, index) => (
-            <Table.Row
-              className="bg-white dark:border-gray-700 dark:bg-gray-800"
-              key={index}
-            >
-              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                {(currentPage - 1) * 10 + index + 1}
-              </Table.Cell>
-              <Table.Cell>
-                <Image
-                  src={item.featured_image}
-                  alt="thumnail"
-                  width={60}
-                  height={30}
-                />
-              </Table.Cell>
-              <Table.Cell>{item.title}</Table.Cell>
-              <Table.Cell>{item.categories?.name}</Table.Cell>
-              <Table.Cell className="capitalize">
-                {item.status === "published" ? (
-                  <Badge color="success" className="w-fit py-1.5">
-                    {PostStatus.PUBLISHED}
-                  </Badge>
-                ) : (
-                  <Badge color="info" className="w-fit py-1.5">
-                    {PostStatus.DRAFT}
-                  </Badge>
-                )}
-              </Table.Cell>
-              <Table.Cell className="capitalize">
-                {item.users?.username}
-              </Table.Cell>
-              <Table.Cell>
-                {dayjs(item.created_at).format("DD/MM/YYYY hh:mm")}
-              </Table.Cell>
-              <Table.Cell
-                onClick={() => onEditPost(item?.slug)}
-                className="cursor-pointer hover:underline"
+    <>
+      <div className="overflow-x-auto">
+        <Table hoverable>
+          <Table.Head>
+            <Table.HeadCell>STT</Table.HeadCell>
+            <Table.HeadCell>Thumnail</Table.HeadCell>
+            <Table.HeadCell>Title</Table.HeadCell>
+            <Table.HeadCell>Category</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Create By</Table.HeadCell>
+            <Table.HeadCell>Updated At</Table.HeadCell>
+            <Table.HeadCell>
+              <span className="sr-only">Edit</span>
+            </Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {posts?.items?.map((item, index) => (
+              <Table.Row
+                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                key={index}
               >
-                Edit
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
-    </div>
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                  {(currentPage - 1) * 10 + index + 1}
+                </Table.Cell>
+                <Table.Cell>
+                  <Image
+                    src={item.featured_image}
+                    alt="thumnail"
+                    width={60}
+                    height={30}
+                  />
+                </Table.Cell>
+                <Table.Cell>{item.title}</Table.Cell>
+                <Table.Cell>{item.categories?.name}</Table.Cell>
+                <Table.Cell className="capitalize">
+                  {item.status === "published" ? (
+                    <Badge color="success" className="w-fit py-1.5">
+                      {PostStatus.PUBLISHED}
+                    </Badge>
+                  ) : (
+                    <Badge color="info" className="w-fit py-1.5">
+                      {PostStatus.DRAFT}
+                    </Badge>
+                  )}
+                </Table.Cell>
+                <Table.Cell className="capitalize">
+                  {item.users?.username}
+                </Table.Cell>
+                <Table.Cell>
+                  {dayjs(item.created_at).format("DD/MM/YYYY hh:mm")}
+                </Table.Cell>
+                <Table.Cell
+                  onClick={() => onClickPostItem(item)}
+                  className="cursor-pointer hover:underline"
+                >
+                  Edit
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </div>
+      <div className="flex overflow-x-auto sm:justify-center">
+        {posts?.totalPages && posts?.totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={posts?.totalPages || 0}
+            onPageChange={onPageChange}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

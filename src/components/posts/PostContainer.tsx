@@ -3,10 +3,11 @@
 import PostsTable from "@/components/posts/PostTable";
 import { fetchPosts } from "@/utils/api/posts";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Pagination, Spinner } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import { useState } from "react";
 import { HiDocumentAdd } from "react-icons/hi";
 import { useRouter } from "next/navigation";
+import { IPost } from "@/types/posts";
 
 const PostContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +24,10 @@ const PostContainer = () => {
 
   const onCreateNewPost = () => {
     router.push("/dashboard/posts/create");
+  };
+
+  const onEditPost = (post: IPost) => {
+    router.push(`/dashboard/posts/${post?.slug}`);
   };
 
   return (
@@ -43,16 +48,12 @@ const PostContainer = () => {
               </div>
             </Button>
           </div>
-          <PostsTable currentPage={currentPage} posts={data?.items || []} />
-          <div className="flex overflow-x-auto sm:justify-center">
-            {data?.totalPages && data?.totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={data?.totalPages || 0}
-                onPageChange={onPageChange}
-              />
-            )}
-          </div>
+          <PostsTable
+            currentPage={currentPage}
+            posts={data}
+            onChange={onPageChange}
+            onClickItem={onEditPost}
+          />
         </>
       )}
     </>

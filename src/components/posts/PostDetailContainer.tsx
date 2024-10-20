@@ -1,23 +1,23 @@
 "use client";
 
+import { useAppContext } from "@/context/AppContext";
 import { IPost, IPostForm } from "@/types/posts";
+import { IUserInfo } from "@/types/users";
 import {
   fetchPostsBySlug,
   updatePost,
   updateStatusOfPost,
   updateTagsOfPost,
 } from "@/utils/api/posts";
+import { uploadSingeFile } from "@/utils/api/upload";
+import { fetchUsersInfoById } from "@/utils/api/users";
+import { PostStatus } from "@/utils/contants";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, Badge, Spinner } from "flowbite-react";
+import dayjs from "dayjs";
+import { Avatar, Spinner } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PostTabs from "./PostTabs";
-import { useAppContext } from "@/context/AppContext";
-import { uploadSingeFile } from "@/utils/api/upload";
-import { fetchUsersInfoById } from "@/utils/api/users";
-import { IUserInfo } from "@/types/users";
-import { PostStatus } from "@/utils/contants";
-import dayjs from "dayjs";
 
 interface IProps {
   slug: string;
@@ -127,27 +127,23 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
               placeholderInitials={`${
                 userInfo?.first_name?.charAt(0).toUpperCase() ?? ""
               }${userInfo?.last_name?.charAt(0).toUpperCase() ?? ""}`}
-              size="lg"
+              size="md"
               rounded
             />
             <div className="grid grid-cols-3 gap-5 text-sm leading-7 dark:text-white">
-              <div className="col-span-1 flex flex-col gap-1 justify-between font-semibold ">
+              <div className="col-span-1 flex flex-col gap-1 justify-between font-semibold text-xs">
                 <div>Author</div>
                 <div>Update At</div>
                 <div>Status</div>
               </div>
-              <div className="col-span-2 flex flex-col gap-1 justify-between ">
+              <div className="col-span-2 flex flex-col gap-1 justify-between text-xs">
                 <div className="capitalize">{`${userInfo?.first_name} ${userInfo?.last_name}`}</div>
                 <div>{dayjs(post?.updated_at).format("DD/MM/YYYY hh:mm")}</div>
                 <div className="capitalize">
                   {post?.status === "published" ? (
-                    <Badge color="success" className="w-fit py-1.5">
-                      {PostStatus.PUBLISHED}
-                    </Badge>
+                    <p className="bg-green-500 text-white w-fit px-1 py-0.5 rounded">{PostStatus.PUBLISHED}</p>
                   ) : (
-                    <Badge color="info" className="w-fit py-1.5">
-                      {PostStatus.DRAFT}
-                    </Badge>
+                    <p className="bg-gray-500 text-white w-fit px-1 py-0.5 rounded">{PostStatus.DRAFT}</p>
                   )}
                 </div>
               </div>
