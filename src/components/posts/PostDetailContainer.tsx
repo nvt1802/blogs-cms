@@ -52,7 +52,7 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
     message: string,
     type: "success" | "error" | "info",
     position?: "top-left" | "top-right" | "bottom-left" | "bottom-right",
-    duration: number = 5000
+    duration: number = 3000
   ) => {
     const id = new Date().toISOString();
     const newToast = { id, message, type, position, duration };
@@ -138,7 +138,7 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
               </div>
               <div className="col-span-2 flex flex-col gap-1 justify-between text-xs">
                 <div className="capitalize">{`${userInfo?.first_name} ${userInfo?.last_name}`}</div>
-                <div>{dayjs(post?.updated_at).format("DD/MM/YYYY hh:mm")}</div>
+                <div>{dayjs(post?.published_at).format("DD/MM/YYYY HH:mm")}</div>
                 <div className="capitalize">
                   {post?.status === "published" ? (
                     <p className="bg-green-500 text-white w-fit px-1 py-0.5 rounded">{PostStatus.PUBLISHED}</p>

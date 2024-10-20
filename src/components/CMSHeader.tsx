@@ -40,7 +40,7 @@ const CMSHeader = () => {
     <Navbar fluid rounded className="w-full rounded-none bg-gray-200">
       {state.isCollapse && (
         <button
-          className="rounded-full p-2 bg-white shadow-lg select-none"
+          className="rounded-full p-2 bg-white shadow-lg select-none hidden sm:block"
           onClick={onExpandMenu}
         >
           <HiChevronDoubleRight />

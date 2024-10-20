@@ -79,7 +79,7 @@ const PostsTable: React.FC<IProps> = ({
                   {item.users?.username}
                 </Table.Cell>
                 <Table.Cell>
-                  {dayjs(item.created_at).format("DD/MM/YYYY hh:mm")}
+                  {dayjs(item.created_at).format("DD/MM/YYYY HH:mm")}
                 </Table.Cell>
                 <Table.Cell
                   onClick={() => onClickPostItem(item)}

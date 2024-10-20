@@ -15,7 +15,7 @@ const PostCreateContainer: React.FC = () => {
     message: string,
     type: "success" | "error" | "info",
     position?: "top-left" | "top-right" | "bottom-left" | "bottom-right",
-    duration: number = 5000
+    duration: number = 3000
   ) => {
     const id = new Date().toISOString();
     const newToast = { id, message, type, position, duration };

@@ -61,33 +61,35 @@ const Menu: React.FC<IProps> = ({ className }) => {
       aria-label="sidebar"
       className={twMerge(
         "cms-sibar relative duration-300",
-        state.isCollapse ? "w-14" : "",
+        state.isCollapse ? "w-16" : "",
         className
       )}
     >
       <Sidebar.Items className="h-[calc(100%-40px)]">
         <Sidebar.ItemGroup>
           {items.map((item) => (
-            <li key={item.name}>
-              <Tooltip content={item.name} placement="left-start">
-                <Link
-                  href={item.href}
-                  className={twMerge(
-                    "flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
-                    item.href === pathname ? "bg-gray-100 dark:bg-gray-700" : ""
-                  )}
-                >
-                  {item.icon}
-                  <span
-                    className={twMerge(
-                      "flex-1 whitespace-nowrap px-3 duration-300",
-                      state.isCollapse ? "hidden" : ""
-                    )}
-                  >
-                    {item?.name}
-                  </span>
-                </Link>
-              </Tooltip>
+            <li key={item.name} className="w-full">
+              <Link
+                href={item.href}
+                className={twMerge(
+                  "flex items-center justify-start rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 w-full",
+                  item.href === pathname ? "bg-white dark:bg-gray-700" : ""
+                )}
+              >
+                <Tooltip content={item.name} placement="left-start">
+                  <div className="flex flex-row">
+                    {item.icon}
+                    <span
+                      className={twMerge(
+                        "flex-1 whitespace-nowrap px-3 duration-300",
+                        state.isCollapse ? "hidden" : ""
+                      )}
+                    >
+                      {item?.name}
+                    </span>
+                  </div>
+                </Tooltip>
+              </Link>
             </li>
           ))}
         </Sidebar.ItemGroup>
@@ -97,7 +99,7 @@ const Menu: React.FC<IProps> = ({ className }) => {
       </Sidebar.Items>
       {!state.isCollapse && (
         <button
-          className="absolute top-4 -right-2 rounded-full p-2 bg-white shadow-lg select-none"
+          className="absolute top-4 -right-2 rounded-full p-2 bg-white shadow-lg select-none hidden sm:block"
           onClick={onCollapseMenu}
         >
           <HiChevronDoubleLeft />

@@ -72,10 +72,10 @@ const UserTable = () => {
                       </Badge>
                     </Table.Cell>
                     <Table.Cell>
-                      {dayjs(item.created_at).format("DD/MM/YYYY mm:ss")}
+                      {dayjs(item.created_at).format("DD/MM/YYYY HH:mm")}
                     </Table.Cell>
                     <Table.Cell>
-                      {dayjs(item.updated_at).format("DD/MM/YYYY mm:ss")}
+                      {dayjs(item.updated_at).format("DD/MM/YYYY HH:mm")}
                     </Table.Cell>
                     <Table.Cell>
                       <a

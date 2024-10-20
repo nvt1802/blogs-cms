@@ -1,16 +1,26 @@
 "use client";
 
-import { ITagsPaginationResponse } from "@/types/tags";
+import { ITags, ITagsPaginationResponse } from "@/types/tags";
 import dayjs from "dayjs";
-import { Pagination, Table } from "flowbite-react";
+import { Clipboard, Pagination, Table } from "flowbite-react";
+import { HiOutlinePencil } from "react-icons/hi";
+import { HiOutlineTrash } from "react-icons/hi";
 
 interface IProps {
   currentPage: number;
   data?: ITagsPaginationResponse;
   onChange?: (page: number) => void;
+  onEditItem?: (post: ITags) => void;
+  onRemoveItem?: (post: ITags) => void;
 }
 
-const TagsTable: React.FC<IProps> = ({ data, currentPage, onChange }) => {
+const TagsTable: React.FC<IProps> = ({
+  data,
+  currentPage,
+  onChange,
+  onEditItem,
+  onRemoveItem
+}) => {
   const onPageChange = (page: number) => {
     if (onChange) {
       onChange(page);
@@ -23,6 +33,7 @@ const TagsTable: React.FC<IProps> = ({ data, currentPage, onChange }) => {
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>STT</Table.HeadCell>
+            <Table.HeadCell>Tag Id</Table.HeadCell>
             <Table.HeadCell>Name</Table.HeadCell>
             <Table.HeadCell>Created At</Table.HeadCell>
             <Table.HeadCell>Updated At</Table.HeadCell>
@@ -39,20 +50,36 @@ const TagsTable: React.FC<IProps> = ({ data, currentPage, onChange }) => {
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                   {(currentPage - 1) * 10 + index + 1}
                 </Table.Cell>
+                <Table.Cell>
+                  <div className="relative flex flex-row gap-2">
+                    <div>{item.id}</div>
+                    <div className="ml-8 relative">
+                      <Clipboard.WithIcon valueToCopy={item.id} key={item.id} />
+                    </div>
+                  </div>
+                </Table.Cell>
                 <Table.Cell>{item.name}</Table.Cell>
                 <Table.Cell>
-                  {dayjs(item.created_at).format("DD/MM/YYYY mm:ss")}
+                  {dayjs(item.created_at).format("DD/MM/YYYY HH:mm")}
                 </Table.Cell>
                 <Table.Cell>
-                  {dayjs(item.updated_at).format("DD/MM/YYYY mm:ss")}
+                  {dayjs(item.updated_at).format("DD/MM/YYYY HH:mm")}
                 </Table.Cell>
-                <Table.Cell>
-                  <a
-                    href="#"
-                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                <Table.Cell className="flex flex-row gap-5">
+                  <button
+                    onClick={() =>
+                      onEditItem ? onEditItem(item) : undefined
+                    }
                   >
-                    Edit
-                  </a>
+                    <HiOutlinePencil />
+                  </button>
+                  <button
+                    onClick={() =>
+                      onRemoveItem ? onRemoveItem(item) : undefined
+                    }
+                  >
+                    <HiOutlineTrash />
+                  </button>
                 </Table.Cell>
               </Table.Row>
             ))}
