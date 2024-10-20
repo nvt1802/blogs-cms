@@ -26,6 +26,10 @@ body {
   }
 }
 
+.logo {
+  filter: brightness(0) invert(1);
+}
+
 .cms-main {
   height: calc(100vh - 62px);
   max-height: calc(100vh - 62px);

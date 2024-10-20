@@ -1,4 +1,4 @@
-import FormLogin from "@/components/auth/FormLogin";
+import LoginContainer from "@/components/LoginContainer";
 import AuthLayout from "@/layouts/AuthLayout";
 import { Metadata } from "next";
 
@@ -9,9 +9,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <AuthLayout>
-      <div className="w-full m-auto">
-        <FormLogin />
-      </div>
+      <LoginContainer />
     </AuthLayout>
   );
 }

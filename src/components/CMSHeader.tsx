@@ -2,13 +2,17 @@
 
 import { useAppContext } from "@/context/AppContext";
 import { fetchUsersInfoById } from "@/utils/api/users";
-import { getCookie } from "@/utils/cookieUtils";
-import { Avatar, Navbar } from "flowbite-react";
+import { clearCookie, getCookie } from "@/utils/cookieUtils";
+import { UserRole } from "@/utils/enum";
+import { Avatar, Badge, Navbar, Popover } from "flowbite-react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { HiChevronDoubleRight, HiMenu } from "react-icons/hi";
+import { HiLogout } from "react-icons/hi";
 
 const CMSHeader = () => {
   const { state, updateState } = useAppContext();
+  const router = useRouter();
 
   const onGetUserInfo = async () => {
     try {
@@ -36,6 +40,11 @@ const CMSHeader = () => {
     localStorage.setItem("isCollapse", "0");
   };
 
+  const onClickLogout = () => {
+    clearCookie("token");
+    router.push("/login");
+  };
+
   return (
     <Navbar fluid rounded className="w-full rounded-none bg-gray-200">
       {state.isCollapse && (
@@ -57,7 +66,58 @@ const CMSHeader = () => {
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2">
-        <Avatar alt="User settings" img={state.user?.profile_picture} rounded />
+        <Popover
+          aria-labelledby="profile-popover"
+          placement="bottom-end"
+          content={
+            <div className="w-72 p-2">
+              <div className="flex flex-row gap-3">
+                <Avatar
+                  alt={state?.user?.username ?? ""}
+                  img={state.user?.profile_picture}
+                  size="lg"
+                  className="min-w-20 min-h-20"
+                  rounded
+                />
+                <div className="w-full text-sm flex flex-col gap-1">
+                  <p className="font-semibold">
+                    {state?.user?.first_name} {state.user?.last_name}
+                  </p>
+                  <Badge
+                    color={
+                      UserRole.ADMIN === state.user?.role
+                        ? "success"
+                        : UserRole.AUTHOR === state.user?.role
+                        ? "warning"
+                        : "blue"
+                    }
+                    className="w-fit"
+                  >
+                    {state.user?.role}
+                  </Badge>
+                  <p>{state.user?.email}</p>
+                  <div className="flex flex-row justify-end">
+                    <button
+                      className="inline-flex gap-2"
+                      onClick={onClickLogout}
+                    >
+                      Logout
+                      <HiLogout className="my-auto" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        >
+          <button>
+            <Avatar
+              alt="User settings"
+              img={state.user?.profile_picture}
+              rounded
+            />
+          </button>
+        </Popover>
       </div>
     </Navbar>
   );

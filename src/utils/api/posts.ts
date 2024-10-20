@@ -70,3 +70,13 @@ export const addTagsForPost = async (slug: string, tags_id: string[]) => {
   }>(`/api/posts/tags`, { slug, tags_id });
   return data.data;
 };
+
+export const deletePost = async (postId: string) => {
+  const { data } = await axiosInstance.delete<{
+    statusCode: number;
+    data: {
+      message: string;
+    };
+  }>(`/api/posts/${postId}`);
+  return data.data;
+};

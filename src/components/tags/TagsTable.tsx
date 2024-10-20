@@ -2,7 +2,7 @@
 
 import { ITags, ITagsPaginationResponse } from "@/types/tags";
 import dayjs from "dayjs";
-import { Clipboard, Pagination, Table } from "flowbite-react";
+import { Clipboard, Pagination, Table, Tooltip } from "flowbite-react";
 import { HiOutlinePencil } from "react-icons/hi";
 import { HiOutlineTrash } from "react-icons/hi";
 
@@ -19,7 +19,7 @@ const TagsTable: React.FC<IProps> = ({
   currentPage,
   onChange,
   onEditItem,
-  onRemoveItem
+  onRemoveItem,
 }) => {
   const onPageChange = (page: number) => {
     if (onChange) {
@@ -66,20 +66,30 @@ const TagsTable: React.FC<IProps> = ({
                   {dayjs(item.updated_at).format("DD/MM/YYYY HH:mm")}
                 </Table.Cell>
                 <Table.Cell className="flex flex-row gap-5">
-                  <button
-                    onClick={() =>
-                      onEditItem ? onEditItem(item) : undefined
-                    }
+                  <Tooltip
+                    content={`Edit ${item?.name}`}
+                    placement="left-start"
                   >
-                    <HiOutlinePencil />
-                  </button>
-                  <button
-                    onClick={() =>
-                      onRemoveItem ? onRemoveItem(item) : undefined
-                    }
+                    <button
+                      onClick={() =>
+                        onEditItem ? onEditItem(item) : undefined
+                      }
+                    >
+                      <HiOutlinePencil />
+                    </button>
+                  </Tooltip>
+                  <Tooltip
+                    content={`Remove ${item?.name}`}
+                    placement="left-start"
                   >
-                    <HiOutlineTrash />
-                  </button>
+                    <button
+                      onClick={() =>
+                        onRemoveItem ? onRemoveItem(item) : undefined
+                      }
+                    >
+                      <HiOutlineTrash />
+                    </button>
+                  </Tooltip>
                 </Table.Cell>
               </Table.Row>
             ))}

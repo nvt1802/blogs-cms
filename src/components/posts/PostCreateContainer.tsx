@@ -22,18 +22,20 @@ const PostCreateContainer: React.FC = () => {
     updateState({ toasts: [...state.toasts, newToast] });
   };
 
-  const onUpdatePost = async (post: IPostForm) => {
+  const onCreateNewPost = async (post: IPostForm) => {
     try {
       setIsUpdateProcessing(true);
       const tagsId = post?.tags_id ?? [];
+      console.log(post.featured_image_blob);
       if (post.featured_image_blob) {
         const { url } = await uploadSingeFile(post.featured_image_blob);
         post.featured_image = url;
+      } else {
+        post.featured_image = "";
       }
       delete post?.tags_id;
       delete post?.featured_image_blob;
       const { slug } = await addNewPost(post);
-      console.log(slug);      
       const { message } = await addTagsForPost(slug, tagsId);
       addToast(message, "success");
       addToast("Update Post success", "success");
@@ -50,7 +52,7 @@ const PostCreateContainer: React.FC = () => {
       <PostTabs
         isCreateForm
         isUpdateProcessing={isUpdateProcessing}
-        onSubmit={onUpdatePost}
+        onSubmit={onCreateNewPost}
       />
     </>
   );

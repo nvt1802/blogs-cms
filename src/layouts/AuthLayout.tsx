@@ -1,3 +1,4 @@
+import ToastContainer from "@/components/share/notification/ToastContainer";
 import React from "react";
 
 const AuthLayout: React.FC<
@@ -8,6 +9,7 @@ const AuthLayout: React.FC<
   return (
     <div className="h-screen w-screen flex bg-gray-50 dark:bg-gray-700">
       <div className="w-full h-full flex">{children}</div>
+      <ToastContainer />
     </div>
   );
 };

@@ -9,6 +9,8 @@ interface IUserInfo {
   profile_picture: string;
   role: string;
   username: string;
+  first_name?: string;
+  last_name?: string;
 }
 
 interface IAppState {

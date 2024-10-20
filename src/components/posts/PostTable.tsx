@@ -3,26 +3,25 @@
 import { IPost, IPostPaginationResponse } from "@/types/posts";
 import { PostStatus } from "@/utils/contants";
 import dayjs from "dayjs";
-import { Badge, Pagination, Table } from "flowbite-react";
+import { Badge, Pagination, Table, Tooltip } from "flowbite-react";
 import Image from "next/image";
+import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 
 interface IProps {
   currentPage: number;
   posts?: IPostPaginationResponse;
   onChange?: (page: number) => void;
-  onClickItem?: (post: IPost) => void;
+  onEditItem?: (post: IPost) => void;
+  onRemoveItem?: (post: IPost) => void;
 }
 
 const PostsTable: React.FC<IProps> = ({
   currentPage = 1,
   posts,
   onChange,
-  onClickItem,
+  onEditItem,
+  onRemoveItem,
 }) => {
-  const onClickPostItem = (post: IPost) => {
-    if (onClickItem) onClickItem(post);
-  };
-
   const onPageChange = (page: number) => {
     if (onChange) {
       onChange(page);
@@ -56,7 +55,7 @@ const PostsTable: React.FC<IProps> = ({
                 </Table.Cell>
                 <Table.Cell>
                   <Image
-                    src={item.featured_image}
+                    src={item.featured_image ?? ""}
                     alt="thumnail"
                     width={60}
                     height={30}
@@ -75,17 +74,37 @@ const PostsTable: React.FC<IProps> = ({
                     </Badge>
                   )}
                 </Table.Cell>
-                <Table.Cell className="capitalize">
-                  {item.users?.username}
-                </Table.Cell>
+                <Table.Cell>{item.users?.username}</Table.Cell>
                 <Table.Cell>
                   {dayjs(item.created_at).format("DD/MM/YYYY HH:mm")}
                 </Table.Cell>
-                <Table.Cell
-                  onClick={() => onClickPostItem(item)}
-                  className="cursor-pointer hover:underline"
-                >
-                  Edit
+                <Table.Cell>
+                  <div className="flex flex-row gap-5">
+                    <Tooltip
+                      content={`Edit ${item?.title}`}
+                      placement="left-start"
+                    >
+                      <button
+                        onClick={() =>
+                          onEditItem ? onEditItem(item) : undefined
+                        }
+                      >
+                        <HiOutlinePencil />
+                      </button>
+                    </Tooltip>
+                    <Tooltip
+                      content={`Remove ${item?.title}`}
+                      placement="left-start"
+                    >
+                      <button
+                        onClick={() =>
+                          onRemoveItem ? onRemoveItem(item) : undefined
+                        }
+                      >
+                        <HiOutlineTrash />
+                      </button>
+                    </Tooltip>
+                  </div>
                 </Table.Cell>
               </Table.Row>
             ))}

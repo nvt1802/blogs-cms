@@ -17,3 +17,18 @@ export interface ICategoriesResponse {
   statusCode: number;
   data: ICategoriesPaginationResponse;
 }
+
+export interface ICategoriesForm {
+  name: string;
+  slug: string;
+  description?: string;
+}
+
+export interface ICategoriesDetai extends ICategories {
+  message?: string;
+}
+
+export interface ICategoriesDetailResponse {
+  statusCode: number;
+  data: ICategoriesDetai;
+}

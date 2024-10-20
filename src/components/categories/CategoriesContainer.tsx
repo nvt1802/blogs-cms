@@ -1,53 +1,58 @@
 "use client";
 
+import CategoriesTable from "@/components/categories/CategoriesTable";
 import CMSModal from "@/components/share/CMSModal";
 import CMsModalConfirm from "@/components/share/CMsModalConfirm";
-import TagForm from "@/components/tags/TagsForm";
-import TagsTable from "@/components/tags/TagsTable";
 import { useAppContext } from "@/context/AppContext";
-import { ITagForm, ITags } from "@/types/tags";
-import { addNewTag, deleteTag, fetchTags, updateTag } from "@/utils/api/tags";
+import { ICategories, ICategoriesForm } from "@/types/categories";
+import {
+  addNewCategories,
+  deleteCategories,
+  fetchCategories,
+  updateCategories,
+} from "@/utils/api/categories";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Spinner } from "flowbite-react";
 import { useState } from "react";
 import { HiTag } from "react-icons/hi";
+import CategoriesForm from "./CategoriesForm";
 
-const TagsContainer = () => {
+const CategoriesContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isShowModal, setShowModal] = useState<boolean>(false);
   const [isCreateForm, setCreateForm] = useState<boolean>(false);
-  const [tagSelected, setTagSelected] = useState<ITags | undefined>();
+  const [categorySelected, setCategorySelected] = useState<ICategories | undefined>();
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [isShowModalConfirm, setModalConfirm] = useState<boolean>(false);
   const { state, updateState } = useAppContext();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["tags", currentPage],
-    queryFn: async () => fetchTags(currentPage),
+    queryFn: async () => fetchCategories(currentPage),
   });
 
   const onChangePage = (page: number) => setCurrentPage(page);
 
-  const onEditTag = (tag: ITags) => {
-    setTagSelected(tag);
+  const onEditTag = (tag: ICategories) => {
+    setCategorySelected(tag);
     setCreateForm(false);
     setShowModal(true);
   };
 
-  const onRemoveTag = (tag: ITags) => {
-    setTagSelected(tag);
+  const onRemoveTag = (tag: ICategories) => {
+    setCategorySelected(tag);
     setModalConfirm(true);
   };
 
-  const onCreateNewTags = () => {
-    setTagSelected(undefined);
+  const onCreateNewCategory = () => {
+    setCategorySelected(undefined);
     setCreateForm(true);
     setShowModal(true);
   };
 
   const onCloseModalConfirm = () => {
     setModalConfirm(false);
-    setTagSelected(undefined);
+    setCategorySelected(undefined);
   };
 
   const addToast = (
@@ -61,28 +66,28 @@ const TagsContainer = () => {
     updateState({ toasts: [...state.toasts, newToast] });
   };
 
-  const onSubmitForm = async (tagForm: ITagForm) => {
+  const onSubmitForm = async (categoriesForm: ICategoriesForm) => {
     try {
       setProcessing(true);
       if (isCreateForm) {
-        const response = await addNewTag(tagForm);
+        const response = await addNewCategories(categoriesForm);
         if (response) {
           refetch();
-          addToast("Add new tag success", "success");
+          addToast("Add new category success", "success");
         }
       }
-      if (tagSelected?.id) {
-        const response = await updateTag(tagSelected?.id, tagForm);
+      if (categorySelected?.id) {
+        const response = await updateCategories(categorySelected?.id, categoriesForm);
         if (response) {
-          setTagSelected(response);
+          setCategorySelected(response);
           refetch();
-          addToast("Update tag success", "success");
+          addToast("Update category success", "success");
         }
       }
       setShowModal(false);
     } catch (error) {
       console.error(error);
-      addToast("Update tag error", "error");
+      addToast("Update category error", "error");
     } finally {
       setProcessing(false);
     }
@@ -90,22 +95,22 @@ const TagsContainer = () => {
 
   const onDeleteTag = async () => {
     try {
-      if (tagSelected?.id) {
-        const { message } = await deleteTag(tagSelected?.id);
-        if (message === "Cannot delete tag currently in use") {
+      if (categorySelected?.id) {
+        const { message } = await deleteCategories(categorySelected?.id);
+        if (message === "Cannot delete category currently in use") {
           addToast(message, "error");
         } else {
           refetch();
-          addToast("Delete tag success", "success");
+          addToast("Delete category success", "success");
         }
       }
     } catch (error) {
       console.error(error);
-      addToast("Delete tag error", "error");
+      addToast("Delete category error", "error");
     } finally {
       setProcessing(false);
       setModalConfirm(false);
-      setTagSelected(undefined);
+      setCategorySelected(undefined);
     }
   };
 
@@ -120,14 +125,14 @@ const TagsContainer = () => {
       ) : (
         <>
           <div className="flex flex-row justify-end p-2">
-            <Button color="success" onClick={onCreateNewTags}>
+            <Button color="success" onClick={onCreateNewCategory}>
               <div className="flex flex-row gap-2">
                 <HiTag size={20} />
-                <p>Create New Tag</p>
+                <p>Create New Category</p>
               </div>
             </Button>
           </div>
-          <TagsTable
+          <CategoriesTable
             currentPage={currentPage}
             data={data}
             onChange={onChangePage}
@@ -142,8 +147,8 @@ const TagsContainer = () => {
             isFooterEmpty={true}
             onClose={() => setShowModal(false)}
           >
-            <TagForm
-              tag={tagSelected}
+            <CategoriesForm
+              tag={categorySelected}
               isCreateForm={isCreateForm}
               isLoading={isProcessing}
               onSubmit={onSubmitForm}
@@ -152,7 +157,7 @@ const TagsContainer = () => {
           </CMSModal>
           <CMsModalConfirm
             isShow={isShowModalConfirm}
-            title="Are you sure you want to delete this tag?"
+            title="Are you sure you want to delete this category?"
             onClose={onCloseModalConfirm}
             onConfirm={onDeleteTag}
           />
@@ -162,4 +167,4 @@ const TagsContainer = () => {
   );
 };
 
-export default TagsContainer;
+export default CategoriesContainer;
