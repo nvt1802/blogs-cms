@@ -1,6 +1,5 @@
 "use client";
 
-import CMSModal from "@/components/share/CMSModal";
 import CMsModalConfirm from "@/components/share/CMsModalConfirm";
 import TagForm from "@/components/tags/TagsForm";
 import TagsTable from "@/components/tags/TagsTable";
@@ -8,7 +7,7 @@ import { useAppContext } from "@/context/AppContext";
 import { ITagForm, ITags } from "@/types/tags";
 import { addNewTag, deleteTag, fetchTags, updateTag } from "@/utils/api/tags";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Spinner } from "flowbite-react";
+import { Button, Drawer, Spinner } from "flowbite-react";
 import { useState } from "react";
 import { HiTag } from "react-icons/hi";
 
@@ -134,22 +133,23 @@ const TagsContainer = () => {
             onEditItem={onEditTag}
             onRemoveItem={onRemoveTag}
           />
-          <CMSModal
-            isShow={isShowModal}
-            title="Add new tag"
-            labelOK="Save"
-            labelCancel="Cancel"
-            isFooterEmpty={true}
+          <Drawer
+            open={isShowModal}
             onClose={() => setShowModal(false)}
+            position="right"
+            className="w-full max-w-md"
           >
-            <TagForm
-              tag={tagSelected}
-              isCreateForm={isCreateForm}
-              isLoading={isProcessing}
-              onSubmit={onSubmitForm}
-              onCancel={() => setShowModal(false)}
-            />
-          </CMSModal>
+            <Drawer.Items className="h-[calc(100vh-32px)]">
+              <TagForm
+                className="flex flex-col justify-between h-full"
+                tag={tagSelected}
+                isCreateForm={isCreateForm}
+                isLoading={isProcessing}
+                onSubmit={onSubmitForm}
+                onCancel={() => setShowModal(false)}
+              />
+            </Drawer.Items>
+          </Drawer>
           <CMsModalConfirm
             isShow={isShowModalConfirm}
             title="Are you sure you want to delete this tag?"

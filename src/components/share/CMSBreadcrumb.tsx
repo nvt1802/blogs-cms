@@ -38,7 +38,7 @@ const CMSBreadcrumb = () => {
         <li key={index} className="group flex items-center capitalize">
           {index === 0 ? (
             <Link href={item.href} className="inline-flex">
-              <HiHome className="mr-2 h-4 w-4 my-auto" />
+              <HiHome className="mr-2 h-4 w-4 my-auto dark:fill-gray-400 hover:fill-white" />
               <p className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Home</p>
             </Link>
           ) : (

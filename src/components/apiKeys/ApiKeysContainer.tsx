@@ -1,59 +1,50 @@
 "use client";
 
-import CategoriesTable from "@/components/categories/CategoriesTable";
 import CMsModalConfirm from "@/components/share/CMsModalConfirm";
 import { useAppContext } from "@/context/AppContext";
-import { ICategories, ICategoriesForm } from "@/types/categories";
+import { IApiKeyForm, IApiKeys } from "@/types/api-keys";
 import {
-  addNewCategories,
-  deleteCategories,
-  fetchCategories,
-  updateCategories,
-} from "@/utils/api/categories";
+  createNewApiKey,
+  deleteApiKey,
+  fetchAllApiKeys,
+} from "@/utils/api/api-keys";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Drawer, Spinner } from "flowbite-react";
 import { useState } from "react";
-import { HiTag } from "react-icons/hi";
-import CategoriesForm from "./CategoriesForm";
+import { HiOutlineKey } from "react-icons/hi";
+import ApiKeysForm from "./ApiKeysForm";
+import ApikeysTable from "./ApikeysTable";
 
-const CategoriesContainer = () => {
+const ApiKeysContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isShowModal, setShowModal] = useState<boolean>(false);
   const [isCreateForm, setCreateForm] = useState<boolean>(false);
-  const [categorySelected, setCategorySelected] = useState<
-    ICategories | undefined
-  >();
+  const [itemSelected, setItemSelected] = useState<IApiKeys | undefined>();
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [isShowModalConfirm, setModalConfirm] = useState<boolean>(false);
   const { state, updateState } = useAppContext();
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["tags", currentPage],
-    queryFn: async () => fetchCategories(currentPage),
+    queryKey: ["api-keys", currentPage],
+    queryFn: async () => fetchAllApiKeys(currentPage),
   });
 
   const onChangePage = (page: number) => setCurrentPage(page);
 
-  const onEditTag = (tag: ICategories) => {
-    setCategorySelected(tag);
-    setCreateForm(false);
-    setShowModal(true);
-  };
-
-  const onRemoveTag = (tag: ICategories) => {
-    setCategorySelected(tag);
+  const onRemoveApiKey = (data: IApiKeys) => {
+    setItemSelected(data);
     setModalConfirm(true);
   };
 
-  const onCreateNewCategory = () => {
-    setCategorySelected(undefined);
+  const onCreateNewApiKey = () => {
+    setItemSelected(undefined);
     setCreateForm(true);
     setShowModal(true);
   };
 
   const onCloseModalConfirm = () => {
     setModalConfirm(false);
-    setCategorySelected(undefined);
+    setItemSelected(undefined);
   };
 
   const addToast = (
@@ -67,54 +58,46 @@ const CategoriesContainer = () => {
     updateState({ toasts: [...state.toasts, newToast] });
   };
 
-  const onSubmitForm = async (categoriesForm: ICategoriesForm) => {
+  const onSubmitForm = async (apiKeyForm: IApiKeyForm) => {
     try {
       setProcessing(true);
-      if (isCreateForm) {
-        const response = await addNewCategories(categoriesForm);
-        if (response) {
-          refetch();
-          addToast("Add new category success", "success");
-        }
+      if (apiKeyForm.duration === "limited") {
+        apiKeyForm.expiry_date = `${apiKeyForm.value}${apiKeyForm.unit}`;
+        delete apiKeyForm.unit;
+        delete apiKeyForm.value;
       }
-      if (categorySelected?.id) {
-        const response = await updateCategories(
-          categorySelected?.id,
-          categoriesForm
-        );
-        if (response) {
-          setCategorySelected(response);
-          refetch();
-          addToast("Update category success", "success");
-        }
+      const response = await createNewApiKey(apiKeyForm);
+      if (response) {
+        refetch();
+        addToast("Add new API Key success", "success");
       }
       setShowModal(false);
     } catch (error) {
       console.error(error);
-      addToast("Update category error", "error");
+      addToast("Create API Key error", "error");
     } finally {
       setProcessing(false);
     }
   };
 
-  const onDeleteTag = async () => {
+  const onDeleteApiKey = async () => {
     try {
-      if (categorySelected?.id) {
-        const { message } = await deleteCategories(categorySelected?.id);
-        if (message === "Cannot delete category currently in use") {
+      if (itemSelected?.id) {
+        const { message } = await deleteApiKey(itemSelected?.id);
+        if (message === "Cannot delete API Key currently in use") {
           addToast(message, "error");
         } else {
           refetch();
-          addToast("Delete category success", "success");
+          addToast("Delete API Key success", "success");
         }
       }
     } catch (error) {
       console.error(error);
-      addToast("Delete category error", "error");
+      addToast("Delete API Key error", "error");
     } finally {
       setProcessing(false);
       setModalConfirm(false);
-      setCategorySelected(undefined);
+      setItemSelected(undefined);
     }
   };
 
@@ -129,19 +112,18 @@ const CategoriesContainer = () => {
       ) : (
         <>
           <div className="flex flex-row justify-end p-2">
-            <Button color="success" onClick={onCreateNewCategory}>
+            <Button color="success" onClick={onCreateNewApiKey}>
               <div className="flex flex-row gap-2">
-                <HiTag size={20} />
-                <p>Create New Category</p>
+                <HiOutlineKey size={20} />
+                <p>Generate New API Key</p>
               </div>
             </Button>
           </div>
-          <CategoriesTable
+          <ApikeysTable
             currentPage={currentPage}
             data={data}
             onChange={onChangePage}
-            onEditItem={onEditTag}
-            onRemoveItem={onRemoveTag}
+            onRemoveItem={onRemoveApiKey}
           />
           <Drawer
             open={isShowModal}
@@ -150,9 +132,8 @@ const CategoriesContainer = () => {
             className="w-full max-w-md"
           >
             <Drawer.Items className="h-[calc(100vh-32px)]">
-              <CategoriesForm
+              <ApiKeysForm
                 className="h-full flex flex-col justify-between"
-                tag={categorySelected}
                 isCreateForm={isCreateForm}
                 isLoading={isProcessing}
                 onSubmit={onSubmitForm}
@@ -162,9 +143,9 @@ const CategoriesContainer = () => {
           </Drawer>
           <CMsModalConfirm
             isShow={isShowModalConfirm}
-            title="Are you sure you want to delete this category?"
+            title="Are you sure you want to delete this API Key?"
             onClose={onCloseModalConfirm}
-            onConfirm={onDeleteTag}
+            onConfirm={onDeleteApiKey}
           />
         </>
       )}
@@ -172,4 +153,4 @@ const CategoriesContainer = () => {
   );
 };
 
-export default CategoriesContainer;
+export default ApiKeysContainer;

@@ -12,6 +12,7 @@ interface IProps {
   tag?: ITags;
   isCreateForm?: boolean;
   isLoading?: boolean;
+  className?: string;
   onSubmit?: (tag: ITagForm) => void;
   onCancel?: () => void;
 }
@@ -20,6 +21,7 @@ const TagForm: React.FC<IProps> = ({
   tag,
   isCreateForm,
   isLoading,
+  className,
   onSubmit,
   onCancel,
 }) => {
@@ -55,7 +57,7 @@ const TagForm: React.FC<IProps> = ({
   }, [dirtyFields]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmitForm)}>
+    <form onSubmit={handleSubmit(onSubmitForm)} className={className}>
       <div className="flex flex-col gap-6">
         <div className="space-y-2">
           <div className="mb-2 block">
@@ -102,6 +104,7 @@ const TagForm: React.FC<IProps> = ({
                 id="slug"
                 type="text"
                 sizing="md"
+                className="custom-input"
                 readOnly
                 color={!!errors?.slug ? "failure" : ""}
                 helperText={

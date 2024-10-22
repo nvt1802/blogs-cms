@@ -168,6 +168,7 @@ const PostForm: React.FC<IProps> = ({
                   id="overview.slug"
                   type="text"
                   sizing="md"
+                  className="custom-input"
                   color={!!errors?.overview?.slug ? "failure" : ""}
                   helperText={
                     <ErrorText
@@ -184,7 +185,7 @@ const PostForm: React.FC<IProps> = ({
           </div>
 
           <div className="flex flex-col gap-2">
-            <p className="text-sm">Categories & Tags</p>
+            <p className="text-sm dark:text-white">Categories & Tags</p>
             <Accordion className="border-gray-300" collapseAll>
               <Accordion.Panel>
                 <Accordion.Title className="p-2.5 text-sm">

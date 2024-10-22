@@ -3,7 +3,7 @@ import MainLayout from "@/layouts/MainLayout";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard - CMS",
+  title: "Users - CMS",
 };
 
 export default function Home() {

@@ -10,6 +10,7 @@ import {
   HiDocument,
   HiOutlineBookmark,
   HiTag,
+  HiOutlineKey,
   HiUser,
 } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
@@ -48,6 +49,11 @@ const Menu: React.FC<IProps> = ({ className }) => {
       name: "Tags",
       href: "/dashboard/tags",
       icon: <HiTag className={iconClass} />,
+    },
+    {
+      name: "API Keys",
+      href: "/dashboard/api-key",
+      icon: <HiOutlineKey className={iconClass} />,
     },
   ];
 

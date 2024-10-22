@@ -11,3 +11,12 @@ export enum UserRole {
   AUTHOR = "author",
   USER = "user",
 }
+
+export enum ExpiresUnit {
+  SECONDS = "s",
+  MINUTES = "m",
+  HOURS = "h",
+  DAYS = "d",
+  WEEKS = "w",
+  YEARS = "y",
+}

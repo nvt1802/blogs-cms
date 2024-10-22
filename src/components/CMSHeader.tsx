@@ -57,7 +57,7 @@ const CMSHeader = () => {
       )}
 
       <button onClick={() => onClick()} className="m-2 sm:hidden">
-        <HiMenu className="h-6 w-6" />
+        <HiMenu className="h-6 w-6 dark:fill-white" />
       </button>
 
       <Navbar.Brand href="/dashboard" className="ml-5">
