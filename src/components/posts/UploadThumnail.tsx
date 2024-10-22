@@ -7,6 +7,7 @@ import { ChangeEvent, useState } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import ErrorText from "../share/ErrorText";
+import { cloudinaryUrl } from "@/utils/contants";
 
 interface IProps {
   post?: IPost;
@@ -66,7 +67,7 @@ const UploadThumnail: React.FC<IProps> = ({
             post?.featured_image && (
               <div className="w-full bg-gray-100 dark:bg-gray-800 flex p-1 max-h-[380px]">
                 <Image
-                  src={post?.featured_image ?? ""}
+                  src={`${cloudinaryUrl}/c_fill,h_380,w_460/${post?.featured_image ?? ""}`}
                   alt="Featured Image"
                   width={460}
                   height={380}

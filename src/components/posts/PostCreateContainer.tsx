@@ -28,8 +28,8 @@ const PostCreateContainer: React.FC = () => {
       const tagsId = post?.tags_id ?? [];
       console.log(post.featured_image_blob);
       if (post.featured_image_blob) {
-        const { url } = await uploadSingeFile(post.featured_image_blob);
-        post.featured_image = url;
+        const { public_id } = await uploadSingeFile(post.featured_image_blob);
+        post.featured_image = public_id;
       } else {
         post.featured_image = "";
       }

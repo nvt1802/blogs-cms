@@ -19,3 +19,5 @@ export enum PostStatus {
   PUBLISHED = "published",
   DRAFT = "draft",
 }
+
+export const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL;

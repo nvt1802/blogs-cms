@@ -1,7 +1,7 @@
 "use client";
 
 import { IPost, IPostPaginationResponse } from "@/types/posts";
-import { PostStatus } from "@/utils/contants";
+import { cloudinaryUrl, PostStatus } from "@/utils/contants";
 import dayjs from "dayjs";
 import { Badge, Pagination, Table, Tooltip } from "flowbite-react";
 import Image from "next/image";
@@ -55,7 +55,7 @@ const PostsTable: React.FC<IProps> = ({
                 </Table.Cell>
                 <Table.Cell>
                   <Image
-                    src={item.featured_image ?? ""}
+                    src={`${cloudinaryUrl}/${item.featured_image ?? ""}`}
                     alt="thumnail"
                     width={60}
                     height={30}

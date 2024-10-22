@@ -2,6 +2,7 @@
 
 import { useAppContext } from "@/context/AppContext";
 import { fetchUsersInfoById } from "@/utils/api/users";
+import { cloudinaryUrl } from "@/utils/contants";
 import { clearCookie, getCookie } from "@/utils/cookieUtils";
 import { UserRole } from "@/utils/enum";
 import { Avatar, Badge, Navbar, Popover } from "flowbite-react";
@@ -113,7 +114,7 @@ const CMSHeader = () => {
           <button>
             <Avatar
               alt="User settings"
-              img={state.user?.profile_picture}
+              img={`${cloudinaryUrl}/c_fill,h_40,w_40/${state.user?.profile_picture}`}
               rounded
             />
           </button>

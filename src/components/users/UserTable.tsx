@@ -1,6 +1,7 @@
 "use client";
 
 import { fetchUsers } from "@/utils/api/users";
+import { cloudinaryUrl } from "@/utils/contants";
 import { UserRole } from "@/utils/enum";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -53,7 +54,7 @@ const UserTable = () => {
                       {(currentPage - 1) * 10 + index + 1}
                     </Table.Cell>
                     <Table.Cell>
-                      <Avatar img={item.profile_picture} alt="avatar" />
+                      <Avatar img={`${cloudinaryUrl}/c_fill,h_50,w_50/${item?.profile_picture ?? ""}`} alt="avatar" />
                     </Table.Cell>
                     <Table.Cell>{item.username}</Table.Cell>
                     <Table.Cell>{item.email}</Table.Cell>

@@ -64,8 +64,8 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
       setIsUpdateProcessing(true);
       const tagsId = post?.tags_id ?? [];
       if (post.featured_image_blob) {
-        const { url } = await uploadSingeFile(post.featured_image_blob);
-        post.featured_image = url;
+        const { public_id } = await uploadSingeFile(post.featured_image_blob);
+        post.featured_image = public_id;
       }
       delete post?.tags_id;
       delete post?.featured_image_blob;
