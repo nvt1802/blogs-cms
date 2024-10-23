@@ -31,6 +31,6 @@ export const editorTools = {
   checklist: CheckList,
   delimiter: Delimiter,
   inlineCode: InlineCode,
-  simpleImage: SimpleImage,
-  textColor: TextColor
+  image: SimpleImage,
+  textColor: TextColor,
 };
