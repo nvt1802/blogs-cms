@@ -114,7 +114,7 @@ const CMSHeader = () => {
           <button>
             <Avatar
               alt="User settings"
-              img={`${cloudinaryUrl}/c_fill,h_40,w_40/${state.user?.profile_picture}`}
+              img={state.user?.profile_picture ? `${cloudinaryUrl}/c_fill,h_40,w_40/${state.user?.profile_picture}` : ""}
               rounded
             />
           </button>

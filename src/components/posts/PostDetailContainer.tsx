@@ -11,7 +11,7 @@ import {
 } from "@/utils/api/posts";
 import { uploadSingeFile } from "@/utils/api/upload";
 import { fetchUsersInfoById } from "@/utils/api/users";
-import { PostStatus } from "@/utils/contants";
+import { cloudinaryUrl, PostStatus } from "@/utils/contants";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { Avatar, Spinner } from "flowbite-react";
@@ -122,12 +122,12 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
         <>
           <div className="flex flex-row gap-5">
             <Avatar
-              img={userInfo?.profile_picture}
+              img={userInfo?.profile_picture ? `${cloudinaryUrl}/c_fill,h_80,w_80/${userInfo?.profile_picture}` : ""}
               alt="avatar"
               placeholderInitials={`${
                 userInfo?.first_name?.charAt(0).toUpperCase() ?? ""
               }${userInfo?.last_name?.charAt(0).toUpperCase() ?? ""}`}
-              size="md"
+              size="lg"
               rounded
             />
             <div className="grid grid-cols-3 gap-5 text-sm leading-7 dark:text-white">

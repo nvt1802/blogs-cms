@@ -4,7 +4,7 @@ import PostsTable from "@/components/posts/PostTable";
 import { deletePost, fetchPosts } from "@/utils/api/posts";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Spinner } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiDocumentAdd } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { IPost } from "@/types/posts";
@@ -18,7 +18,7 @@ const PostContainer = () => {
   const [postSelected, setPostSelected] = useState<IPost | undefined>();
   const [isShowModalConfirm, setModalConfirm] = useState<boolean>(false);
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, refetch, isError } = useQuery({
     queryKey: ["posts", currentPage],
     queryFn: async () => fetchPosts(currentPage),
   });
@@ -76,6 +76,13 @@ const PostContainer = () => {
       setPostSelected(undefined);
     }
   };
+
+  useEffect(() => {
+    if (isError) {
+      addToast("Unable to get data from api", "error");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError]);
 
   return (
     <>
