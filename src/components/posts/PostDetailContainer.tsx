@@ -59,17 +59,20 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
     updateState({ toasts: [...state.toasts, newToast] });
   };
 
-  const onUpdatePost = async (post: IPostForm) => {
+  const onUpdatePost = async (postFormData: IPostForm) => {
     try {
       setIsUpdateProcessing(true);
-      const tagsId = post?.tags_id ?? [];
-      if (post.featured_image_blob) {
-        const { public_id } = await uploadSingeFile(post.featured_image_blob);
-        post.featured_image = public_id;
+      const tagsId = postFormData?.tags_id ?? [];
+      if (postFormData.featured_image_blob) {
+        const { public_id } = await uploadSingeFile(
+          postFormData.featured_image_blob
+        );
+        postFormData.featured_image = public_id;
       }
-      delete post?.tags_id;
-      delete post?.featured_image_blob;
-      const response = await updatePost(slug, post);
+      delete postFormData?.tags_id;
+      delete postFormData?.featured_image_blob;
+      postFormData.status = post?.status || "draft";
+      const response = await updatePost(slug, postFormData);
       await updateTagsOfPost(slug, tagsId);
       if (response.slug !== slug) {
         router.push(`/dashboard/posts/${response.slug}`);
@@ -114,15 +117,19 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
     <>
       {isLoading ? (
         <div className="flex flex-col text-center h-full">
-        <div className="my-auto">
-          <Spinner aria-label="spinner" />
+          <div className="my-auto">
+            <Spinner aria-label="spinner" />
+          </div>
         </div>
-      </div>
       ) : (
         <>
           <div className="flex flex-row gap-5">
             <Avatar
-              img={userInfo?.profile_picture ? `${cloudinaryUrl}/c_fill,h_80,w_80/${userInfo?.profile_picture}` : ""}
+              img={
+                userInfo?.profile_picture
+                  ? `${cloudinaryUrl}/c_fill,h_80,w_80/${userInfo?.profile_picture}`
+                  : ""
+              }
               alt="avatar"
               placeholderInitials={`${
                 userInfo?.first_name?.charAt(0).toUpperCase() ?? ""
@@ -138,12 +145,18 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
               </div>
               <div className="col-span-2 flex flex-col gap-1 justify-between text-xs">
                 <div className="capitalize">{`${userInfo?.first_name} ${userInfo?.last_name}`}</div>
-                <div>{dayjs(post?.published_at).format("DD/MM/YYYY HH:mm")}</div>
+                <div>
+                  {dayjs(post?.published_at).format("DD/MM/YYYY HH:mm")}
+                </div>
                 <div className="capitalize">
                   {post?.status === "published" ? (
-                    <p className="bg-green-500 text-white w-fit px-1 py-0.5 rounded">{PostStatus.PUBLISHED}</p>
+                    <p className="bg-green-500 text-white w-fit px-1 py-0.5 rounded">
+                      {PostStatus.PUBLISHED}
+                    </p>
                   ) : (
-                    <p className="bg-gray-500 text-white w-fit px-1 py-0.5 rounded">{PostStatus.DRAFT}</p>
+                    <p className="bg-gray-500 text-white w-fit px-1 py-0.5 rounded">
+                      {PostStatus.DRAFT}
+                    </p>
                   )}
                 </div>
               </div>
