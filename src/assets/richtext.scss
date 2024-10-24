@@ -1,0 +1,115 @@
+.rich-text {
+  @apply space-y-4;
+
+  blockquote {
+    font-style: italic;
+    border-left: 4px solid #3498db;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background-color: #f5f8fa;
+    color: #555;
+    border-radius: 5px;
+  }
+
+  blockquote p {
+    margin: 0;
+  }
+
+  blockquote::before {
+    content: '“';
+    font-size: 2rem;
+    line-height: 0;
+    vertical-align: -0.4rem;
+    color: #3498db;
+    margin-right: 0.5rem;
+  }
+
+  blockquote::after {
+    content: '”';
+    font-size: 2rem;
+    line-height: 0;
+    vertical-align: -0.4rem;
+    color: #3498db;
+    margin-left: 0.5rem;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 0.5em;
+    color: #333;
+  }
+
+  b,
+  strong {
+    font-weight: bold;
+    color: #000;
+  }
+
+  i,
+  em {
+    font-style: italic;
+    color: #333;
+  }
+
+  u {
+    text-decoration: underline;
+  }
+
+  ul,
+  ol {
+    margin-left: 2em;
+    padding-left: 1em;
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+
+  li {
+    margin-bottom: 0.5em;
+  }
+
+  a {
+    color: #1e90ff;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold my-2 mx-0;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  img {
+    @apply max-w-full w-full h-auto block my-2 mx-0;
+  }
+
+  pre {
+    @apply bg-[#f5f5f5] p-4 overflow-x-auto;
+  }
+
+  code {
+    @apply bg-[#f0f0f0] px-1.5 py-1;
+    font-family: 'Courier New', Courier, monospace;
+  }
+}

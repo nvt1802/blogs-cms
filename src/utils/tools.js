@@ -19,13 +19,19 @@ import TextColor from "editorjs-text-color-plugin";
 export const editorTools = {
   embed: Embed,
   table: Table,
-  list: List,
+  list: {
+    class: List,
+    inlineToolbar: ["bold", "italic", "link"],
+  },
   warning: Warning,
   code: Code,
   linkTool: LinkTool,
   image: Image,
   raw: Raw,
-  header: Header,
+  header: {
+    class: Header,
+    inlineToolbar: ['bold', 'italic', 'link'],
+  },
   quote: Quote,
   marker: Marker,
   checklist: CheckList,
