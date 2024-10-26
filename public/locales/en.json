@@ -1,0 +1,37 @@
+{
+  "HomePage": {
+    "title": "Hello world!",
+    "about": "Go to the about page"
+  },
+  "UsersPage": {
+    "column-username": "Username",
+    "column-role": "Role",
+    "column-created-at": "Created At",
+    "column-updated-at": "Updated At",
+    "admin": "Admin",
+    "user": "User",
+    "author": "Author"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, vi {VI} en {EN} other {Unknown}}"
+  },
+  "Common": {
+    "posts": "Posts",
+    "categories": "Categories",
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "tags": "Tags",
+    "api-key": "Api Keys"
+  },
+  "PostsPage": {
+    "btn-create-new-post": "Create New Post",
+    "column-thumnail": "Thumnail",
+    "column-title": "Title",
+    "column-category": "Category",
+    "column-status": "Status",
+    "column-created-by": "Create By",
+    "column-updated-at": "Updated At"
+  }
+}

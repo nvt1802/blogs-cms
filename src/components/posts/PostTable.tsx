@@ -4,6 +4,7 @@ import { IPost, IPostPaginationResponse } from "@/types/posts";
 import { cloudinaryUrl, PostStatus } from "@/utils/contants";
 import dayjs from "dayjs";
 import { Badge, Pagination, Table, Tooltip } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 
@@ -22,6 +23,8 @@ const PostsTable: React.FC<IProps> = ({
   onEditItem,
   onRemoveItem,
 }) => {
+  const t = useTranslations("PostsPage");
+
   const onPageChange = (page: number) => {
     if (onChange) {
       onChange(page);
@@ -35,11 +38,11 @@ const PostsTable: React.FC<IProps> = ({
           <Table.Head>
             <Table.HeadCell>STT</Table.HeadCell>
             <Table.HeadCell>Thumnail</Table.HeadCell>
-            <Table.HeadCell>Title</Table.HeadCell>
-            <Table.HeadCell>Category</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>Create By</Table.HeadCell>
-            <Table.HeadCell>Updated At</Table.HeadCell>
+            <Table.HeadCell>{t("column-title")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-category")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-status")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-created-by")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-updated-at")}</Table.HeadCell>
             <Table.HeadCell>
               <span className="sr-only">Edit</span>
             </Table.HeadCell>

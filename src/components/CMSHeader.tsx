@@ -8,8 +8,8 @@ import { UserRole } from "@/utils/enum";
 import { Avatar, Badge, Navbar, Popover } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { HiChevronDoubleRight, HiMenu } from "react-icons/hi";
-import { HiLogout } from "react-icons/hi";
+import { HiChevronDoubleRight, HiLogout, HiMenu } from "react-icons/hi";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 const CMSHeader = () => {
   const { state, updateState } = useAppContext();
@@ -66,7 +66,8 @@ const CMSHeader = () => {
           CMS
         </span>
       </Navbar.Brand>
-      <div className="flex md:order-2">
+      <div className="flex md:order-2 gap-3">
+        <LocaleSwitcher />
         <Popover
           aria-labelledby="profile-popover"
           placement="bottom-end"
@@ -75,7 +76,11 @@ const CMSHeader = () => {
               <div className="flex flex-row gap-3">
                 <Avatar
                   alt={state?.user?.username ?? ""}
-                  img={state.user?.profile_picture}
+                  img={
+                    state.user?.profile_picture
+                      ? `${cloudinaryUrl}/c_fill,h_80,w_80/${state.user?.profile_picture}`
+                      : ""
+                  }
                   size="lg"
                   className="min-w-20 min-h-20"
                   rounded
@@ -114,7 +119,11 @@ const CMSHeader = () => {
           <button>
             <Avatar
               alt="User settings"
-              img={state.user?.profile_picture ? `${cloudinaryUrl}/c_fill,h_40,w_40/${state.user?.profile_picture}` : ""}
+              img={
+                state.user?.profile_picture
+                  ? `${cloudinaryUrl}/c_fill,h_40,w_40/${state.user?.profile_picture}`
+                  : ""
+              }
               rounded
             />
           </button>

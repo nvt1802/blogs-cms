@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { IPost } from "@/types/posts";
 import CMsModalConfirm from "../share/CMsModalConfirm";
 import { useAppContext } from "@/context/AppContext";
+import { useLocale, useTranslations } from "next-intl";
 
 const PostContainer = () => {
   const router = useRouter();
@@ -17,6 +18,8 @@ const PostContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postSelected, setPostSelected] = useState<IPost | undefined>();
   const [isShowModalConfirm, setModalConfirm] = useState<boolean>(false);
+  const locale = useLocale();
+  const t = useTranslations("PostsPage");
 
   const { data, isLoading, refetch, isError } = useQuery({
     queryKey: ["posts", currentPage],
@@ -28,11 +31,11 @@ const PostContainer = () => {
   };
 
   const onCreateNewPost = () => {
-    router.push("/dashboard/posts/create");
+    router.push(`/${locale}/dashboard/posts/create`);
   };
 
   const onEditPost = (post: IPost) => {
-    router.push(`/dashboard/posts/${post?.slug}`);
+    router.push(`/${locale}/dashboard/posts/${post?.slug}`);
   };
 
   const onRemovePost = (post: IPost) => {
@@ -81,7 +84,7 @@ const PostContainer = () => {
     if (isError) {
       addToast("Unable to get data from api", "error");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isError]);
 
   return (
@@ -98,7 +101,7 @@ const PostContainer = () => {
             <Button color="success" onClick={onCreateNewPost}>
               <div className="flex flex-row gap-2">
                 <HiDocumentAdd size={20} />
-                <p>Create New Post</p>
+                <p>{t("btn-create-new-post")}</p>
               </div>
             </Button>
           </div>

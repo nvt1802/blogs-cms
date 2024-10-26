@@ -6,10 +6,12 @@ import { UserRole } from "@/utils/enum";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { Avatar, Badge, Pagination, Spinner, Table } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 const UserTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const t = useTranslations("UsersPage");
 
   const { data, isLoading } = useQuery({
     queryKey: ["users", currentPage],
@@ -27,7 +29,7 @@ const UserTable = () => {
           <div className="my-auto">
             <Spinner aria-label="spinner" />
           </div>
-      </div>
+        </div>
       ) : (
         <>
           <div className="overflow-y-auto">
@@ -35,11 +37,11 @@ const UserTable = () => {
               <Table.Head>
                 <Table.HeadCell>STT</Table.HeadCell>
                 <Table.HeadCell>Avatar</Table.HeadCell>
-                <Table.HeadCell>Username</Table.HeadCell>
+                <Table.HeadCell>{t("column-username")}</Table.HeadCell>
                 <Table.HeadCell>Email</Table.HeadCell>
-                <Table.HeadCell>Role</Table.HeadCell>
-                <Table.HeadCell>Created At</Table.HeadCell>
-                <Table.HeadCell>Updated At</Table.HeadCell>
+                <Table.HeadCell>{t("column-role")}</Table.HeadCell>
+                <Table.HeadCell>{t("column-created-at")}</Table.HeadCell>
+                <Table.HeadCell>{t("column-updated-at")}</Table.HeadCell>
                 <Table.HeadCell>
                   <span className="sr-only">Edit</span>
                 </Table.HeadCell>
@@ -54,7 +56,13 @@ const UserTable = () => {
                       {(currentPage - 1) * 10 + index + 1}
                     </Table.Cell>
                     <Table.Cell>
-                      <Avatar img={`${cloudinaryUrl}/c_fill,h_50,w_50/${item?.profile_picture ?? ""}`} alt="avatar" />
+                      <Avatar
+                        img={`${cloudinaryUrl}/c_fill,h_50,w_50/${
+                          item?.profile_picture ?? ""
+                        }`}
+                        rounded
+                        alt="avatar"
+                      />
                     </Table.Cell>
                     <Table.Cell>{item.username}</Table.Cell>
                     <Table.Cell>{item.email}</Table.Cell>
@@ -69,7 +77,7 @@ const UserTable = () => {
                         }
                         className="w-fit"
                       >
-                        {item.role}
+                        {t(`${item.role.toLowerCase()}`)}
                       </Badge>
                     </Table.Cell>
                     <Table.Cell>

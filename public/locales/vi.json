@@ -1,0 +1,37 @@
+{
+  "HomePage": {
+    "title": "Hello world!",
+    "about": "con cacc"
+  },
+  "UsersPage": {
+    "column-username": "Tên đăng nhập",
+    "column-role": "Vai trò",
+    "column-created-at": "Ngày tạo",
+    "column-updated-at": "Ngày cập nhật",
+    "admin": "Quản trị viên",
+    "user": "Người dùng",
+    "author": "Tác giả"
+  },
+  "LocaleSwitcher": {
+    "label": "Thay đổi ngôn ngữ",
+    "locale": "{locale, select, vi {VI} en {EN} other {Unknown}}"
+  },
+  "Common": {
+    "posts": "Bài viết",
+    "categories": "Thể loại",
+    "home": "Trang chủ",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "tags": "Tags",
+    "api-key": "Api Keys"
+  },
+  "PostsPage": {
+    "btn-create-new-post": "Tạo bài viết mới",
+    "column-thumnail": "Thumnail",
+    "column-title": "Tiêu đề",
+    "column-category": "Danh mục",
+    "column-status": "Trạng thái",
+    "column-created-by": "Người tạo",
+    "column-updated-at": "Ngày cập nhật"
+  }
+}

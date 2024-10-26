@@ -1,14 +1,5 @@
-import MainLayout from "@/layouts/MainLayout";
-import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Home Page - CMS",
-};
-
-export default function Home() {
-  return (
-    <MainLayout>
-      <div></div>
-    </MainLayout>
-  );
+export default function RootPage() {
+  redirect("/en");
 }

@@ -2,6 +2,7 @@
 
 import { useAppContext } from "@/context/AppContext";
 import { DarkThemeToggle, Sidebar, Tooltip } from "flowbite-react";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -21,38 +22,40 @@ interface IProps {
 
 const Menu: React.FC<IProps> = ({ className }) => {
   const pathname = usePathname();
+  const t = useTranslations("Common");
   const { state, updateState } = useAppContext();
+  const locale = useLocale();
   const iconClass =
     "h-6 w-6 flex-shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white";
   const items = [
     {
       name: "Dashboard",
-      href: "/dashboard",
+      href: `/${locale}/dashboard`,
       icon: <HiChartPie className={iconClass} />,
     },
     {
       name: "Users",
-      href: "/dashboard/users",
+      href: `/${locale}/dashboard/users`,
       icon: <HiUser className={iconClass} />,
     },
     {
-      name: "Posts",
-      href: "/dashboard/posts",
+      name: t("posts"),
+      href: `/${locale}/dashboard/posts`,
       icon: <HiDocument className={iconClass} />,
     },
     {
-      name: "Categories",
-      href: "/dashboard/categories",
+      name: t("categories"),
+      href: `/${locale}/dashboard/categories`,
       icon: <HiOutlineBookmark className={iconClass} />,
     },
     {
       name: "Tags",
-      href: "/dashboard/tags",
+      href: `/${locale}/dashboard/tags`,
       icon: <HiTag className={iconClass} />,
     },
     {
       name: "API Keys",
-      href: "/dashboard/api-key",
+      href: `/${locale}/dashboard/api-key`,
       icon: <HiOutlineKey className={iconClass} />,
     },
   ];
