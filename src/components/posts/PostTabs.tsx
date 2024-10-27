@@ -5,10 +5,11 @@ import SeoForm from "@/components/posts/SeoForm";
 import CMSTabs, { ITabItem } from "@/components/share/tabs/CMSTabs";
 import TabItem from "@/components/share/tabs/TabItem";
 import { IPost, IPostForm, IPostFormInput } from "@/types/posts";
-import { PostStatus, postTabs } from "@/utils/contants";
+import { getPostTabs, PostStatus } from "@/utils/contants";
 import { getCookie } from "@/utils/cookieUtils";
 import { OutputData } from "@editorjs/editorjs";
 import { Button } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -35,7 +36,8 @@ const PostTabs: React.FC<IProps> = ({
   onPublish,
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [tabs, setTabs] = useState<ITabItem[]>(postTabs);
+  const t = useTranslations("PostForm");
+  const [tabs, setTabs] = useState<ITabItem[]>(getPostTabs(t));
   const [defaultValue, setDefaultValue] = useState<IPostFormInput>();
   const [fileList, setFileList] = useState<FileList | null>();
 

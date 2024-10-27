@@ -23,7 +23,8 @@
     "dashboard": "Dashboard",
     "users": "Users",
     "tags": "Tags",
-    "api-key": "Api Keys"
+    "api-key": "Api Keys",
+    "create": "Tạo"
   },
   "PostsPage": {
     "btn-create-new-post": "Tạo bài viết mới",
@@ -33,5 +34,10 @@
     "column-status": "Trạng thái",
     "column-created-by": "Người tạo",
     "column-updated-at": "Ngày cập nhật"
+  },
+  "PostForm": {
+    "overview": "Tổng quan",
+    "content": "Nội dung",
+    "seo": "Seo"
   }
 }

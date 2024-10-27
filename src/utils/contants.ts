@@ -3,18 +3,23 @@ import { ITabItem } from "@/components/share/tabs/CMSTabs";
 export const pageLimit = 6;
 export const postTabs: ITabItem[] = [
   {
-    name: "Overview",
+    name: "overview",
     status: "unknown",
   },
   {
-    name: "Content",
+    name: "content",
     status: "unknown",
   },
   {
-    name: "Seo",
+    name: "seo",
     status: "unknown",
   },
 ];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getPostTabs = (t: any): ITabItem[] => {
+  return postTabs.map((item) => ({ ...item, name: t(item?.name) }));
+};
+
 export enum PostStatus {
   PUBLISHED = "published",
   DRAFT = "draft",

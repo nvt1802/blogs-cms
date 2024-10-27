@@ -28,7 +28,8 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === HttpStatusCode.Forbidden) {
-      location.href = "/login";
+      const locale = getCookie("NEXT_LOCALE");
+      location.href = `/${locale}/login`;
     }
     return Promise.reject(error);
   }

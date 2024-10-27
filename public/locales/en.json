@@ -23,7 +23,8 @@
     "dashboard": "Dashboard",
     "users": "Users",
     "tags": "Tags",
-    "api-key": "Api Keys"
+    "api-key": "Api Keys",
+    "create": "Create"
   },
   "PostsPage": {
     "btn-create-new-post": "Create New Post",
@@ -33,5 +34,10 @@
     "column-status": "Status",
     "column-created-by": "Create By",
     "column-updated-at": "Updated At"
+  },
+  "PostForm": {
+    "overview": "Overview",
+    "content": "Content",
+    "seo": "Seo"
   }
 }
