@@ -18,12 +18,14 @@ import { Avatar, Spinner } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PostTabs from "./PostTabs";
+import { useTranslations } from "next-intl";
 
 interface IProps {
   slug: string;
 }
 const PostContainer: React.FC<IProps> = ({ slug }) => {
   const router = useRouter();
+  const t = useTranslations("PostForm");
   const [isUpdateProcessing, setIsUpdateProcessing] = useState<boolean>(false);
   const [isPublishProcessing, setIsPublishProcessing] =
     useState<boolean>(false);
@@ -139,9 +141,9 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
             />
             <div className="grid grid-cols-3 gap-5 text-sm leading-7 dark:text-white">
               <div className="col-span-1 flex flex-col gap-1 justify-between font-semibold text-xs">
-                <div>Author</div>
-                <div>Published At</div>
-                <div>Status</div>
+                <div>{t("author")}</div>
+                <div>{t("published-at")}</div>
+                <div>{t("status")}</div>
               </div>
               <div className="col-span-2 flex flex-col gap-1 justify-between text-xs">
                 <div className="capitalize">{`${userInfo?.first_name} ${userInfo?.last_name}`}</div>

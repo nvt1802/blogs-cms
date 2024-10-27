@@ -8,6 +8,7 @@ import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import ErrorText from "../share/ErrorText";
 import { cloudinaryUrl } from "@/utils/contants";
+import { useTranslations } from "next-intl";
 
 interface IProps {
   post?: IPost;
@@ -22,6 +23,7 @@ const UploadThumnail: React.FC<IProps> = ({
   errors,
   onChaneFileList,
 }) => {
+  const t = useTranslations("PostForm");
   const [fileList, setFileList] = useState<FileList | null>();
   const [isShowBlob, setIsShowBlob] = useState<boolean>(false);
 
@@ -38,7 +40,7 @@ const UploadThumnail: React.FC<IProps> = ({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row gap-4">
-        <p className="text-sm dark:text-white">Featured Image</p>
+        <p className="text-sm dark:text-white">{t("lbl-featured-image")}</p>
         <ErrorText
           isError={!!errors?.overview?.featuredImage}
           message={errors?.overview?.featuredImage?.message}

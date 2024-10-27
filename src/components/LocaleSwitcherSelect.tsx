@@ -35,13 +35,13 @@ export default function LocaleSwitcherSelect({
   return (
     <label
       className={twMerge(
-        "relative text-gray-400",
+        "relative text-gray-400 my-auto",
         isPending && "transition-opacity [&:disabled]:opacity-30"
       )}
     >
       <p className="sr-only">{label}</p>
       <select
-        className="inline-flex appearance-none bg-transparent p-1.5 !pr-8 rounded-lg"
+        className="inline-flex appearance-none bg-transparent p-1.5 !pr-8 rounded-lg text-sm leading-4"
         defaultValue={defaultValue}
         disabled={isPending}
         onChange={onSelectChange}

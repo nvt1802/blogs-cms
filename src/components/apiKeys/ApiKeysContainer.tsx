@@ -14,6 +14,7 @@ import { useState } from "react";
 import { HiOutlineKey } from "react-icons/hi";
 import ApiKeysForm from "./ApiKeysForm";
 import ApikeysTable from "./ApikeysTable";
+import { useTranslations } from "next-intl";
 
 const ApiKeysContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +24,7 @@ const ApiKeysContainer = () => {
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [isShowModalConfirm, setModalConfirm] = useState<boolean>(false);
   const { state, updateState } = useAppContext();
+  const t = useTranslations("ApiKeysPage");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["api-keys", currentPage],
@@ -115,7 +117,7 @@ const ApiKeysContainer = () => {
             <Button color="success" onClick={onCreateNewApiKey}>
               <div className="flex flex-row gap-2">
                 <HiOutlineKey size={20} />
-                <p>Generate New API Key</p>
+                <p>{t("btn-create-new-key")}</p>
               </div>
             </Button>
           </div>

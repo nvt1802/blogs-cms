@@ -4,6 +4,7 @@ import ErrorText from "@/components/share/ErrorText";
 import { IPostFormInput } from "@/types/posts";
 import { ErrorMessage } from "@/utils/errorMessage";
 import { Label, TextInput, ToggleSwitch } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 import {
   Control,
@@ -19,11 +20,13 @@ interface IProps {
 }
 
 const SeoForm: React.FC<IProps> = ({ errors, control }) => {
+  const t = useTranslations("PostForm");
+
   return (
     <div className="p-4 flex flex-col gap-5">
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="small" value="Title" />
+          <Label htmlFor="small" value={t("lbl-seo-title")} />
         </div>
         <Controller
           name="seo.seoTitle"
@@ -51,7 +54,7 @@ const SeoForm: React.FC<IProps> = ({ errors, control }) => {
       </div>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="small" value="Description" />
+          <Label htmlFor="small" value={t("lbl-seo-description")} />
         </div>
         <Controller
           name="seo.excerpt"

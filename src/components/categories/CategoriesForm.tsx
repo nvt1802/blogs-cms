@@ -6,6 +6,7 @@ import { ITags } from "@/types/tags";
 import { ErrorMessage } from "@/utils/errorMessage";
 import { generateSlug } from "@/utils/string-helper";
 import { Button, Label, TextInput } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import React, { ChangeEvent, useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
@@ -26,6 +27,8 @@ const CategoriesForm: React.FC<IProps> = ({
   onSubmit,
   onCancel,
 }) => {
+  const t = useTranslations("CategoriesPage");
+
   const {
     handleSubmit,
     control,
@@ -64,7 +67,7 @@ const CategoriesForm: React.FC<IProps> = ({
       <div className="flex flex-col gap-6">
         <div className="space-y-2">
           <div className="mb-2 block">
-            <Label htmlFor="title" value="Title" />
+            <Label htmlFor="title" value={t("lbl-title")} />
           </div>
           <Controller
             name="name"
@@ -124,7 +127,7 @@ const CategoriesForm: React.FC<IProps> = ({
 
         <div className="space-y-2">
           <div className="mb-2 block">
-            <Label htmlFor="description" value="Description" />
+            <Label htmlFor="description" value={t("lbl-description")} />
           </div>
           <Controller
             name="description"

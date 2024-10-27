@@ -38,6 +38,52 @@
   "PostForm": {
     "overview": "Overview",
     "content": "Content",
-    "seo": "Seo"
+    "seo": "Seo",
+    "lbl-title": "Title",
+    "lbl-slug": "Slug",
+    "lbl-categories-and-tags": "Categories & Tags",
+    "lbl-category": "Category",
+    "lbl-tags": "Tags",
+    "lbl-featured-image": "Featured Image",
+    "lbl-seo-title": "Seo Title",
+    "lbl-seo-description": "Description",
+    "author": "Author",
+    "published-at": "Published At",
+    "status": "Status"
+  },
+  "CategoriesPage": {
+    "btn-create-new-category": "Create New Category",
+    "column-name": "Name",
+    "column-description": "Description",
+    "column-created-at": "Created At",
+    "column-updated-at": "Updated At",
+    "edit": "Edit",
+    "remove": "Remove",
+    "lbl-title": "Title",
+    "lbl-description": "Description"
+  },
+  "TagsPage": {
+    "btn-create-new-tag": "Create New Tag",
+    "column-tag-id": "Tag ID",
+    "column-name": "Name",
+    "column-created-at": "Created At",
+    "column-updated-at": "Updated At",
+    "edit": "Edit",
+    "remove": "Remove",
+    "lbl-title": "Title"
+  },
+  "ApiKeysPage": {
+    "btn-create-new-key": "Generate New API Key",
+    "column-name": "Name",
+    "column-token": "Token",
+    "column-duration": "Duration",
+    "column-expiry-date": "Expiry Date",
+    "column-created-at": "Created At",
+    "edit": "Edit",
+    "remove": "Remove",
+    "lbl-name": "Name",
+    "lbl-secret-key": "Secret Key",
+    "limited": "Limited",
+    "unlimited": "Unlimited"
   }
 }

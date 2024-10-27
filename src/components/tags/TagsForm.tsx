@@ -5,6 +5,7 @@ import { ITagForm, ITags } from "@/types/tags";
 import { ErrorMessage } from "@/utils/errorMessage";
 import { generateSlug } from "@/utils/string-helper";
 import { Button, Label, TextInput } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import React, { ChangeEvent, useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
@@ -25,6 +26,8 @@ const TagForm: React.FC<IProps> = ({
   onSubmit,
   onCancel,
 }) => {
+  const t = useTranslations("TagsPage");
+
   const {
     handleSubmit,
     control,
@@ -61,7 +64,7 @@ const TagForm: React.FC<IProps> = ({
       <div className="flex flex-col gap-6">
         <div className="space-y-2">
           <div className="mb-2 block">
-            <Label htmlFor="title" value="Title" />
+            <Label htmlFor="title" value={t("lbl-title")} />
           </div>
           <Controller
             name="name"

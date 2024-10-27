@@ -13,6 +13,7 @@ import { ErrorMessage } from "@/utils/errorMessage";
 import { generateSlug } from "@/utils/string-helper";
 import { useQuery } from "@tanstack/react-query";
 import { Accordion, Label, TextInput } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import React, { ChangeEvent, FocusEvent, useEffect, useState } from "react";
 import {
   Control,
@@ -47,6 +48,7 @@ const PostForm: React.FC<IProps> = ({
   clearErrors,
   onChaneFileList,
 }) => {
+  const t = useTranslations("PostForm");
   const [categories, setCategories] = useState<IOption[]>([]);
   const [tags, setTags] = useState<IOption[]>([]);
 
@@ -125,7 +127,7 @@ const PostForm: React.FC<IProps> = ({
         <div className="flex flex-col gap-6">
           <div className="space-y-2">
             <div className="mb-2 block">
-              <Label htmlFor="overview.title" value="Title" />
+              <Label htmlFor="overview.title" value={t("lbl-title")} />
             </div>
             <Controller
               name="overview.title"
@@ -155,7 +157,7 @@ const PostForm: React.FC<IProps> = ({
 
           <div className="space-y-2">
             <div className="mb-2 block">
-              <Label htmlFor="overview.slug" value="Slug" />
+              <Label htmlFor="overview.slug" value={t("lbl-slug")} />
             </div>
             <Controller
               name="overview.slug"
@@ -185,12 +187,12 @@ const PostForm: React.FC<IProps> = ({
           </div>
 
           <div className="flex flex-col gap-2">
-            <p className="text-sm dark:text-white">Categories & Tags</p>
+            <p className="text-sm dark:text-white">{t("lbl-categories-and-tags")}</p>
             <Accordion className="border-gray-300" collapseAll>
               <Accordion.Panel>
                 <Accordion.Title className="p-2.5 text-sm">
                   <div className="flex flex-row gap-4">
-                    <p>Category</p>
+                    <p>{t("lbl-category")}</p>
                     <ErrorText
                       isError={!!errors?.overview?.category_id}
                       message={errors?.overview?.category_id?.message}
@@ -218,7 +220,7 @@ const PostForm: React.FC<IProps> = ({
               <Accordion.Panel>
                 <Accordion.Title className="p-2.5 text-sm">
                   <div className="flex flex-row gap-4">
-                    <p>Tags</p>
+                    <p>{t("lbl-tags")}</p>
                     <ErrorText
                       isError={!!errors?.overview?.tag_id}
                       message={errors?.overview?.tag_id?.message}

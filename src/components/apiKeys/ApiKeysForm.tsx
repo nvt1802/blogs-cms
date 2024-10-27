@@ -6,6 +6,7 @@ import { IApiKeyForm } from "@/types/api-keys";
 import { ExpiresUnit } from "@/utils/enum";
 import { ErrorMessage } from "@/utils/errorMessage";
 import { Button, Label, Select, TextInput } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import React, { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
@@ -24,6 +25,8 @@ const ApiKeysForm: React.FC<IProps> = ({
   onSubmit,
   onCancel,
 }) => {
+  const t = useTranslations("ApiKeysPage");
+
   const {
     handleSubmit,
     control,
@@ -59,7 +62,7 @@ const ApiKeysForm: React.FC<IProps> = ({
       <div className="flex flex-col gap-6">
         <div className="space-y-2">
           <div className="mb-2 block">
-            <Label htmlFor="title" value="Name" />
+            <Label htmlFor="title" value={t("lbl-name")} />
           </div>
           <Controller
             name="name"
@@ -88,7 +91,7 @@ const ApiKeysForm: React.FC<IProps> = ({
 
         <div className="space-y-2">
           <div className="mb-2 block">
-            <Label htmlFor="secret_key" value="Secret Key" />
+            <Label htmlFor="secret_key" value={t("lbl-secret-key")} />
           </div>
           <Controller
             name="secret_key"
@@ -125,8 +128,8 @@ const ApiKeysForm: React.FC<IProps> = ({
             render={({ field: { value, onChange, ...restField } }) => (
               <RadioList
                 options={[
-                  { label: "Unlimited", value: "unlimited" },
-                  { label: "Limited", value: "limited" },
+                  { label: t("unlimited"), value: "unlimited" },
+                  { label: t("limited"), value: "limited" },
                 ]}
                 value={value}
                 onChange={onChange}

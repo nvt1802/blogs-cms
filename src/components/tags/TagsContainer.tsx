@@ -8,6 +8,7 @@ import { ITagForm, ITags } from "@/types/tags";
 import { addNewTag, deleteTag, fetchTags, updateTag } from "@/utils/api/tags";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Drawer, Spinner } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { HiTag } from "react-icons/hi";
 
@@ -19,6 +20,7 @@ const TagsContainer = () => {
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [isShowModalConfirm, setModalConfirm] = useState<boolean>(false);
   const { state, updateState } = useAppContext();
+  const t = useTranslations("TagsPage");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["tags", currentPage],
@@ -122,7 +124,7 @@ const TagsContainer = () => {
             <Button color="success" onClick={onCreateNewTags}>
               <div className="flex flex-row gap-2">
                 <HiTag size={20} />
-                <p>Create New Tag</p>
+                <p>{t("btn-create-new-tag")}</p>
               </div>
             </Button>
           </div>

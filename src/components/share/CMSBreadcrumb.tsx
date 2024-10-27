@@ -63,7 +63,9 @@ const CMSBreadcrumb = () => {
               </Link>
             ) : (
               <p className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                {t(item?.name?.toLowerCase())}
+                {item?.name?.includes("-")
+                  ? item?.name
+                  : t(item?.name?.toLowerCase())}
               </p>
             ))}
         </li>

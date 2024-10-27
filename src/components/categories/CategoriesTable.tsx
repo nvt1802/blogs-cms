@@ -3,6 +3,7 @@
 import { ICategories, ICategoriesPaginationResponse } from "@/types/categories";
 import dayjs from "dayjs";
 import { Pagination, Table, Tooltip } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 
 interface IProps {
@@ -20,6 +21,8 @@ const CategoriesTable: React.FC<IProps> = ({
   onEditItem,
   onRemoveItem,
 }) => {
+  const t = useTranslations("CategoriesPage");
+
   const onPageChange = (page: number) => {
     if (onChange) {
       onChange(page);
@@ -32,12 +35,12 @@ const CategoriesTable: React.FC<IProps> = ({
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>STT</Table.HeadCell>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Description</Table.HeadCell>
-            <Table.HeadCell>Created At</Table.HeadCell>
-            <Table.HeadCell>Updated At</Table.HeadCell>
+            <Table.HeadCell>{t("column-name")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-description")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-created-at")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-updated-at")}</Table.HeadCell>
             <Table.HeadCell>
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">{t("edit")}</span>
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
@@ -58,7 +61,10 @@ const CategoriesTable: React.FC<IProps> = ({
                   {dayjs(item.updated_at).format("DD/MM/YYYY HH:mm")}
                 </Table.Cell>
                 <Table.Cell className="flex flex-row gap-5">
-                  <Tooltip content={`Edit ${item?.name}`} placement="left-start">
+                  <Tooltip
+                    content={`${t("edit")} ${item?.name}`}
+                    placement="left-start"
+                  >
                     <button
                       onClick={() =>
                         onEditItem ? onEditItem(item) : undefined
@@ -67,7 +73,10 @@ const CategoriesTable: React.FC<IProps> = ({
                       <HiOutlinePencil />
                     </button>
                   </Tooltip>
-                  <Tooltip content={`Remove ${item?.name}`} placement="left-start">
+                  <Tooltip
+                    content={`${t("remove")} ${item?.name}`}
+                    placement="left-start"
+                  >
                     <button
                       onClick={() =>
                         onRemoveItem ? onRemoveItem(item) : undefined

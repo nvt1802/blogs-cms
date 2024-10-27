@@ -15,6 +15,7 @@ import { Button, Drawer, Spinner } from "flowbite-react";
 import { useState } from "react";
 import { HiTag } from "react-icons/hi";
 import CategoriesForm from "./CategoriesForm";
+import { useTranslations } from "next-intl";
 
 const CategoriesContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,6 +27,7 @@ const CategoriesContainer = () => {
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [isShowModalConfirm, setModalConfirm] = useState<boolean>(false);
   const { state, updateState } = useAppContext();
+  const t = useTranslations("CategoriesPage");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["tags", currentPage],
@@ -132,7 +134,7 @@ const CategoriesContainer = () => {
             <Button color="success" onClick={onCreateNewCategory}>
               <div className="flex flex-row gap-2">
                 <HiTag size={20} />
-                <p>Create New Category</p>
+                <p>{t("btn-create-new-category")}</p>
               </div>
             </Button>
           </div>

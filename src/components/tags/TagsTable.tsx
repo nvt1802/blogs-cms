@@ -3,6 +3,7 @@
 import { ITags, ITagsPaginationResponse } from "@/types/tags";
 import dayjs from "dayjs";
 import { Clipboard, Pagination, Table, Tooltip } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import { HiOutlinePencil } from "react-icons/hi";
 import { HiOutlineTrash } from "react-icons/hi";
 
@@ -21,6 +22,8 @@ const TagsTable: React.FC<IProps> = ({
   onEditItem,
   onRemoveItem,
 }) => {
+  const t = useTranslations("TagsPage");
+
   const onPageChange = (page: number) => {
     if (onChange) {
       onChange(page);
@@ -33,12 +36,12 @@ const TagsTable: React.FC<IProps> = ({
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>STT</Table.HeadCell>
-            <Table.HeadCell>Tag Id</Table.HeadCell>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Created At</Table.HeadCell>
-            <Table.HeadCell>Updated At</Table.HeadCell>
+            <Table.HeadCell>{t("column-tag-id")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-name")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-created-at")}</Table.HeadCell>
+            <Table.HeadCell>{t("column-updated-at")}</Table.HeadCell>
             <Table.HeadCell>
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">{t("edit")}</span>
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
@@ -67,7 +70,7 @@ const TagsTable: React.FC<IProps> = ({
                 </Table.Cell>
                 <Table.Cell className="flex flex-row gap-5">
                   <Tooltip
-                    content={`Edit ${item?.name}`}
+                    content={`${t("edit")} ${item?.name}`}
                     placement="left-start"
                   >
                     <button
@@ -79,7 +82,7 @@ const TagsTable: React.FC<IProps> = ({
                     </button>
                   </Tooltip>
                   <Tooltip
-                    content={`Remove ${item?.name}`}
+                    content={`${t("remove")} ${item?.name}`}
                     placement="left-start"
                   >
                     <button

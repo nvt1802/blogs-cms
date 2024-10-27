@@ -38,6 +38,52 @@
   "PostForm": {
     "overview": "Tổng quan",
     "content": "Nội dung",
-    "seo": "Seo"
+    "seo": "Seo",
+    "lbl-title": "Tiêu đề",
+    "lbl-slug": "Slug",
+    "lbl-categories-and-tags": "Danh mục & tags",
+    "lbl-category": "Danh mục",
+    "lbl-tags": "Tags",
+    "lbl-featured-image": "Hình ảnh nổi bật",
+    "lbl-seo-title": "Tiêu đề SEO",
+    "lbl-seo-description": "Mô tả",
+    "author": "Tác giả",
+    "published-at": "Ngày xuất bản",
+    "status": "Trạng thái"
+  },
+  "CategoriesPage": {
+    "btn-create-new-category": "Tạo danh mục mới",
+    "column-name": "Tên",
+    "column-description": "Mô tả",
+    "column-created-at": "Ngày tạo",
+    "column-updated-at": "Ngày cập nhật",
+    "edit": "Chỉnh sửa",
+    "remove": "Xoá",
+    "lbl-title": "Tiêu đề",
+    "lbl-description": "Mô tả"
+  },
+  "TagsPage": {
+    "btn-create-new-tag": "Tạo thẻ mới",
+    "column-tag-id": "Tag ID",
+    "column-name": "Tên",
+    "column-created-at": "Ngày tạo",
+    "column-updated-at": "Ngày cập nhật",
+    "edit": "Chỉnh sửa",
+    "remove": "Xoá",
+    "lbl-title": "Tiêu đề"
+  },
+  "ApiKeysPage": {
+    "btn-create-new-key": "Tạo khóa API mới",
+    "column-name": "Tên",
+    "column-token": "Token",
+    "column-duration": "Thời hạn sử dụng",
+    "column-expiry-date": "Ngày hết hạn",
+    "column-created-at": "Ngày tạo",
+    "edit": "Chỉnh sửa",
+    "remove": "Xoá",
+    "lbl-name": "Tên",
+    "lbl-secret-key": "Khóa bí mật",
+    "limited": "Giới hạn",
+    "unlimited": "Không giới hạn"
   }
 }
