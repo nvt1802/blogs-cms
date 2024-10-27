@@ -85,5 +85,11 @@
     "lbl-secret-key": "Khóa bí mật",
     "limited": "Giới hạn",
     "unlimited": "Không giới hạn"
+  },
+  "ImagesPage": {
+    "btn-upload-new-image": "Tải lên hình ảnh",
+    "column-image": "Xem trước hình ảnh",
+    "column-name": "Tên",
+    "column-created-at": "Ngày upload"
   }
 }

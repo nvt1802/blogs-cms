@@ -60,7 +60,6 @@ const PostContainer = () => {
   };
 
   const onDeletePost = async () => {
-    console.log(postSelected);
     try {
       if (postSelected?.id) {
         const { message } = await deletePost(postSelected?.id);

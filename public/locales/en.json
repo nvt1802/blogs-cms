@@ -85,5 +85,11 @@
     "lbl-secret-key": "Secret Key",
     "limited": "Limited",
     "unlimited": "Unlimited"
+  },
+  "ImagesPage": {
+    "btn-upload-new-image": "Upload Image",
+    "column-image": "Image Preview",
+    "column-name": "Name",
+    "column-created-at": "Created At"
   }
 }

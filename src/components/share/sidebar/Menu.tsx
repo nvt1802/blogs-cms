@@ -12,6 +12,7 @@ import {
   HiOutlineBookmark,
   HiTag,
   HiOutlineKey,
+  HiOutlineDatabase,
   HiUser,
 } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
@@ -57,6 +58,11 @@ const Menu: React.FC<IProps> = ({ className }) => {
       name: "API Keys",
       href: `/${locale}/dashboard/api-key`,
       icon: <HiOutlineKey className={iconClass} />,
+    },
+    {
+      name: "Images",
+      href: `/${locale}/dashboard/images`,
+      icon: <HiOutlineDatabase className={iconClass} />,
     },
   ];
 
