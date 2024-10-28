@@ -6,7 +6,9 @@ import EditorJS, { OutputData } from "@editorjs/editorjs";
 import { TextInput } from "flowbite-react";
 import { useEffect, useRef } from "react";
 import { UseFormRegister } from "react-hook-form";
-import "@/assets/richtext.scss"
+import "@/assets/richtext.scss";
+import "@/assets/editor.scss";
+
 interface IProps {
   isShowEditor?: boolean;
   data?: OutputData;
@@ -34,7 +36,7 @@ const CMSEditor: React.FC<IProps> = ({
           try {
             const savedData = await editorRef.current?.save();
             if (savedData && Array.isArray(savedData.blocks)) {
-              console.log(savedData);              
+              console.log(savedData);
               onChange(savedData);
             }
           } catch (error) {
@@ -50,7 +52,7 @@ const CMSEditor: React.FC<IProps> = ({
     <>
       <div
         id="editorjs"
-        className="h-[calc(100vh-420px)] w-full overflow-y-auto relative bg-white dark:bg-gray-700 rounded-lg dark:text-white rich-text"
+        className="h-[calc(100vh-310px)] w-full overflow-y-auto relative bg-white dark:bg-gray-700 rounded-lg dark:text-white rich-text"
       />
       <TextInput
         id="small"

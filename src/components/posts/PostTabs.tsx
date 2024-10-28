@@ -160,7 +160,7 @@ const PostTabs: React.FC<IProps> = ({
     >
       <form
         onSubmit={handleSubmit(onSubmitForm)}
-        className="max-h-[calc(100vh-350px)]"
+        className="max-h-[calc(100vh-300px)]"
       >
         <TabItem active={activeTab === 0} className="bg-white">
           <OverviewForm
