@@ -6,9 +6,9 @@ import {
 import axiosInstance from "../axiosInstance";
 import { pageLimit } from "../contants";
 
-export const fetchImages = async (page: number) => {
+export const fetchImages = async (page: number, limit: number = pageLimit ) => {
   const { data } = await axiosInstance.get<IImagesResponse>(
-    `/api/images?page=${page}&limit=${pageLimit}`
+    `/api/images?page=${page}&limit=${limit}`
   );
   return data.data;
 };

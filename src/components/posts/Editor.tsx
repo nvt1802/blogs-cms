@@ -36,7 +36,6 @@ const CMSEditor: React.FC<IProps> = ({
           try {
             const savedData = await editorRef.current?.save();
             if (savedData && Array.isArray(savedData.blocks)) {
-              console.log(savedData);
               onChange(savedData);
             }
           } catch (error) {

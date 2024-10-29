@@ -1,5 +1,6 @@
 import { IImagesPaginationResponse } from "@/types/images";
-import { cloudinaryUrl } from "./contants";
+import { cloudinaryUrl } from "@/utils/contants";
+import { addClass, removeClass } from "@/utils/elementHelper";
 
 type ImageToolData = {
   url?: string;
@@ -7,7 +8,10 @@ type ImageToolData = {
 };
 
 type ImageSelectionPluginConfig = {
-  fetchImages: (page: number) => Promise<IImagesPaginationResponse>;
+  fetchImages: (
+    page: number,
+    limit?: number
+  ) => Promise<IImagesPaginationResponse>;
 };
 
 interface IImages {
@@ -27,10 +31,15 @@ class SimpleImage {
   private data: ImageToolData;
   private wrapper: HTMLElement;
   private modal: HTMLElement | null;
-  private fetchImages?: (page: number) => Promise<IImagesPaginationResponse>;
+  private fetchImages?: (
+    page: number,
+    limit?: number
+  ) => Promise<IImagesPaginationResponse>;
   private images: IImages[];
   private imageSelected?: IImages;
   private caption: string;
+  private currentPage: number;
+  private totalPages: number;
 
   constructor({
     data,
@@ -41,11 +50,13 @@ class SimpleImage {
   }) {
     this.data = data || { url: "", caption: "" };
     this.wrapper = document.createElement("div");
-    this.wrapper.classList.add("image-selection-wrapper", "relative");
+    addClass(this.wrapper, "image-selection-wrapper relative");
     this.modal = null;
     this.images = [];
     this.imageSelected = undefined;
     this.caption = "";
+    this.currentPage = 1;
+    this.totalPages = 1;
     this.fetchImages = config?.fetchImages;
   }
 
@@ -53,15 +64,19 @@ class SimpleImage {
     if (this.data.url) {
       this.renderImage(this.data.url);
     } else {
-      const openGalleryButton = document.createElement("button");
-      openGalleryButton.textContent = "Open Gallery";
-      openGalleryButton.type = "button";
-      openGalleryButton.classList.add("open-gallery-button");
-      openGalleryButton.onclick = () => this.openModal();
-      this.wrapper.appendChild(openGalleryButton);
+      this.renderButtonOpenModal();
     }
     return this.wrapper;
   }
+
+  private renderButtonOpenModal = () => {
+    const openGalleryButton = document.createElement("button");
+    openGalleryButton.textContent = "Open Gallery";
+    openGalleryButton.type = "button";
+    addClass(openGalleryButton, "open-gallery-button");
+    openGalleryButton.onclick = () => this.openModal();
+    this.wrapper.appendChild(openGalleryButton);
+  };
 
   private renderImage(url: string): void {
     // Clear any existing image
@@ -71,45 +86,77 @@ class SimpleImage {
     const actionHover = document.createElement("div");
     const btnChangeImage = document.createElement("button");
     const btnDeleteImage = document.createElement("button");
-    actionHover.classList.add("absolute", "top-10", "left-1/2", "flex", "flex-row", "gap-3");
+    addClass(actionHover, "action-hover");
 
     btnChangeImage.type = "button";
-    btnChangeImage.innerHTML = `<svg width="17" height="15" viewBox="0 0 336 276" xmlns="http://www.w3.org/2000/svg"><path d="M291 150V79c0-19-15-34-34-34H79c-19 0-34 15-34 34v42l67-44 81 72 56-29 42 30zm0 52l-43-30-56 30-81-67-66 39v23c0 19 15 34 34 34h178c17 0 31-13 34-29zM79 0h178c44 0 79 35 79 79v118c0 44-35 79-79 79H79c-44 0-79-35-79-79V79C0 35 35 0 79 0z"/></svg>`;
+    addClass(btnChangeImage, "btn");
+    btnChangeImage.innerHTML = `<svg width="17" height="15" viewBox="0 0 336 276" style="fill: white;" xmlns="http://www.w3.org/2000/svg"><path d="M291 150V79c0-19-15-34-34-34H79c-19 0-34 15-34 34v42l67-44 81 72 56-29 42 30zm0 52l-43-30-56 30-81-67-66 39v23c0 19 15 34 34 34h178c17 0 31-13 34-29zM79 0h178c44 0 79 35 79 79v118c0 44-35 79-79 79H79c-44 0-79-35-79-79V79C0 35 35 0 79 0z"/></svg>`;
     btnChangeImage.onclick = () => this.openModal();
 
     btnDeleteImage.type = "button";
-    btnDeleteImage.innerHTML = `<svg width="17" height="17" viewBox="0 -0.5 21 21" xmlns="http://www.w3.org/2000/svg"><path d="M7.35 16h2.1V8h-2.1zm4.2 0h2.1V8h-2.1zm-6.3 2h10.5V6H5.25zm2.1-14h6.3V2h-6.3zm8.4 0V0H5.25v4H0v2h3.15v14h14.7V6H21V4z" fill-rule="evenodd"/></svg>`;
+    addClass(btnDeleteImage, "btn");
+    btnDeleteImage.innerHTML = `<svg width="17" height="17" viewBox="0 -0.5 21 21" style="fill: white;" xmlns="http://www.w3.org/2000/svg"><path d="M7.35 16h2.1V8h-2.1zm4.2 0h2.1V8h-2.1zm-6.3 2h10.5V6H5.25zm2.1-14h6.3V2h-6.3zm8.4 0V0H5.25v4H0v2h3.15v14h14.7V6H21V4z" fill-rule="evenodd"/></svg>`;
     btnDeleteImage.onclick = () => {
-      this.data.url = this.imageSelected?.url;
+      this.data.url = "";
       this.data.caption = this.caption;
+      this.wrapper.querySelector("img")?.remove();
+      this.renderButtonOpenModal();
     };
 
     actionHover.appendChild(btnChangeImage);
     actionHover.appendChild(btnDeleteImage);
     const img = document.createElement("img");
     img.src = url;
-    img.classList.add("image-preview");
+    addClass(img, "image-preview");
     this.wrapper.appendChild(img);
     this.wrapper.appendChild(actionHover);
   }
 
   private onMountModal(): void {
     this.modal = document.createElement("div");
-    this.modal.classList.add("image-modal");
+    addClass(this.modal, "image-modal");
 
     const modalContent = document.createElement("div");
+    const buttonLoadmore = document.createElement("button");
     const imageSection = document.createElement("div");
-    modalContent.classList.add("modal-content", "flex", "flex-col", "gap-5");
-    imageSection.classList.add("image-section", "flex", "flex-row", "gap-4");
+    buttonLoadmore.innerText = "Load More";
+    buttonLoadmore.onclick = () => {
+      if (this.fetchImages) {
+        this.currentPage += 1;
+        this.fetchImages(this.currentPage, 7).then((res) => {
+          this.totalPages = res.totalPages;
+          if (res.totalPages <= this.currentPage) {
+            buttonLoadmore.remove();
+          }
+          const newListImage = res.items.map((item) => ({
+            url: `${cloudinaryUrl}/${item.public_id}`,
+            alt: item?.name,
+            urlPreview: `${cloudinaryUrl}/c_fill,h_100,w_100/${item.public_id}`,
+          }));
+          newListImage.forEach((image) => {
+            const img = document.createElement("img");
+            img.src = image?.urlPreview ?? "";
+            img.alt = image.alt;
+            img.setAttribute("data-name", image.alt);
+            addClass(img, "modal-image-option");
+            img.onclick = () => onClickImage(image);
+            imageSection.appendChild(img);
+          });
+          this.images = [...this.images, ...newListImage];
+        });
+      }
+    };
+    addClass(modalContent, "modal-content");
+    addClass(buttonLoadmore, "btn-load-more");
+    addClass(imageSection, "image-section");
 
     const onClickImage = (image: IImages) => {
       this.imageSelected = image;
-      // (event.target as HTMLImageElement).setAttribute("data-name", image.alt);
       this.modal?.querySelectorAll(".modal-image-option")?.forEach((imgTag) => {
         if (imgTag?.getAttribute("data-name") === image.alt) {
-          imgTag.classList.add("ring-2", "ring-green-800");
+          addClass(imgTag as HTMLElement, "ring-2 ring-green-800");
         } else {
-          imgTag.classList.remove("ring-2", "ring-green-800");
+          removeClass(imgTag as HTMLElement, "ring-2 ring-green-800");
         }
       });
     };
@@ -119,45 +166,45 @@ class SimpleImage {
       img.src = image?.urlPreview ?? "";
       img.alt = image.alt;
       img.setAttribute("data-name", image.alt);
-      img.classList.add("modal-image-option");
+      addClass(img, "modal-image-option");
       img.onclick = () => onClickImage(image);
       imageSection.appendChild(img);
     });
     const actionDiv = document.createElement("div");
     const closeButton = document.createElement("button");
     const applyButton = document.createElement("button");
-    actionDiv.classList.add(
-      "flex",
-      "flex-row",
-      "gap-4",
-      "w-full",
-      "justify-end"
-    );
+    addClass(actionDiv, "footer-btn");
     closeButton.textContent = "Close";
-    closeButton.classList.add("close-modal-button");
+    addClass(closeButton, "close-modal-button");
     applyButton.textContent = "Apply";
-    applyButton.classList.add("apply-modal-button");
+    addClass(applyButton, "apply-modal-button");
     actionDiv.appendChild(applyButton);
     actionDiv.appendChild(closeButton);
 
     closeButton.onclick = () => this.closeModal();
     applyButton.onclick = () => this.selectImage();
     modalContent.appendChild(imageSection);
+    if (this.totalPages > this.currentPage) {
+      modalContent.appendChild(buttonLoadmore);
+    }
     modalContent.appendChild(actionDiv);
     this.modal.appendChild(modalContent);
     document.body.appendChild(this.modal);
   }
 
   private openModal(): void {
-    if (this.fetchImages) {
-      this.fetchImages(1).then((res) => {
+    if (this.fetchImages && !this.images.length) {
+      this.fetchImages(this.currentPage, 7).then((res) => {
         this.images = res.items.map((item) => ({
           url: `${cloudinaryUrl}/${item.public_id}`,
           alt: item?.name,
           urlPreview: `${cloudinaryUrl}/c_fill,h_100,w_100/${item.public_id}`,
         }));
+        this.totalPages = res.totalPages;
         this.onMountModal();
       });
+    } else {
+      this.onMountModal();
     }
   }
 
