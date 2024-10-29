@@ -3,29 +3,33 @@
 import { IPost, IPostFormInput } from "@/types/posts";
 import { FileInput, Label } from "flowbite-react";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { ChangeEvent, useEffect, useState } from "react";
+import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import ErrorText from "../share/ErrorText";
 import { cloudinaryUrl } from "@/utils/contants";
 import { useTranslations } from "next-intl";
+import ImageGallery from "./ImageGallery";
 
 interface IProps {
   post?: IPost;
   register: UseFormRegister<IPostFormInput>;
   errors?: FieldErrors<IPostFormInput>;
   onChaneFileList?: (fileList: FileList | null) => void;
+  setValue: UseFormSetValue<IPostFormInput>;
 }
 
 const UploadThumnail: React.FC<IProps> = ({
   post,
   register,
   errors,
+  setValue,
   onChaneFileList,
 }) => {
   const t = useTranslations("PostForm");
   const [fileList, setFileList] = useState<FileList | null>();
   const [isShowBlob, setIsShowBlob] = useState<boolean>(false);
+  const [featuredImage, setFeaturedImage] = useState<string>();
 
   const onChangeImage = (event: ChangeEvent<HTMLInputElement>) => {
     setFileList(event?.target.files);
@@ -37,10 +41,21 @@ const UploadThumnail: React.FC<IProps> = ({
     }
   };
 
+  useEffect(() => {
+    setFeaturedImage(post?.featured_image);
+  }, [post?.featured_image]);
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row gap-4">
         <p className="text-sm dark:text-white">{t("lbl-featured-image")}</p>
+        <ImageGallery
+          onApplyImage={(image) => {
+            setValue("overview.featuredImage", image?.public_id);
+            setFeaturedImage(image?.public_id);
+            setFileList(null);
+          }}
+        />
         <ErrorText
           isError={!!errors?.overview?.featuredImage}
           message={errors?.overview?.featuredImage?.message}
@@ -66,10 +81,12 @@ const UploadThumnail: React.FC<IProps> = ({
               />
             </div>
           ) : (
-            post?.featured_image && (
+            featuredImage && (
               <div className="w-full bg-gray-100 dark:bg-gray-800 flex p-1 max-h-[380px]">
                 <Image
-                  src={`${cloudinaryUrl}/c_fill,h_380,w_460/${post?.featured_image ?? ""}`}
+                  src={`${cloudinaryUrl}/c_fill,h_380,w_460/${
+                    featuredImage ?? ""
+                  }`}
                   alt="Featured Image"
                   width={460}
                   height={380}
@@ -78,7 +95,7 @@ const UploadThumnail: React.FC<IProps> = ({
               </div>
             )
           )}
-          {!post?.featured_image && !fileList && (
+          {!featuredImage && !fileList && (
             <div className="flex flex-col items-center justify-center pb-6 pt-5">
               <svg
                 className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"

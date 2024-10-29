@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PostTabs from "./PostTabs";
 import { useTranslations } from "next-intl";
+import { addNewImages } from "@/utils/api/images";
 
 interface IProps {
   slug: string;
@@ -70,6 +71,10 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
           postFormData.featured_image_blob
         );
         postFormData.featured_image = public_id;
+        await addNewImages({
+          name: postFormData.featured_image_blob[0]?.name ?? "",
+          public_id,
+        });
       }
       delete postFormData?.tags_id;
       delete postFormData?.featured_image_blob;

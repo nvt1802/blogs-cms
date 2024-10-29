@@ -1,3 +1,7 @@
+.ce-popover__items {
+  @apply dark:text-black;
+}
+
 .image-url-wrapper {
   @apply w-full;
 
@@ -15,7 +19,6 @@
   transition: background-color 0.3s ease;
 }
 
-/* Preview image within the editor block */
 .image-preview {
   max-width: 100%;
   height: auto;

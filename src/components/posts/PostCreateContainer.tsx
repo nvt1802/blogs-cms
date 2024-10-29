@@ -8,6 +8,7 @@ import { useState } from "react";
 import PostTabs from "./PostTabs";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
+import { addNewImages } from "@/utils/api/images";
 
 const PostCreateContainer: React.FC = () => {
   const router = useRouter();
@@ -33,6 +34,10 @@ const PostCreateContainer: React.FC = () => {
       console.log(post.featured_image_blob);
       if (post.featured_image_blob) {
         const { public_id } = await uploadSingeFile(post.featured_image_blob);
+        await addNewImages({
+          name: post.featured_image_blob[0]?.name ?? "",
+          public_id,
+        });
         post.featured_image = public_id;
       } else {
         post.featured_image = "";
@@ -44,7 +49,7 @@ const PostCreateContainer: React.FC = () => {
       addToast(message, "success");
       addToast("Update Post success", "success");
       setTimeout(() => {
-        router.push(`/${locale}/dashboard/posts`)
+        router.push(`/${locale}/dashboard/posts`);
       }, 3000);
     } catch (error) {
       console.error(error);

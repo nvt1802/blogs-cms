@@ -187,7 +187,9 @@ const PostForm: React.FC<IProps> = ({
           </div>
 
           <div className="flex flex-col gap-2">
-            <p className="text-sm dark:text-white">{t("lbl-categories-and-tags")}</p>
+            <p className="text-sm dark:text-white">
+              {t("lbl-categories-and-tags")}
+            </p>
             <Accordion className="border-gray-300" collapseAll>
               <Accordion.Panel>
                 <Accordion.Title className="p-2.5 text-sm">
@@ -253,6 +255,7 @@ const PostForm: React.FC<IProps> = ({
             post={post}
             register={register}
             errors={errors}
+            setValue={setValue}
             onChaneFileList={onChaneFileList}
           />
         </div>
