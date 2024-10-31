@@ -91,3 +91,9 @@ input {
 .custom-input input {
   @apply dark:bg-slate-700 dark:text-white;
 }
+
+.custom-card {
+  > div {
+    @apply p-2.5;
+  }
+}

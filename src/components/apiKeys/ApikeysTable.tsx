@@ -81,7 +81,7 @@ const ApikeysTable: React.FC<IProps> = ({
                         onRemoveItem ? onRemoveItem(item) : undefined
                       }
                     >
-                      <HiOutlineTrash />
+                      <HiOutlineTrash size={20} />
                     </button>
                   </Tooltip>
                 </Table.Cell>

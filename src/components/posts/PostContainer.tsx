@@ -1,16 +1,18 @@
 "use client";
 
 import PostsTable from "@/components/posts/PostTable";
+import { useAppContext } from "@/context/AppContext";
+import { IPost } from "@/types/posts";
 import { deletePost, fetchPosts } from "@/utils/api/posts";
+import { ScreenBreakpoints } from "@/utils/enum";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Spinner } from "flowbite-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HiDocumentAdd } from "react-icons/hi";
-import { useRouter } from "next/navigation";
-import { IPost } from "@/types/posts";
-import CMsModalConfirm from "../share/CMsModalConfirm";
-import { useAppContext } from "@/context/AppContext";
-import { useLocale, useTranslations } from "next-intl";
+import CMsModalConfirm from "@/components/share/CMsModalConfirm";
+import PostListing from "@/components/posts/PostListing";
 
 const PostContainer = () => {
   const router = useRouter();
@@ -95,7 +97,7 @@ const PostContainer = () => {
           </div>
         </div>
       ) : (
-        <>
+        <div className="max-h-[calc(100vh-80px)] sm:max-h-[calc(100vh-160px)] overflow-y-auto pr-2">
           <div className="flex flex-row justify-end p-2">
             <Button color="success" onClick={onCreateNewPost}>
               <div className="flex flex-row gap-2">
@@ -104,20 +106,30 @@ const PostContainer = () => {
               </div>
             </Button>
           </div>
-          <PostsTable
-            currentPage={currentPage}
-            posts={data}
-            onChange={onPageChange}
-            onEditItem={onEditPost}
-            onRemoveItem={onRemovePost}
-          />
+          {state.innerWidth >= ScreenBreakpoints.LG ? (
+            <PostsTable
+              currentPage={currentPage}
+              posts={data}
+              onChange={onPageChange}
+              onEditItem={onEditPost}
+              onRemoveItem={onRemovePost}
+            />
+          ) : (
+            <PostListing
+              currentPage={currentPage}
+              posts={data}
+              onChange={onPageChange}
+              onEditItem={onEditPost}
+              onRemoveItem={onRemovePost}
+            />
+          )}
           <CMsModalConfirm
             isShow={isShowModalConfirm}
             title={`Are you sure you want to delete "${postSelected?.title}" ?`}
             onClose={onCloseModalConfirm}
             onConfirm={onDeletePost}
           />
-        </>
+        </div>
       )}
     </>
   );

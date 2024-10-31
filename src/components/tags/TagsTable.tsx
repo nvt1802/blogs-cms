@@ -78,7 +78,7 @@ const TagsTable: React.FC<IProps> = ({
                         onEditItem ? onEditItem(item) : undefined
                       }
                     >
-                      <HiOutlinePencil />
+                      <HiOutlinePencil size={20} />
                     </button>
                   </Tooltip>
                   <Tooltip
@@ -90,7 +90,7 @@ const TagsTable: React.FC<IProps> = ({
                         onRemoveItem ? onRemoveItem(item) : undefined
                       }
                     >
-                      <HiOutlineTrash />
+                      <HiOutlineTrash size={20} />
                     </button>
                   </Tooltip>
                 </Table.Cell>

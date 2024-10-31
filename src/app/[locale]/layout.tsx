@@ -24,7 +24,7 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  if (!routing.locales.includes(locale as "en" | "vi")) {
+  if (!routing?.locales?.includes(locale as "en" | "vi")) {
     notFound();
   }
   const messages = await getMessages();
