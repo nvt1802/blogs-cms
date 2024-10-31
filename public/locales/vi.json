@@ -33,7 +33,8 @@
     "column-category": "Danh mục",
     "column-status": "Trạng thái",
     "column-created-by": "Người tạo",
-    "column-updated-at": "Ngày cập nhật"
+    "column-updated-at": "Ngày cập nhật",
+    "published-at": "Ngày xuất bản"
   },
   "PostForm": {
     "overview": "Tổng quan",

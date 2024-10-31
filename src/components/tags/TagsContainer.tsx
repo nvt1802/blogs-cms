@@ -6,11 +6,13 @@ import TagsTable from "@/components/tags/TagsTable";
 import { useAppContext } from "@/context/AppContext";
 import { ITagForm, ITags } from "@/types/tags";
 import { addNewTag, deleteTag, fetchTags, updateTag } from "@/utils/api/tags";
+import { ScreenBreakpoints } from "@/utils/enum";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Drawer, Spinner } from "flowbite-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { HiTag } from "react-icons/hi";
+import TagsListing from "./TagsListing";
 
 const TagsContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -128,13 +130,24 @@ const TagsContainer = () => {
               </div>
             </Button>
           </div>
-          <TagsTable
-            currentPage={currentPage}
-            data={data}
-            onChange={onChangePage}
-            onEditItem={onEditTag}
-            onRemoveItem={onRemoveTag}
-          />
+          {state.innerWidth >= ScreenBreakpoints.MD ? (
+            <TagsTable
+              currentPage={currentPage}
+              data={data}
+              onChange={onChangePage}
+              onEditItem={onEditTag}
+              onRemoveItem={onRemoveTag}
+            />
+          ) : (
+            <TagsListing
+              currentPage={currentPage}
+              data={data}
+              onChange={onChangePage}
+              onEditItem={onEditTag}
+              onRemoveItem={onRemoveTag}
+            />
+          )}
+
           <Drawer
             open={isShowModal}
             onClose={() => setShowModal(false)}

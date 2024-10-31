@@ -2,6 +2,7 @@ import { IPost, IPostPaginationResponse } from "@/types/posts";
 import { cloudinaryUrl } from "@/utils/contants";
 import dayjs from "dayjs";
 import { Badge, Card, Pagination, Tooltip } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 
@@ -20,6 +21,8 @@ const PostListing: React.FC<IProps> = ({
   onEditItem,
   onRemoveItem,
 }) => {
+  const t = useTranslations("PostsPage");
+
   const onPageChange = (page: number) => {
     if (onChange) {
       onChange(page);
@@ -49,17 +52,17 @@ const PostListing: React.FC<IProps> = ({
               <div className="flex flex-col gap-1.5 dark:text-white w-full max-w-[calc(100%-160px)] xs:max-w-[calc(100%-200px)]">
                 <p className="text-sm truncate w-full">{item?.title}</p>
                 <p className="inline-flex gap-2 text-xs">
-                  <span>Status:</span>
+                  <span>{t("column-status")}:</span>
                   <Badge className="w-fit my-auto px-1 py-0.5 text-[10px] leading-[10px]">
                     {item?.status}
                   </Badge>
                 </p>
                 <p className="inline-flex gap-2 text-xs">
-                  <span>Author:</span>
+                  <span>{t("column-created-by")}:</span>
                   <span>{item?.users?.username}</span>
                 </p>
                 <p className="inline-flex gap-2 text-xs">
-                  <span>Publish Date:</span>
+                  <span>{t("published-at")}:</span>
                   <span>
                     {dayjs(item?.published_at).format("DD/MM/YYYY HH:mm")}
                   </span>

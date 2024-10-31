@@ -8,13 +8,15 @@ import {
   deleteApiKey,
   fetchAllApiKeys,
 } from "@/utils/api/api-keys";
+import { ScreenBreakpoints } from "@/utils/enum";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Drawer, Spinner } from "flowbite-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { HiOutlineKey } from "react-icons/hi";
-import ApiKeysForm from "./ApiKeysForm";
-import ApikeysTable from "./ApikeysTable";
-import { useTranslations } from "next-intl";
+import ApiKeyListing from "@/components/apiKeys/ApiKeyListing";
+import ApiKeysForm from "@/components/apiKeys/ApiKeysForm";
+import ApikeysTable from "@/components/apiKeys/ApikeysTable";
 
 const ApiKeysContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -121,12 +123,21 @@ const ApiKeysContainer = () => {
               </div>
             </Button>
           </div>
-          <ApikeysTable
-            currentPage={currentPage}
-            data={data}
-            onChange={onChangePage}
-            onRemoveItem={onRemoveApiKey}
-          />
+          {state.innerWidth >= ScreenBreakpoints.MD ? (
+            <ApikeysTable
+              currentPage={currentPage}
+              data={data}
+              onChange={onChangePage}
+              onRemoveItem={onRemoveApiKey}
+            />
+          ) : (
+            <ApiKeyListing
+              currentPage={currentPage}
+              data={data}
+              onChange={onChangePage}
+              onRemoveItem={onRemoveApiKey}
+            />
+          )}
           <Drawer
             open={isShowModal}
             onClose={() => setShowModal(false)}

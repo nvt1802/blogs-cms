@@ -16,6 +16,8 @@ import { useState } from "react";
 import { HiTag } from "react-icons/hi";
 import CategoriesForm from "./CategoriesForm";
 import { useTranslations } from "next-intl";
+import { ScreenBreakpoints } from "@/utils/enum";
+import CategoryListing from "./CategoryListing";
 
 const CategoriesContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -138,13 +140,24 @@ const CategoriesContainer = () => {
               </div>
             </Button>
           </div>
-          <CategoriesTable
-            currentPage={currentPage}
-            data={data}
-            onChange={onChangePage}
-            onEditItem={onEditTag}
-            onRemoveItem={onRemoveTag}
-          />
+          {state.innerWidth >= ScreenBreakpoints.MD ? (
+            <CategoriesTable
+              currentPage={currentPage}
+              data={data}
+              onChange={onChangePage}
+              onEditItem={onEditTag}
+              onRemoveItem={onRemoveTag}
+            />
+          ) : (
+            <CategoryListing
+              currentPage={currentPage}
+              data={data}
+              onChange={onChangePage}
+              onEditItem={onEditTag}
+              onRemoveItem={onRemoveTag}
+            />
+          )}
+
           <Drawer
             open={isShowModal}
             onClose={() => setShowModal(false)}

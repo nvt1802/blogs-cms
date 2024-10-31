@@ -33,7 +33,8 @@
     "column-category": "Category",
     "column-status": "Status",
     "column-created-by": "Create By",
-    "column-updated-at": "Updated At"
+    "column-updated-at": "Updated At",
+    "published-at": "Published At"
   },
   "PostForm": {
     "overview": "Overview",

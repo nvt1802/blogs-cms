@@ -21,7 +21,7 @@ const CMSSidebar = () => {
       >
         <Drawer.Header title="MENU" titleIcon={() => <></>} />
         <Drawer.Items>
-          <Menu className="h-[calc(100vh-72px)] w-[unset]" />
+          <Menu className="h-[calc(100vh-72px)] w-[unset]" menuDrawer />
         </Drawer.Items>
       </Drawer>
     </>

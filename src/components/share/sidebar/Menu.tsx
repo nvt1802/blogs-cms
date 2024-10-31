@@ -19,9 +19,10 @@ import { twMerge } from "tailwind-merge";
 
 interface IProps {
   className?: string;
+  menuDrawer?: boolean;
 }
 
-const Menu: React.FC<IProps> = ({ className }) => {
+const Menu: React.FC<IProps> = ({ className, menuDrawer }) => {
   const pathname = usePathname();
   const t = useTranslations("Common");
   const { state, updateState } = useAppContext();
@@ -97,7 +98,7 @@ const Menu: React.FC<IProps> = ({ className }) => {
                     <span
                       className={twMerge(
                         "flex-1 whitespace-nowrap px-3 duration-300",
-                        state.isCollapse ? "hidden" : ""
+                        !menuDrawer && state.isCollapse ? "hidden" : ""
                       )}
                     >
                       {item?.name}
