@@ -5,7 +5,7 @@ import { IImage } from "@/types/images";
 import { fetchImages } from "@/utils/api/images";
 import { cloudinaryUrl } from "@/utils/contants";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Spinner } from "flowbite-react";
+import { Button, Spinner, Tooltip } from "flowbite-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -67,20 +67,21 @@ const ImageGallery: React.FC<IProps> = ({ onApplyImage }) => {
           <div className="flex flex-col gap-5">
             <div className="flex flex-row flex-wrap gap-5">
               {images?.map((image, index) => (
-                <Image
-                  key={index}
-                  alt={image.name}
-                  src={`${cloudinaryUrl}/c_fill,h_100,w_100/${image.public_id}`}
-                  width={100}
-                  height={100}
-                  className={twMerge(
-                    "p-1 hover:transition-transform hover:duration-200 hover:ease-linear hover:scale-105 hover:p-0",
-                    imageSelected?.id === image.id
-                      ? "ring-2 ring-green-800"
-                      : ""
-                  )}
-                  onClick={() => setImageSelected(image)}
-                />
+                <Tooltip key={index} content={image.name}>
+                  <Image
+                    alt={image.name}
+                    src={`${cloudinaryUrl}/c_fill,h_100,w_100/${image.public_id}`}
+                    width={100}
+                    height={100}
+                    className={twMerge(
+                      "p-1 hover:transition-transform hover:duration-200 hover:ease-linear hover:scale-105 hover:p-0",
+                      imageSelected?.id === image.id
+                        ? "ring-2 ring-green-800"
+                        : ""
+                    )}
+                    onClick={() => setImageSelected(image)}
+                  />
+                </Tooltip>
               ))}
             </div>
             <Button

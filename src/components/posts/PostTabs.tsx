@@ -7,6 +7,7 @@ import TabItem from "@/components/share/tabs/TabItem";
 import { IPost, IPostForm, IPostFormInput } from "@/types/posts";
 import { getPostTabs, PostStatus } from "@/utils/contants";
 import { getCookie } from "@/utils/cookieUtils";
+import { convertEditorDataToHTML, convertHTMLToEditorData } from "@/utils/richText";
 import { OutputData } from "@editorjs/editorjs";
 import { Button } from "flowbite-react";
 import { useTranslations } from "next-intl";
@@ -127,7 +128,7 @@ const PostTabs: React.FC<IProps> = ({
   };
 
   const onEditorChange = (data: OutputData) => {
-    setValue("content", JSON.stringify(data), { shouldDirty: true });
+    setValue("content", convertEditorDataToHTML(data.blocks), { shouldDirty: true });
   };
 
   const onChangeThumnailBlob = (fileList: FileList | null) => {
@@ -179,7 +180,7 @@ const PostTabs: React.FC<IProps> = ({
           <Editor
             register={register}
             isShowEditor={activeTab === 1}
-            data={post?.content ? JSON?.parse(post?.content) : null}
+            data={convertHTMLToEditorData(post?.content ?? "")}
             onChange={onEditorChange}
           />
         </TabItem>

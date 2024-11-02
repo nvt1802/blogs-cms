@@ -101,7 +101,7 @@
   }
 
   img {
-    @apply max-w-full w-full h-auto block my-2 mx-0;
+    @apply max-w-full w-full h-auto block my-2 mx-0 object-cover;
   }
 
   pre {

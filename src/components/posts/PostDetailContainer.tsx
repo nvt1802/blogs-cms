@@ -18,7 +18,7 @@ import { Avatar, Spinner } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PostTabs from "./PostTabs";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { addNewImages } from "@/utils/api/images";
 
 interface IProps {
@@ -34,6 +34,7 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
   const [post, setPost] = useState<IPost>();
   const [userInfo, setUserInfo] = useState<IUserInfo>();
   const { state, updateState } = useAppContext();
+  const locale = useLocale();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["posts", slug],
@@ -82,7 +83,7 @@ const PostContainer: React.FC<IProps> = ({ slug }) => {
       const response = await updatePost(slug, postFormData);
       await updateTagsOfPost(slug, tagsId);
       if (response.slug !== slug) {
-        router.push(`/dashboard/posts/${response.slug}`);
+        router.push(`/${locale}/dashboard/posts/${response.slug}`);
       } else {
         setPost(response);
         addToast("Update Post success", "success");

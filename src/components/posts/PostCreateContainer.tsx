@@ -48,9 +48,7 @@ const PostCreateContainer: React.FC = () => {
       const { message } = await addTagsForPost(slug, tagsId);
       addToast(message, "success");
       addToast("Update Post success", "success");
-      setTimeout(() => {
-        router.push(`/${locale}/dashboard/posts`);
-      }, 3000);
+      router.push(`/${locale}/dashboard/posts`);
     } catch (error) {
       console.error(error);
       addToast("Update Post error", "error");

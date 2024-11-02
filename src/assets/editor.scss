@@ -19,14 +19,39 @@
   transition: background-color 0.3s ease;
 }
 
-.image-preview {
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
-  margin-top: 10px;
+.image-preview-wrapper {
+  @apply relative;
+
+  .image-preview {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
 
   &:hover~.action-hover {
     @apply visible;
+  }
+
+  .resize-handle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #333;
+    cursor: nwse-resize;
+  }
+}
+
+.caption-input {
+  margin-top: 10px;
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 4px;
+
+  &:focus {
+    outline: none !important;
+    -webkit-box-shadow: none;
   }
 }
 
