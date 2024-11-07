@@ -1,7 +1,7 @@
 "use client";
 
 import { fetchUsers } from "@/utils/api/users";
-import { cloudinaryUrl } from "@/utils/contants";
+import { cloudinaryUrl, pageLimit } from "@/utils/contants";
 import { UserRole } from "@/utils/enum";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -53,7 +53,7 @@ const UserTable = () => {
                     key={index}
                   >
                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                      {(currentPage - 1) * 10 + index + 1}
+                      {(currentPage - 1) * pageLimit + index + 1}
                     </Table.Cell>
                     <Table.Cell>
                       <Avatar

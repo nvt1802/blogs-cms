@@ -1,7 +1,7 @@
 "use client";
 
 import { IPost, IPostPaginationResponse } from "@/types/posts";
-import { cloudinaryUrl, PostStatus } from "@/utils/contants";
+import { cloudinaryUrl, pageLimit, PostStatus } from "@/utils/contants";
 import dayjs from "dayjs";
 import { Badge, Pagination, Table, Tooltip } from "flowbite-react";
 import { useTranslations } from "next-intl";
@@ -54,7 +54,7 @@ const PostsTable: React.FC<IProps> = ({
                 key={index}
               >
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {(currentPage - 1) * 10 + index + 1}
+                  {(currentPage - 1) * pageLimit + index + 1}
                 </Table.Cell>
                 <Table.Cell>
                   <Image

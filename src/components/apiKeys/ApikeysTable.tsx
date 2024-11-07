@@ -1,6 +1,7 @@
 "use client";
 
 import { IApiKeys, IApiKeysPaginationResponse } from "@/types/api-keys";
+import { pageLimit } from "@/utils/contants";
 import dayjs from "dayjs";
 import { Clipboard, Pagination, Table, Tooltip } from "flowbite-react";
 import { useTranslations } from "next-intl";
@@ -49,7 +50,7 @@ const ApikeysTable: React.FC<IProps> = ({
                 key={index}
               >
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {(currentPage - 1) * 10 + index + 1}
+                  {(currentPage - 1) * pageLimit + index + 1}
                 </Table.Cell>
                 <Table.Cell>{item.name}</Table.Cell>
                 <Table.Cell>

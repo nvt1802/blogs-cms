@@ -1,6 +1,7 @@
 "use client";
 
 import { ITags, ITagsPaginationResponse } from "@/types/tags";
+import { pageLimit } from "@/utils/contants";
 import dayjs from "dayjs";
 import { Clipboard, Pagination, Table, Tooltip } from "flowbite-react";
 import { useTranslations } from "next-intl";
@@ -51,7 +52,7 @@ const TagsTable: React.FC<IProps> = ({
                 key={index}
               >
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {(currentPage - 1) * 10 + index + 1}
+                  {(currentPage - 1) * pageLimit + index + 1}
                 </Table.Cell>
                 <Table.Cell>
                   <div className="relative flex flex-row gap-2">
